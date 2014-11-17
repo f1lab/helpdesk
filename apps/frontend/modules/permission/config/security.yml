@@ -1,0 +1,8 @@
+new:
+  credentials: [[can_create_permissions]]
+
+edit:
+  credentials: [[can_edit_permissions]]
+
+delete:
+  credentials: [[can_delete_permissions]]
