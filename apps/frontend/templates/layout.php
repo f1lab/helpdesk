@@ -70,6 +70,12 @@
                 <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
               </li>
             <?php endif ?>
+
+            <?php if ($sf_user->hasCredential('can view report')): ?>
+              <li <?php if ('report' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('report/index') ?>">Отчёт</a>
+              </li>
+            <?php endif ?>
           </ul>
 
           <div class="pull-right">
