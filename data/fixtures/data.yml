@@ -1,0 +1,61 @@
+sfGuardGroup:
+  sfGuardGroup_1:
+    name: 'F1 Lab'
+    description: 'F1 Lab Co., Ltd.'
+    isExecutor: true
+    isClient: false
+sfGuardUserGroup:
+  sfGuardUserGroup_2_1:
+    User: sfGuardUser_2
+    Group: sfGuardGroup_1
+  sfGuardUserGroup_3_1:
+    User: sfGuardUser_3
+    Group: sfGuardGroup_1
+  sfGuardUserGroup_4_1:
+    User: sfGuardUser_4
+    Group: sfGuardGroup_1
+sfGuardUser:
+  sfGuardUser_1:
+    first_name: null
+    last_name: null
+    email_address: anatoly.pashin@gmail.com
+    username: admin
+    algorithm: sha1
+    salt: fdf8454c4aac8875f7e18073a0918d46
+    password: a515044e819ef1c5188c50d91e6b21dc77c6d8fd
+    is_active: true
+    is_super_admin: true
+  sfGuardUser_2:
+    first_name: Anatoly
+    last_name: Pashin
+    email_address: service@f1lab.ru
+    username: anatoly
+    algorithm: sha1
+    salt: aabacf9eb414c5981e542bb8a83a5cca
+    password: af9970d9c3fcf21e1b32ad1172905f3d4d2773a8
+    is_active: true
+    is_super_admin: false
+    last_login: null
+  sfGuardUser_3:
+    first_name: Anton
+    last_name: Shvetsov
+    email_address: director@f1lab.ru
+    username: anton
+    algorithm: sha1
+    salt: 72ab80f932e806d6e883f5e1d72444df
+    password: 1c94c4e484e3b4dabc39864a8797c6b4200df5de
+    is_active: true
+    is_super_admin: false
+    last_login: null
+  sfGuardUser_4:
+    first_name: Alexey
+    last_name: Savin
+    email_address: commercial@f1lab.ru
+    username: alexey
+    algorithm: sha1
+    salt: 3a4456f73cd00a85cdc4651f0f947c8d
+    password: 24c7685987e06933fc0ea3789b3e0d631fe7e17a
+    is_active: true
+    is_super_admin: false
+    last_login: null
+  

@@ -1,0 +1,5 @@
+cache/*
+log/*
+web/uploads/*
+lib/vendor/symfony
+

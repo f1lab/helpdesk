@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xliff PUBLIC "-//XLIFF//DTD XLIFF//EN" "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd">
+<xliff version="1.0">
+  <file source-language="EN" target-language="ru" datatype="plaintext" original="messages" date="2012-04-18T12:00:31Z" product-name="messages">
+    <header/>
+    <body>
+      <trans-unit id="1">
+        <source>[0]Nobody is logged|[1]There is 1 person logged|(1,+Inf]There are %1% persons logged</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>less than a minute</source>
+        <target>меньше минуты</target>
+      </trans-unit>
+      <trans-unit id="3">
+        <source>1 minute</source>
+        <target>1 минуту</target>
+      </trans-unit>
+      <trans-unit id="4">
+        <source>less than 5 seconds</source>
+        <target>меньше 5 секунд</target>
+      </trans-unit>
+      <trans-unit id="5">
+        <source>less than 10 seconds</source>
+        <target>меньше 10 секунд</target>
+      </trans-unit>
+      <trans-unit id="6">
+        <source>less than 20 seconds</source>
+        <target>меньше 20 секунд</target>
+      </trans-unit>
+      <trans-unit id="7">
+        <source>half a minute</source>
+        <target>полминуты</target>
+      </trans-unit>
+      <trans-unit id="8">
+        <source>%minutes% minutes</source>
+        <target><![CDATA[{n: n % 10 > 1 && n % 10 < 5}]]>%minutes% минуты|(1,+Inf]%minutes% минут</target>
+      </trans-unit>
+      <trans-unit id="9">
+        <source>about 1 hour</source>
+        <target>примерно 1 час</target>
+      </trans-unit>
+      <trans-unit id="10">
+        <source>about %hours% hours</source>
+        <target><![CDATA[{n: n % 10 > 1 && n % 10 <5}]]>примерно %hours% часа|(1,+Inf]примерно %hours% часов</target>
+      </trans-unit>
+      <trans-unit id="11">
+        <source>1 day</source>
+        <target>1 день</target>
+      </trans-unit>
+      <trans-unit id="12">
+        <source>%days% days</source>
+        <target><![CDATA[{n: n % 10 > 1 && n % 10 <5}]]>%days% дня|(1,+Inf]%days% дней</target>
+      </trans-unit>
+      <trans-unit id="13">
+        <source>about 1 month</source>
+        <target>примерно 1 месяц</target>
+      </trans-unit>
+      <trans-unit id="14">
+        <source>%months% months</source>
+        <target><![CDATA[{n: n % 10 > 1 && n % 10 <5}]]>%months% месяца|(1,+Inf]%months% месяцев</target>
+      </trans-unit>
+      <trans-unit id="15">
+        <source>about 1 year</source>
+        <target>примерно 1 год</target>
+      </trans-unit>
+      <trans-unit id="16">
+        <source>over %years% years</source>
+        <target><![CDATA[{n: n % 10 > 1 && n % 10 <5}]]>больше %years% года|(1,+Inf]больше %years% лет</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

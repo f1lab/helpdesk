@@ -1,0 +1,86 @@
+/*.form-fluid textarea,
+.form-fluid input[type="text"] {
+  width: 99% !important;
+}*/
+
+body {
+  min-width: 570px;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow-y: scroll;
+}
+
+table.tickets tbody tr {
+  cursor: pointer;
+}
+
+.comments .comment {
+  margin-bottom: 1em;
+  border: 1px solid #aaa;
+  padding: .5em 1em;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+  border-radius: 5px;
+}
+  .comments .comment .header {
+  }
+    .comments .comment .header .who {}
+    .comments .comment .header .what {}
+    .comments .comment .header .when {}
+      .comments .comment .header .when a {
+        color: #333;
+      }
+  .comments .comment .content {
+    position: relative;
+    min-height: 2em;
+  }
+    .comments .comment .content .actions {
+      position: absolute;
+      right: 0;
+      top: 3px;
+    }
+      .comments .comment:hover .content .actions {
+        display: block;
+      }
+        .comments .comment:hover .content .actions li {
+        }
+
+.label-large {
+  padding: 9px 14px;
+  font-size: 15px;
+  line-height: normal;
+}
+
+.ticket-status {
+  /* text-align: center;
+  line-height: 3em; */
+}
+  .ticket-status div+div {
+    margin-top: 1em;
+  }
+  .ticket-status div.center {
+    text-align: center;
+  }
+
+/*.form-fluid .input-append input,
+.form-fluid .input-prepend input {
+  width: auto !important;
+}*/
+
+.fluid {
+  min-width: 99%;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  margin-top: 5em;
+  margin-bottom: 2em;
+}
+  footer .container {
+    text-align: right;
+  }

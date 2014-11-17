@@ -1,0 +1,162 @@
+sfGuardUser:
+  relations:
+    Tickets:
+      class: Ticket
+      type: many
+      local: id
+      foreign: created_by
+      onDelete: CASCADE
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: created_by
+      onDelete: CASCADE
+
+sfGuardGroup:
+  columns:
+    isExecutor:
+      type: boolean
+      default: false
+      notnull: true
+    isClient:
+      type: boolean
+      default: false
+      notnull: true
+  relations:
+    Responsibles:
+      class: sfGuardUser
+      refClass: RefCompanyResponsible
+      local: group_id
+      foreign: user_id
+      foreignAlias: ResponsibleForCompany
+
+RefCompanyResponsible:
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    Responsible:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+Ticket:
+  actAs: [Timestampable, Signable, SoftDelete]
+  columns:
+    isClosed:
+      type: boolean
+      default: false
+      notnull: true
+    name:
+      type: string(255)
+      notnull: true
+    description: clob
+    attach:
+      type: string(255)
+    deadline:
+      type: timestamp
+    planned_start:
+      type: timestamp
+    planned_finish:
+      type: timestamp
+    period_id: integer
+    company_id: integer
+  relations:
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
+      onDelete: CASCADE
+    Responsibles:
+      class: sfGuardUser
+      refClass: RefTicketResponsible
+      local: ticket_id
+      foreign: user_id
+      foreignAlias: ResponsibleForTickets
+    Period:
+      class: Periods
+      local: period_id
+      foreign: id
+    ToCompany:
+      class: sfGuardGroup
+      local: company_id
+      foreign: id
+
+RefTicketResponsible:
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      local: user_id
+      foreign: id
+
+Comment:
+  actAs: [Timestampable, Signable]
+  columns:
+    ticket_id:
+      type: integer
+      notnull: true
+    text:
+      type: clob
+      notnull: true
+    attachment:
+      type: string(255)
+    changed_ticket_state_to:
+      type: enum
+      values: [opened, closed]
+  relations:
+    ReadedComments:
+      local: id
+      foreign: comment_id
+      onDelete: CASCADE
+
+ReadedTickets:
+  actAs: [Timestampable]
+  columns:
+    user_id: integer
+    ticket_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+  indexes:
+    unique_for_user_and_ticket:
+      fields: [user_id, ticket_id]
+      type: unique
+
+ReadedComments:
+  actAs: [Timestampable]
+  columns:
+    user_id: integer
+    comment_id: integer
+  relations:
+    Comment:
+      foreignAlias: Comments
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+  indexes:
+    unique_for_user_and_comment:
+      fields: [user_id, comment_id]
+      type: unique
+
+Periods:
+  columns:
+    period_name: string(255)
+    description: clob
+    length: integer

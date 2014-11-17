@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.7.1" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>sfDoctrineAdminGeneratorWithShowPlugin</name>
+ <channel>pear.symfony-project.com</channel>
+ <summary>a theme for the admin generator with a show view.</summary>
+ <description>a theme for the admin generator with a show view.</description>
+ <lead>
+  <name>Pierre Cahard</name>
+  <user>pcahard</user>
+  <email>pcahard@gmail.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2008-11-30</date>
+ <time>21:50:19</time>
+ <version>
+  <release>1.0.0</release>
+  <api>1.0.0</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.symfony-project.org/license">MIT license</license>
+ <notes>-</notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="data/generator/sfDoctrineModule/adminWithShow/skeleton/templates/.sf" role="data"/>
+   <file md5sum="9a134d150ca648715fced9a845e76aaf" name="data/generator/sfDoctrineModule/adminWithShow/skeleton/config/generator.yml" role="data"/>
+   <file md5sum="7a184b9a5ed16c21cb55a521e16c7e72" name="data/generator/sfDoctrineModule/adminWithShow/skeleton/actions/actions.class.php" role="data"/>
+   <file md5sum="14dbf13332dfce05d1d6e51e2f427b4e" name="data/generator/sfDoctrineModule/adminWithShow/skeleton/lib/helper.php" role="data"/>
+   <file md5sum="4bd80b0e5614ce3f06966dc244d88fdb" name="data/generator/sfDoctrineModule/adminWithShow/skeleton/lib/configuration.php" role="data"/>
+   <file md5sum="5c04493898f09ea928f26465752bd863" name="data/generator/sfDoctrineModule/adminWithShow/parts/sortingAction.php" role="data"/>
+   <file md5sum="1b71611241c98d237ea3f5ee9a182a7c" name="data/generator/sfDoctrineModule/adminWithShow/parts/newAction.php" role="data"/>
+   <file md5sum="71592cb8c346fcb39dda67f256607d7e" name="data/generator/sfDoctrineModule/adminWithShow/parts/deleteAction.php" role="data"/>
+   <file md5sum="a4fab933268d1601bfff828871f054e9" name="data/generator/sfDoctrineModule/adminWithShow/parts/editAction.php" role="data"/>
+   <file md5sum="dac3f99dc0c36f9303cb53d13ae1a68a" name="data/generator/sfDoctrineModule/adminWithShow/parts/filtersAction.php" role="data"/>
+   <file md5sum="1aa2c776eddd70ca062a4ce403f708f5" name="data/generator/sfDoctrineModule/adminWithShow/parts/indexAction.php" role="data"/>
+   <file md5sum="541b64e2a0316f396085fdd09b1d1fc0" name="data/generator/sfDoctrineModule/adminWithShow/parts/actionsConfiguration.php" role="data"/>
+   <file md5sum="a1e993d880121430075e441e5b30acce" name="data/generator/sfDoctrineModule/adminWithShow/parts/fieldsConfiguration.php" role="data"/>
+   <file md5sum="7c2c5719bdab6cf40aab7d35c8990547" name="data/generator/sfDoctrineModule/adminWithShow/parts/filtersConfiguration.php" role="data"/>
+   <file md5sum="26918838d523b529d9f774e791cac59d" name="data/generator/sfDoctrineModule/adminWithShow/parts/createAction.php" role="data"/>
+   <file md5sum="a5f59edcdb560f627e2d82a90258d206" name="data/generator/sfDoctrineModule/adminWithShow/parts/showAction.php" role="data"/>
+   <file md5sum="b7c66defd1694b35a6a4682a8d92a5cf" name="data/generator/sfDoctrineModule/adminWithShow/parts/filterAction.php" role="data"/>
+   <file md5sum="2142759d00657f59d236cfb44f189c64" name="data/generator/sfDoctrineModule/adminWithShow/parts/processFormAction.php" role="data"/>
+   <file md5sum="f0da6417baa6105bf28b6df4d4b1d5e7" name="data/generator/sfDoctrineModule/adminWithShow/parts/batchAction.php" role="data"/>
+   <file md5sum="54822cd6543d928495119c1c743f7c64" name="data/generator/sfDoctrineModule/adminWithShow/parts/sortingConfiguration.php" role="data"/>
+   <file md5sum="8718224f5d3202476017cd50bf9f1777" name="data/generator/sfDoctrineModule/adminWithShow/parts/updateAction.php" role="data"/>
+   <file md5sum="ed8ba8d30c602ab90b8f91955bb0f403" name="data/generator/sfDoctrineModule/adminWithShow/parts/paginationConfiguration.php" role="data"/>
+   <file md5sum="324c4a530124250441a9f7e0f066eaf1" name="data/generator/sfDoctrineModule/adminWithShow/parts/paginationAction.php" role="data"/>
+   <file md5sum="872aecb6dbeea4c03eddd41f53bc5659" name="data/generator/sfDoctrineModule/adminWithShow/parts/showConfiguration.php" role="data"/>
+   <file md5sum="eff5276251e91641f55f46a56901d272" name="data/generator/sfDoctrineModule/adminWithShow/parts/configuration.php" role="data"/>
+   <file md5sum="060234eddb35e79d8ae91086e867e8e1" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_show_actions.php" role="data"/>
+   <file md5sum="daba309b31d591306d0ba7bd401d8dee" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list.php" role="data"/>
+   <file md5sum="0baf9abe1924ee373ec85e2986ce669c" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_th_stacked.php" role="data"/>
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form_footer.php" role="data"/>
+   <file md5sum="790641346f7d70ad99e61f1c8c156b7f" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/indexSuccess.php" role="data"/>
+   <file md5sum="76646594ecf96a2f938d019d136e3881" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_td_actions.php" role="data"/>
+   <file md5sum="a7fb483f28ebb656f1861ace4b9cd609" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_pagination.php" role="data"/>
+   <file md5sum="fadfe9ba9ea3369ab768967a25dce301" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form.php" role="data"/>
+   <file md5sum="a91a139000b62798387b303882951cf9" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_td_stacked.php" role="data"/>
+   <file md5sum="5d1cde4a0c9c0380409023fc6acfcd6a" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_batch_actions.php" role="data"/>
+   <file md5sum="68aab8ff49362c46a22068f467df602d" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_actions.php" role="data"/>
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form_header.php" role="data"/>
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_footer.php" role="data"/>
+   <file md5sum="b68bc4cc958eaded84482f22ebcdeb8d" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_show.php" role="data"/>
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_header.php" role="data"/>
+   <file md5sum="33fcd5a00b8ec6902a71c706349128e7" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_filters_field.php" role="data"/>
+   <file md5sum="58e3ed67f16ef30c226cd6257f6e9e90" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_td_tabular.php" role="data"/>
+   <file md5sum="58378f181d6ac368ebf6c92084e3c25f" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/showSuccess.php" role="data"/>
+   <file md5sum="7cf10176bf6674b5b87020ced44f7777" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/newSuccess.php" role="data"/>
+   <file md5sum="a074b73c3d51338389db38d53cfc5407" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_field_boolean.php" role="data"/>
+   <file md5sum="85f56167ac9001bc37e9167d4de3c96d" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_th_tabular.php" role="data"/>
+   <file md5sum="0ab434424fa623c4aaed92cee26c8615" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/editSuccess.php" role="data"/>
+   <file md5sum="94e347aa4ca12085b20ee8c417cf66af" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_flashes.php" role="data"/>
+   <file md5sum="fac1c09284e8c261452fa14c522a9106" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form_actions.php" role="data"/>
+   <file md5sum="cc867a9d827e62829ae861203000b689" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_list_td_batch_actions.php" role="data"/>
+   <file md5sum="74d5c01afbfc4838eb10c9c24cad3538" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_assets.php" role="data"/>
+   <file md5sum="55fd3db6b0f30d29c438ad0a1020e2f4" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_filters.php" role="data"/>
+   <file md5sum="05789a626aa80a6827405c797d15e181" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form_fieldset.php" role="data"/>
+   <file md5sum="9067f8acb007cde1539285f2b31497ed" name="data/generator/sfDoctrineModule/adminWithShow/template/templates/_form_field.php" role="data"/>
+   <file md5sum="fd97ab6695df57004739499b6663d589" name="data/generator/sfDoctrineModule/adminWithShow/template/actions/actions.class.php" role="data"/>
+   <file md5sum="c7f3d21042a10fd58bccdf8e84d5073e" name="data/generator/sfDoctrineModule/adminWithShow/template/lib/helper.php" role="data"/>
+   <file md5sum="a73b327f64ff74d34bcfc1ab1c111457" name="config/sfDoctrineAdminGeneratorWithShowPluginConfiguration.class.php" role="data"/>
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="LICENSE" role="data"/>
+   <file md5sum="09622e88c04b02b5a384badd037b6a04" name="README" role="data"/>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.1</min>
+   </pearinstaller>
+   
+  </required>
+ </dependencies>
+ <phprelease/>
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <license>MIT</license>
+   <date>2008-11-29</date>
+   <notes>* pcahard: release of the plugin</notes>
+  </release>
+ </changelog>
+</package>

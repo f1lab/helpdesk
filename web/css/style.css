@@ -1,0 +1,12 @@
+body { font-family:Arial, Helvetica, Sans-Serif; font-size:0.8em;}
+        .table_report th { background:#7CB8E2 none repeat-x scroll center left; color:#fff; padding:20px 15px; text-align:left;}
+        .table_report td { background:#FFDEAD;  padding:25spx 25px; }
+        .table_report tr.odd td { background:#ffffff ; cursor:pointer; }
+        .table_report div.arrow { background:transparent none no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+        .table_report div.up { background-position:0px 0px;}
+        
+        .table_report2 th { background:#7CB8E2 none repeat-x scroll center left; color:#fff; padding:20px 15px; text-align:left;}
+        .table_report2 td { background:#FFDEAD;  padding:25spx 25px; }
+        .table_report2 tr.odd td { background:#ffffff ; cursor:pointer; }
+        .table_report2 div.arrow { background:transparent none no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+        .table_report2 div.up { background-position:0px 0px;}

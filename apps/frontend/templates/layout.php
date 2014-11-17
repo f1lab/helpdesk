@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+  <meta charset="UTF-8">
+  <?php include_http_metas() ?>
+  <?php include_metas() ?>
+  <?php include_title() ?>
+
+  <?php include_stylesheets() ?>
+
+  <?php include_javascripts() ?>
+
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+
+<body>
+  <script src="/js/notifications.js"></script>
+
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="<?php echo url_for('@homepage') ?>">F1 Lab → Helpdesk</a>
+
+        <div class="nav-collapse"><?php if ($sf_user->isAuthenticated()) : ?>
+          <ul class="nav"><?php $currentRoute = $sf_context->getRouting()->getCurrentRouteName() ?>
+            <li <?php if ('homepage' == $currentRoute or 'tickets-my' == $currentRoute): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@homepage') ?>">Мои заявки</a>
+            </li>
+			<?php if ($sf_user->hasCredential('can_use_schedule')): ?>
+            <li <?php  if ('shedule' == $currentRoute):  ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@shedule') ?>">Моё расписание</a>
+            </li>
+          <?php endif ?>
+            <li <?php if ('tickets-new' == $currentRoute): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@tickets-new') ?>">Добавить заявку</a>
+            </li>
+          <?php if ($sf_user->hasCredential('view_company_tickets')): ?>
+            <li <?php if ('tickets-company' == $currentRoute): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@tickets-company') ?>">Заявки компании</a>
+            </li>
+          <?php endif ?>
+
+          <li class="divider-vertical"></li>
+
+          <?php if ($sf_user->hasCredential('can_use_dashboard')): ?>
+            <li <?php if (in_array($currentRoute, array(
+              'dashboard',
+              'dashboard-tickets',
+              'dashboard-comments',
+              ))): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@dashboard') ?>">Dashboard</a>
+            </li>
+          <?php endif ?>
+
+          <?php if ($sf_user->hasCredential('can_edit_companies_and_users')): ?>
+            <li <?php if ('companies' == $currentRoute or 'companies-show' == $currentRoute): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
+            </li>
+          <?php endif ?>
+		  
+          </ul>
+
+          <div class="pull-right">
+            <div class="btn-group">
+              <a class="btn dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-user"></i>
+                <?php echo $sf_user->getUsername() ?>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu fluid">
+                <li><a href="<?php echo url_for('guard/logout') ?>">Выйти</a></li>
+              </ul>
+            </div>
+          </div>
+        <?php endif ?></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style = "width: auto;">
+    <?php if ($sf_user->hasFlash('message') and list($type, $title, $content)=$sf_user->getFlash('message')): ?>
+    <div class="alert alert-<?php echo $type ?>">
+      <a href="#" class="close" data-dismiss="alert">×</a>
+      <strong><?php echo $title ?></strong>
+      <?php echo $content ?>
+    </div>
+    <?php endif ?>
+
+    <?php echo $sf_content ?>
+  </div>
+
+  <footer>
+    <div class="container">
+      —
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/13-View
+
+default:
+  http_metas:
+    content-type: text/html
+
+  metas:
+    #title:        symfony project
+    #description:  symfony project
+    #keywords:     symfony, project
+    #language:     en
+    #robots:       index, follow
+    viewport:      width=device-width, initial-scale=1.0
+
+  stylesheets:
+    - bootstrap
+    - bootstrap-datepicker
+    - fullcalendar
+    - timepicker
+    - bootstrap-wysihtml5-0.0.2.css
+    - chosen
+    - style
+    - main
+
+  javascripts:
+    - wysihtml5.min.js
+    - jquery.min
+    - bootstrap-wysihtml5-0.0.2.js
+    - bootstrap.min.js
+    - bootstrap-datepicker
+    - bootstrap-timepicker
+    - fullcalendar.min
+    - jquery-ui.custom.min
+    - chosen.jquery.min.js
+    - jquery-migrate-1.2.1.min.js
+    - main
+    
+
+  has_layout:     true
+  layout:         layout
