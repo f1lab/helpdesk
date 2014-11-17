@@ -74,6 +74,10 @@ class TicketForm extends BaseTicketForm
       $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
     }
 
+    if (!sfContext::getInstance()->getUser()->hasCredential('can set categories for tickets')) {
+      $this->getWidgetSchema()->offsetSet('category_id', new sfWidgetFormInputHidden());
+    }
+
     $this->widgetSchema->setLabels(array(
       'name' => 'Тема',
       'description' => 'Описание',
@@ -82,6 +86,7 @@ class TicketForm extends BaseTicketForm
       'responsibles_list' => 'Ответственные',
       'period_id' => 'Период',
       'company_id' => 'На компанию',
+      'category_id' => 'Категория',
     ));
 
     $this->validatorSchema['attach'] = new sfValidatorFile(array(

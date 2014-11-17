@@ -13,6 +13,7 @@
 <?php echo $form->renderFormTag(url_for('@tickets-create'), array('class' => 'well form-fluid')) ?>
   <?php //echo $form->renderUsing('bootstrap') ?>
   <?php echo $form['name']->renderRow()?>
+  <?php echo $form['category_id']->renderRow()?>
   <?php echo $form['description']->renderRow()?>
   <?php echo $form['attach']->renderRow()?>
   <?php echo $form['deadline']->renderRow()?>

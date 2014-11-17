@@ -80,6 +80,10 @@ RefCompanyNotify:
 Ticket:
   actAs: [Timestampable, Signable, SoftDelete]
   columns:
+    category_id:
+      type: integer
+      notnull: true
+      default: 1
     isClosed:
       type: boolean
       default: false
@@ -119,6 +123,15 @@ Ticket:
       class: sfGuardGroup
       local: company_id
       foreign: id
+    Category:
+      local: category_id
+      foreign: id
+
+Category:
+  columns:
+    name:
+      type: string(255)
+      notnull: true
 
 RefTicketResponsible:
   columns:
