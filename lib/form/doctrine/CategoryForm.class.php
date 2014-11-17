@@ -12,5 +12,10 @@ class CategoryForm extends BaseCategoryForm
 {
   public function configure()
   {
+    $this->getWidgetSchema()
+      ->setLabels([
+        'name' => 'Название',
+      ])
+    ;
   }
 }

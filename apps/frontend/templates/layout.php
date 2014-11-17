@@ -62,12 +62,18 @@
             </li>
           <?php endif ?>
 
+          <?php if ($sf_user->hasCredential('can set categories for tickets')): ?>
+            <li <?php if ('category' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
+              <a href="<?php echo url_for('category/index') ?>">Категории заявок</a>
+            </li>
+          <?php endif ?>
+
           <?php if ($sf_user->hasCredential('can_edit_companies_and_users')): ?>
             <li <?php if ('companies' == $currentRoute or 'companies-show' == $currentRoute): ?> class="active"<?php endif ?>>
               <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
             </li>
           <?php endif ?>
-		  
+
           </ul>
 
           <div class="pull-right">
