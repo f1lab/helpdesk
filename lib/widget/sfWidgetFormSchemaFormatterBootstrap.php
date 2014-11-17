@@ -3,7 +3,7 @@ class sfWidgetFormSchemaFormatterBootstrap extends sfWidgetFormSchemaFormatter
 {
   protected
     $rowFormat                 = "<div class=\"control-group %row_class%\">\n %label%\n <div class=\"controls\">\n  %field%\n  %error%\n  %help%\n  %hidden_fields%\n </div>\n</div>\n",
-    $errorRowFormat            = '%errors%',
+    $errorRowFormat            = '<div class="control-group error">%errors%</div>',
     $errorListFormatInARow     = "<span class=\"help-inline\">%errors%</span>\n",
     $errorRowFormatInARow      = "%error% ",
     $namedErrorRowFormatInARow = "%name%: %error% ",

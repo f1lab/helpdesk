@@ -40,7 +40,7 @@ class TicketForm extends BaseTicketForm
     } else {
       unset ($this['responsibles_list']);
     }
-    
+
     $this->getWidgetSchema()
         ->offsetSet('company_id', new sfWidgetFormDoctrineChoice(array(
           'multiple' => false,
@@ -62,12 +62,17 @@ class TicketForm extends BaseTicketForm
         'rows' => 15,
       )))
       ->offsetSet('attach', new sfWidgetFormInputFile())
-      ->offsetSet('deadline', new sfWidgetFormBootstrapDateTime(array(), array(
+      ;
+
+    if (sfContext::getInstance()->getUser()->hasCredential('can set deadlines for tickets')) {
+      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormBootstrapDateTime(array(), array(
         'placeholder' => '',
         'class' => 'span2',
         'type' => 'date',
-       )))
-      ;
+      )));
+    } else {
+      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
+    }
 
     $this->widgetSchema->setLabels(array(
       'name' => 'Тема',
