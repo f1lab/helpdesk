@@ -2,4 +2,7 @@ cache/*
 log/*
 web/uploads/*
 lib/vendor/symfony
+lib/model/doctrine/base/*
+lib/form/doctrine/base/*
+lib/filter/doctrine/base/*
 
