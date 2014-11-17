@@ -57,7 +57,12 @@
           . ($ticket->getDeadline() && strtotime($ticket->getDeadline()) < time() ? ' назад!' : '')
           ?>
       </td><?php endif ?>
-      <?php if ($showCompanyName): ?><td>#<?php echo $ticket->getCreator()->getGroups()->getFirst()->getName() ?></td><?php endif ?>
+
+      <?php if ($showCompanyName): ?><td>#<?php
+        $company = $ticket->getCreator()->getGroups()->getFirst();
+        echo $company ? $company->getName() : 'компания неизвестна';
+      ?></td><?php endif ?>
+
       <?php if ($showUserName): ?><td>@<?php echo $ticket->getCreator()->getUsername() ?></td><?php endif ?>
 
       <td>

@@ -94,7 +94,7 @@ setTimeout("locs()", 300000);
     </div>
   <?php endif ?>
 
-  <?php if (true == ($responsibles = $ticket->getCreator()->getGroups()->getFirst()->getResponsibles()) and count($responsibles)): ?>
+  <?php $company = $ticket->getCreator()->getGroups()->getFirst(); if ($company && true == ($responsibles = $company->getResponsibles()) and count($responsibles)): ?>
     <div>
       Ответственные за компанию:
       <ul style="text-align:left"><?php foreach ($responsibles as $user): ?>
