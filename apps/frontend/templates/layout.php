@@ -36,44 +36,40 @@
             <li <?php if ('homepage' == $currentRoute or 'tickets-my' == $currentRoute): ?> class="active"<?php endif ?>>
               <a href="<?php echo url_for('@homepage') ?>">Мои заявки</a>
             </li>
-			<?php if ($sf_user->hasCredential('can_use_schedule')): ?>
-            <li <?php  if ('shedule' == $currentRoute):  ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('@shedule') ?>">Моё расписание</a>
-            </li>
-          <?php endif ?>
-            <li <?php if ('tickets-new' == $currentRoute): ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('@tickets-new') ?>">Добавить заявку</a>
-            </li>
-          <?php if ($sf_user->hasCredential('view_company_tickets')): ?>
-            <li <?php if ('tickets-company' == $currentRoute): ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('@tickets-company') ?>">Заявки компании</a>
-            </li>
-          <?php endif ?>
 
-          <li class="divider-vertical"></li>
+            <?php if ($sf_user->hasCredential('can_use_schedule')): ?>
+              <li <?php  if ('shedule' == $currentRoute):  ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('@shedule') ?>">Моё расписание</a>
+              </li>
+            <?php endif ?>
 
-          <?php if ($sf_user->hasCredential('can_use_dashboard')): ?>
-            <li <?php if (in_array($currentRoute, array(
-              'dashboard',
-              'dashboard-tickets',
-              'dashboard-comments',
-              ))): ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('@dashboard') ?>">Dashboard</a>
-            </li>
-          <?php endif ?>
+            <?php if ($sf_user->hasCredential('view_company_tickets')): ?>
+              <li <?php if ('tickets-company' == $currentRoute): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('@tickets-company') ?>">Заявки компании</a>
+              </li>
+            <?php endif ?>
 
-          <?php if ($sf_user->hasCredential('can set categories for tickets')): ?>
-            <li <?php if ('category' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('category/index') ?>">Категории заявок</a>
-            </li>
-          <?php endif ?>
+            <?php if ($sf_user->hasCredential('can_use_dashboard')): ?>
+              <li <?php if (in_array($currentRoute, array(
+                'dashboard',
+                'dashboard-tickets',
+                'dashboard-comments',
+                ))): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('@dashboard') ?>">Dashboard</a>
+              </li>
+            <?php endif ?>
 
-          <?php if ($sf_user->hasCredential('can_edit_companies_and_users')): ?>
-            <li <?php if ('companies' == $currentRoute or 'companies-show' == $currentRoute): ?> class="active"<?php endif ?>>
-              <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
-            </li>
-          <?php endif ?>
+            <?php if ($sf_user->hasCredential('can set categories for tickets')): ?>
+              <li <?php if ('category' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('category/index') ?>">Категории заявок</a>
+              </li>
+            <?php endif ?>
 
+            <?php if ($sf_user->hasCredential('can_edit_companies_and_users')): ?>
+              <li <?php if ('companies' == $currentRoute or 'companies-show' == $currentRoute): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
+              </li>
+            <?php endif ?>
           </ul>
 
           <div class="pull-right">
