@@ -16,6 +16,7 @@
  * @property boolean $is_super_admin
  * @property timestamp $last_login
  * @property enum $type
+ * @property string $phone
  * @property Doctrine_Collection $Groups
  * @property Doctrine_Collection $Permissions
  * @property Doctrine_Collection $Tickets
@@ -41,6 +42,7 @@
  * @method boolean               getIsSuperAdmin()          Returns the current record's "is_super_admin" value
  * @method timestamp             getLastLogin()             Returns the current record's "last_login" value
  * @method enum                  getType()                  Returns the current record's "type" value
+ * @method string                getPhone()                 Returns the current record's "phone" value
  * @method Doctrine_Collection   getGroups()                Returns the current record's "Groups" collection
  * @method Doctrine_Collection   getPermissions()           Returns the current record's "Permissions" collection
  * @method Doctrine_Collection   getTickets()               Returns the current record's "Tickets" collection
@@ -65,6 +67,7 @@
  * @method sfGuardUser           setIsSuperAdmin()          Sets the current record's "is_super_admin" value
  * @method sfGuardUser           setLastLogin()             Sets the current record's "last_login" value
  * @method sfGuardUser           setType()                  Sets the current record's "type" value
+ * @method sfGuardUser           setPhone()                 Sets the current record's "phone" value
  * @method sfGuardUser           setGroups()                Sets the current record's "Groups" collection
  * @method sfGuardUser           setPermissions()           Sets the current record's "Permissions" collection
  * @method sfGuardUser           setTickets()               Sets the current record's "Tickets" collection
@@ -143,6 +146,10 @@ abstract class BasesfGuardUser extends sfDoctrineRecord
              ),
              'notnull' => true,
              'default' => 'user',
+             ));
+        $this->hasColumn('phone', 'string', 255, array(
+             'type' => 'string',
+             'length' => 255,
              ));
 
 

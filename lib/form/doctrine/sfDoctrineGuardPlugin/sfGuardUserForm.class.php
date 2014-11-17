@@ -48,6 +48,16 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       )))
     ;
 
+    $this->getWidgetSchema()->offsetGet('type')->setOption('choices', [
+      'user' => 'Пользователь',
+      'it-admin' => 'IT-администратор',
+    ]);
+
+    $this->getWidgetSchema()->offsetGet('phone')
+      ->setAttribute('pattern', '\+7[0-9]{10}')
+      ->setAttribute('placeholder', '+79147911019')
+    ;
+
     $this->validatorSchema['password'] = new sfValidatorString(array('required' => true, 'max_length' => 32));
 
     $this->widgetSchema->setLabels(array(
@@ -58,6 +68,8 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       'password' => 'Пароль',
       'groups_list' => 'Компания',
       'responsible_for_company_list' => 'Отвечает за компанию',
+      'type' => 'Тип пользователя',
+      'phone' => 'Номер телефона',
     ));
   }
 }

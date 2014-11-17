@@ -1,4 +1,14 @@
 sfGuardUser:
+  columns:
+    type:
+      type: enum
+      values:
+        - it-admin
+        - user
+      notnull: true
+      default: user
+    phone:
+      type: string(255)
   relations:
     Tickets:
       class: Ticket
