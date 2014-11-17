@@ -33,6 +33,8 @@ sfGuardGroup:
       type: boolean
       default: false
       notnull: true
+    sms_title:
+      type: string(255)
   relations:
     Responsibles:
       class: sfGuardUser

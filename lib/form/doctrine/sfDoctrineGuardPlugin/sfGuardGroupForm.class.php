@@ -68,6 +68,7 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
       'description' => 'Наименование',
       'responsibles_list' => 'Ответственные',
       'notify_list' => 'Кого оповещать',
+      'sms_title' => 'Заголовок смс-сообщения',
     ));
   }
 }
