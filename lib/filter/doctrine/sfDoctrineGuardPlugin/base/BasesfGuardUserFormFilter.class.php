@@ -30,6 +30,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'groups_list'                  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'permissions_list'             => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission')),
       'responsible_for_company_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
+      'notify_for_company_list'      => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'responsible_for_tickets_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Ticket')),
     ));
 
@@ -51,6 +52,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'groups_list'                  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'permissions_list'             => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission', 'required' => false)),
       'responsible_for_company_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
+      'notify_for_company_list'      => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'responsible_for_tickets_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Ticket', 'required' => false)),
     ));
 
@@ -117,6 +119,24 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
     ;
   }
 
+  public function addNotifyForCompanyListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query
+      ->leftJoin($query->getRootAlias().'.RefCompanyNotify RefCompanyNotify')
+      ->andWhereIn('RefCompanyNotify.group_id', $values)
+    ;
+  }
+
   public function addResponsibleForTicketsListColumnQuery(Doctrine_Query $query, $field, $values)
   {
     if (!is_array($values))
@@ -161,6 +181,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'groups_list'                  => 'ManyKey',
       'permissions_list'             => 'ManyKey',
       'responsible_for_company_list' => 'ManyKey',
+      'notify_for_company_list'      => 'ManyKey',
       'responsible_for_tickets_list' => 'ManyKey',
     );
   }

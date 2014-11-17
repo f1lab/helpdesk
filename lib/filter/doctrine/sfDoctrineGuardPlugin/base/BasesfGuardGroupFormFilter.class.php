@@ -22,6 +22,7 @@ abstract class BasesfGuardGroupFormFilter extends BaseFormFilterDoctrine
       'users_list'        => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
       'permissions_list'  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission')),
       'responsibles_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
+      'notify_list'       => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
     ));
 
     $this->setValidators(array(
@@ -34,6 +35,7 @@ abstract class BasesfGuardGroupFormFilter extends BaseFormFilterDoctrine
       'users_list'        => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
       'permissions_list'  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission', 'required' => false)),
       'responsibles_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
+      'notify_list'       => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('sf_guard_group_filters[%s]');
@@ -99,6 +101,24 @@ abstract class BasesfGuardGroupFormFilter extends BaseFormFilterDoctrine
     ;
   }
 
+  public function addNotifyListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query
+      ->leftJoin($query->getRootAlias().'.RefCompanyNotify RefCompanyNotify')
+      ->andWhereIn('RefCompanyNotify.user_id', $values)
+    ;
+  }
+
   public function getModelName()
   {
     return 'sfGuardGroup';
@@ -117,6 +137,7 @@ abstract class BasesfGuardGroupFormFilter extends BaseFormFilterDoctrine
       'users_list'        => 'ManyKey',
       'permissions_list'  => 'ManyKey',
       'responsibles_list' => 'ManyKey',
+      'notify_list'       => 'ManyKey',
     );
   }
 }

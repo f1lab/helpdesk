@@ -40,6 +40,12 @@ sfGuardGroup:
       local: group_id
       foreign: user_id
       foreignAlias: ResponsibleForCompany
+    Notify:
+      class: sfGuardUser
+      refClass: RefCompanyNotify
+      local: group_id
+      foreign: user_id
+      foreignAlias: NotifyForCompany
 
 RefCompanyResponsible:
   columns:
@@ -51,6 +57,20 @@ RefCompanyResponsible:
       local: group_id
       foreign: id
     Responsible:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefCompanyNotify:
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    Notify:
       class: sfGuardUser
       local: user_id
       foreign: id

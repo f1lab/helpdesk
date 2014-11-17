@@ -33,6 +33,7 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
       'groups_list'                  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'permissions_list'             => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission')),
       'responsible_for_company_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
+      'notify_for_company_list'      => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'responsible_for_tickets_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Ticket')),
     ));
 
@@ -55,6 +56,7 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
       'groups_list'                  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'permissions_list'             => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission', 'required' => false)),
       'responsible_for_company_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
+      'notify_for_company_list'      => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'responsible_for_tickets_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Ticket', 'required' => false)),
     ));
 
@@ -98,6 +100,11 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
       $this->setDefault('responsible_for_company_list', $this->object->ResponsibleForCompany->getPrimaryKeys());
     }
 
+    if (isset($this->widgetSchema['notify_for_company_list']))
+    {
+      $this->setDefault('notify_for_company_list', $this->object->NotifyForCompany->getPrimaryKeys());
+    }
+
     if (isset($this->widgetSchema['responsible_for_tickets_list']))
     {
       $this->setDefault('responsible_for_tickets_list', $this->object->ResponsibleForTickets->getPrimaryKeys());
@@ -110,6 +117,7 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
     $this->saveGroupsList($con);
     $this->savePermissionsList($con);
     $this->saveResponsibleForCompanyList($con);
+    $this->saveNotifyForCompanyList($con);
     $this->saveResponsibleForTicketsList($con);
 
     parent::doSave($con);
@@ -226,6 +234,44 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
     if (count($link))
     {
       $this->object->link('ResponsibleForCompany', array_values($link));
+    }
+  }
+
+  public function saveNotifyForCompanyList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['notify_for_company_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->NotifyForCompany->getPrimaryKeys();
+    $values = $this->getValue('notify_for_company_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('NotifyForCompany', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('NotifyForCompany', array_values($link));
     }
   }
 

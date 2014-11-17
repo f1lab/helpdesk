@@ -20,11 +20,12 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       $this['is_super_admin'],
       $this['algorithm'],
       $this['last_login'],
-      $this['responsible_for_tickets_list']
+      $this['responsible_for_tickets_list'],
+      $this['notify_for_company_list']
     );
 
     $this->getWidgetSchema()
-      ->offsetSet('password', new sfWidgetFormInputPassword(array()))
+      ->offsetSet('password', new sfWidgetFormInputPassword())
       ->offsetSet('groups_list', new sfWidgetFormDoctrineChoice(array(
         'multiple' => false,
         'model' => 'sfGuardGroup',
@@ -58,7 +59,7 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       ->setAttribute('placeholder', '+79147911019')
     ;
 
-    $this->validatorSchema['password'] = new sfValidatorString(array('required' => true, 'max_length' => 32));
+    $this->validatorSchema['password'] = new sfValidatorString(array('required' => false, 'max_length' => 32));
 
     $this->widgetSchema->setLabels(array(
       'first_name' => 'Имя',

@@ -38,6 +38,18 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
         'class' => 'chzn-select',
         'data-placeholder' => 'Выберите…',
       )))
+
+      ->offsetSet('notify_list', new sfWidgetFormDoctrineChoice(array(
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->where('u.type = ?', 'it-admin')
+        ,
+      ), array(
+        'class' => 'chzn-select',
+        'data-placeholder' => 'Выберите…',
+      )))
     ;
 
     $this->validatorSchema['description'] = new sfValidatorString(array(
@@ -55,6 +67,7 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
       'users_list' => 'Пользователи',
       'description' => 'Наименование',
       'responsibles_list' => 'Ответственные',
+      'notify_list' => 'Кого оповещать',
     ));
   }
 }

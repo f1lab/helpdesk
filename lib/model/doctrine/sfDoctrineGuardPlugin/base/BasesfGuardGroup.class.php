@@ -12,9 +12,11 @@
  * @property Doctrine_Collection $Users
  * @property Doctrine_Collection $Permissions
  * @property Doctrine_Collection $Responsibles
+ * @property Doctrine_Collection $Notify
  * @property Doctrine_Collection $sfGuardGroupPermission
  * @property Doctrine_Collection $sfGuardUserGroup
  * @property Doctrine_Collection $RefCompanyResponsible
+ * @property Doctrine_Collection $RefCompanyNotify
  * @property Doctrine_Collection $Ticket
  * 
  * @method string              getName()                   Returns the current record's "name" value
@@ -24,9 +26,11 @@
  * @method Doctrine_Collection getUsers()                  Returns the current record's "Users" collection
  * @method Doctrine_Collection getPermissions()            Returns the current record's "Permissions" collection
  * @method Doctrine_Collection getResponsibles()           Returns the current record's "Responsibles" collection
+ * @method Doctrine_Collection getNotify()                 Returns the current record's "Notify" collection
  * @method Doctrine_Collection getSfGuardGroupPermission() Returns the current record's "sfGuardGroupPermission" collection
  * @method Doctrine_Collection getSfGuardUserGroup()       Returns the current record's "sfGuardUserGroup" collection
  * @method Doctrine_Collection getRefCompanyResponsible()  Returns the current record's "RefCompanyResponsible" collection
+ * @method Doctrine_Collection getRefCompanyNotify()       Returns the current record's "RefCompanyNotify" collection
  * @method Doctrine_Collection getTicket()                 Returns the current record's "Ticket" collection
  * @method sfGuardGroup        setName()                   Sets the current record's "name" value
  * @method sfGuardGroup        setDescription()            Sets the current record's "description" value
@@ -35,9 +39,11 @@
  * @method sfGuardGroup        setUsers()                  Sets the current record's "Users" collection
  * @method sfGuardGroup        setPermissions()            Sets the current record's "Permissions" collection
  * @method sfGuardGroup        setResponsibles()           Sets the current record's "Responsibles" collection
+ * @method sfGuardGroup        setNotify()                 Sets the current record's "Notify" collection
  * @method sfGuardGroup        setSfGuardGroupPermission() Sets the current record's "sfGuardGroupPermission" collection
  * @method sfGuardGroup        setSfGuardUserGroup()       Sets the current record's "sfGuardUserGroup" collection
  * @method sfGuardGroup        setRefCompanyResponsible()  Sets the current record's "RefCompanyResponsible" collection
+ * @method sfGuardGroup        setRefCompanyNotify()       Sets the current record's "RefCompanyNotify" collection
  * @method sfGuardGroup        setTicket()                 Sets the current record's "Ticket" collection
  * 
  * @package    helpdesk
@@ -89,6 +95,11 @@ abstract class BasesfGuardGroup extends sfDoctrineRecord
              'local' => 'group_id',
              'foreign' => 'user_id'));
 
+        $this->hasMany('sfGuardUser as Notify', array(
+             'refClass' => 'RefCompanyNotify',
+             'local' => 'group_id',
+             'foreign' => 'user_id'));
+
         $this->hasMany('sfGuardGroupPermission', array(
              'local' => 'id',
              'foreign' => 'group_id'));
@@ -98,6 +109,10 @@ abstract class BasesfGuardGroup extends sfDoctrineRecord
              'foreign' => 'group_id'));
 
         $this->hasMany('RefCompanyResponsible', array(
+             'local' => 'id',
+             'foreign' => 'group_id'));
+
+        $this->hasMany('RefCompanyNotify', array(
              'local' => 'id',
              'foreign' => 'group_id'));
 

@@ -25,6 +25,7 @@ abstract class BasesfGuardGroupForm extends BaseFormDoctrine
       'users_list'        => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
       'permissions_list'  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission')),
       'responsibles_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
+      'notify_list'       => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser')),
     ));
 
     $this->setValidators(array(
@@ -38,6 +39,7 @@ abstract class BasesfGuardGroupForm extends BaseFormDoctrine
       'users_list'        => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
       'permissions_list'  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission', 'required' => false)),
       'responsibles_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
+      'notify_list'       => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardUser', 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(
@@ -77,6 +79,11 @@ abstract class BasesfGuardGroupForm extends BaseFormDoctrine
       $this->setDefault('responsibles_list', $this->object->Responsibles->getPrimaryKeys());
     }
 
+    if (isset($this->widgetSchema['notify_list']))
+    {
+      $this->setDefault('notify_list', $this->object->Notify->getPrimaryKeys());
+    }
+
   }
 
   protected function doSave($con = null)
@@ -84,6 +91,7 @@ abstract class BasesfGuardGroupForm extends BaseFormDoctrine
     $this->saveUsersList($con);
     $this->savePermissionsList($con);
     $this->saveResponsiblesList($con);
+    $this->saveNotifyList($con);
 
     parent::doSave($con);
   }
@@ -199,6 +207,44 @@ abstract class BasesfGuardGroupForm extends BaseFormDoctrine
     if (count($link))
     {
       $this->object->link('Responsibles', array_values($link));
+    }
+  }
+
+  public function saveNotifyList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['notify_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->Notify->getPrimaryKeys();
+    $values = $this->getValue('notify_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('Notify', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('Notify', array_values($link));
     }
   }
 

@@ -22,11 +22,13 @@
  * @property Doctrine_Collection $Tickets
  * @property Doctrine_Collection $Comments
  * @property Doctrine_Collection $ResponsibleForCompany
+ * @property Doctrine_Collection $NotifyForCompany
  * @property Doctrine_Collection $sfGuardUserPermission
  * @property Doctrine_Collection $sfGuardUserGroup
  * @property sfGuardRememberKey $RememberKeys
  * @property sfGuardForgotPassword $ForgotPassword
  * @property Doctrine_Collection $RefCompanyResponsible
+ * @property Doctrine_Collection $RefCompanyNotify
  * @property Doctrine_Collection $ResponsibleForTickets
  * @property Doctrine_Collection $ReadedTickets
  * @property Doctrine_Collection $ReadedComments
@@ -48,11 +50,13 @@
  * @method Doctrine_Collection   getTickets()               Returns the current record's "Tickets" collection
  * @method Doctrine_Collection   getComments()              Returns the current record's "Comments" collection
  * @method Doctrine_Collection   getResponsibleForCompany() Returns the current record's "ResponsibleForCompany" collection
+ * @method Doctrine_Collection   getNotifyForCompany()      Returns the current record's "NotifyForCompany" collection
  * @method Doctrine_Collection   getSfGuardUserPermission() Returns the current record's "sfGuardUserPermission" collection
  * @method Doctrine_Collection   getSfGuardUserGroup()      Returns the current record's "sfGuardUserGroup" collection
  * @method sfGuardRememberKey    getRememberKeys()          Returns the current record's "RememberKeys" value
  * @method sfGuardForgotPassword getForgotPassword()        Returns the current record's "ForgotPassword" value
  * @method Doctrine_Collection   getRefCompanyResponsible() Returns the current record's "RefCompanyResponsible" collection
+ * @method Doctrine_Collection   getRefCompanyNotify()      Returns the current record's "RefCompanyNotify" collection
  * @method Doctrine_Collection   getResponsibleForTickets() Returns the current record's "ResponsibleForTickets" collection
  * @method Doctrine_Collection   getReadedTickets()         Returns the current record's "ReadedTickets" collection
  * @method Doctrine_Collection   getReadedComments()        Returns the current record's "ReadedComments" collection
@@ -73,11 +77,13 @@
  * @method sfGuardUser           setTickets()               Sets the current record's "Tickets" collection
  * @method sfGuardUser           setComments()              Sets the current record's "Comments" collection
  * @method sfGuardUser           setResponsibleForCompany() Sets the current record's "ResponsibleForCompany" collection
+ * @method sfGuardUser           setNotifyForCompany()      Sets the current record's "NotifyForCompany" collection
  * @method sfGuardUser           setSfGuardUserPermission() Sets the current record's "sfGuardUserPermission" collection
  * @method sfGuardUser           setSfGuardUserGroup()      Sets the current record's "sfGuardUserGroup" collection
  * @method sfGuardUser           setRememberKeys()          Sets the current record's "RememberKeys" value
  * @method sfGuardUser           setForgotPassword()        Sets the current record's "ForgotPassword" value
  * @method sfGuardUser           setRefCompanyResponsible() Sets the current record's "RefCompanyResponsible" collection
+ * @method sfGuardUser           setRefCompanyNotify()      Sets the current record's "RefCompanyNotify" collection
  * @method sfGuardUser           setResponsibleForTickets() Sets the current record's "ResponsibleForTickets" collection
  * @method sfGuardUser           setReadedTickets()         Sets the current record's "ReadedTickets" collection
  * @method sfGuardUser           setReadedComments()        Sets the current record's "ReadedComments" collection
@@ -189,6 +195,11 @@ abstract class BasesfGuardUser extends sfDoctrineRecord
              'local' => 'user_id',
              'foreign' => 'group_id'));
 
+        $this->hasMany('sfGuardGroup as NotifyForCompany', array(
+             'refClass' => 'RefCompanyNotify',
+             'local' => 'user_id',
+             'foreign' => 'group_id'));
+
         $this->hasMany('sfGuardUserPermission', array(
              'local' => 'id',
              'foreign' => 'user_id'));
@@ -206,6 +217,10 @@ abstract class BasesfGuardUser extends sfDoctrineRecord
              'foreign' => 'user_id'));
 
         $this->hasMany('RefCompanyResponsible', array(
+             'local' => 'id',
+             'foreign' => 'user_id'));
+
+        $this->hasMany('RefCompanyNotify', array(
              'local' => 'id',
              'foreign' => 'user_id'));
 
