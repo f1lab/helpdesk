@@ -1,11 +1,6 @@
 <?php use_stylesheets_for_form($form) ?>
 <?php use_javascripts_for_form($form) ?>
-<script>
-  $(function() {
-    $('.chzn-select').chosen();
-    $('.chzn-select-deselect').chosen({ allow_single_deselect: true });
-  });
-</script>
+
 <div class="page-header">
   <h1>Редактировать компанию <?php echo $company->getName() ?></h1>
 </div>
