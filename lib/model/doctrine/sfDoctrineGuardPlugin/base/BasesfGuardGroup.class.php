@@ -9,7 +9,6 @@
  * @property string $description
  * @property boolean $isExecutor
  * @property boolean $isClient
- * @property string $sms_title
  * @property Doctrine_Collection $Users
  * @property Doctrine_Collection $Permissions
  * @property Doctrine_Collection $Responsibles
@@ -24,7 +23,6 @@
  * @method string              getDescription()            Returns the current record's "description" value
  * @method boolean             getIsExecutor()             Returns the current record's "isExecutor" value
  * @method boolean             getIsClient()               Returns the current record's "isClient" value
- * @method string              getSmsTitle()               Returns the current record's "sms_title" value
  * @method Doctrine_Collection getUsers()                  Returns the current record's "Users" collection
  * @method Doctrine_Collection getPermissions()            Returns the current record's "Permissions" collection
  * @method Doctrine_Collection getResponsibles()           Returns the current record's "Responsibles" collection
@@ -38,7 +36,6 @@
  * @method sfGuardGroup        setDescription()            Sets the current record's "description" value
  * @method sfGuardGroup        setIsExecutor()             Sets the current record's "isExecutor" value
  * @method sfGuardGroup        setIsClient()               Sets the current record's "isClient" value
- * @method sfGuardGroup        setSmsTitle()               Sets the current record's "sms_title" value
  * @method sfGuardGroup        setUsers()                  Sets the current record's "Users" collection
  * @method sfGuardGroup        setPermissions()            Sets the current record's "Permissions" collection
  * @method sfGuardGroup        setResponsibles()           Sets the current record's "Responsibles" collection
@@ -77,10 +74,6 @@ abstract class BasesfGuardGroup extends sfDoctrineRecord
              'type' => 'boolean',
              'default' => false,
              'notnull' => true,
-             ));
-        $this->hasColumn('sms_title', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
              ));
     }
 
