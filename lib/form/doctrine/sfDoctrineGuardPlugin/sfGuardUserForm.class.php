@@ -56,7 +56,7 @@ class sfGuardUserForm extends PluginsfGuardUserForm
 
     $this->getWidgetSchema()->offsetGet('phone')
       ->setAttribute('pattern', '\+7[0-9]{10}')
-      ->setAttribute('placeholder', '+79147911019')
+      ->setAttribute('placeholder', '+71234567890')
     ;
 
     $this->validatorSchema['password'] = new sfValidatorString(array('required' => false, 'max_length' => 32));

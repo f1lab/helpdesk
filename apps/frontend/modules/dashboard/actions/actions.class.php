@@ -68,7 +68,7 @@ class dashboardActions extends sfActions
 
     $this->form->getWidgetSchema()->offsetGet('phone')
       ->setAttribute('pattern', '\+7[0-9]{10}')
-      ->setAttribute('placeholder', '+79147911019')
+      ->setAttribute('placeholder', '+71234567890')
     ;
 
     if ($request->isMethod('put')) {
