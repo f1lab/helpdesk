@@ -53,6 +53,14 @@
       <?php if ($showDate): ?><td title="<?php echo $ticket->getCreatedAt() ?>">
         <?php echo time_ago_in_words(strtotime($ticket->getCreatedAt())) ?> назад
       </td><?php endif ?>
+
+      <?php if ($showCompanyName): ?><td>#<?php
+        $company = $ticket->getCreator()->getGroups()->getFirst();
+        echo $company ? $company->getName() : 'компания неизвестна';
+      ?></td><?php endif ?>
+
+      <?php if ($showUserName): ?><td>@<?php echo $ticket->getCreator()->getUsername() ?></td><?php endif ?>
+
       <?php if ($showDeadline): ?><td title="<?php echo $ticket->getDeadline() ?>">
         ещё <?php
         echo ($ticket->getDeadline()
@@ -61,13 +69,6 @@
           . ($ticket->getDeadline() && strtotime($ticket->getDeadline()) < time() ? ' назад!' : '')
           ?>
       </td><?php endif ?>
-
-      <?php if ($showCompanyName): ?><td>#<?php
-        $company = $ticket->getCreator()->getGroups()->getFirst();
-        echo $company ? $company->getName() : 'компания неизвестна';
-      ?></td><?php endif ?>
-
-      <?php if ($showUserName): ?><td>@<?php echo $ticket->getCreator()->getUsername() ?></td><?php endif ?>
 
       <?php if (!isset($dontShowApply)): $applier = $ticket->getApplier(); ?>
         <td>
