@@ -15,26 +15,45 @@
         <th>Тема</th>
         <th>Категория</th>
         <th>Время создания</th>
+        <th>Deadline</th>
         <th>Закрыта?</th>
 
-        <th>Deadline</th>
+        <th>Общее время выполнения</th>
+
+        <th>Регламентированные сроки</th>
+
       </tr>
     </thead>
-    <tbody><?php foreach ($tickets as $ticket): ?>
-      <tr>
+    <tbody><?php foreach ($tickets as $ticket):
+      $closer = $ticket->getIsClosed() ? ($ticket->getCloser() ?: null) : null;
+      $applier = $ticket->getApplier();
+      $worked = strtotime($closer ? $closer->getCreatedAt() : date('d.m.Y H:i:s')) - strtotime($applier ? $applier->getCreatedAt() : $ticket->getCreatedAt());
+      $reglamented = $ticket->getDeadline() ? (strtotime($ticket->getDeadline()) - strtotime($ticket->getCreatedAt())) : null;
+    ?>
+      <tr class="<?php echo (!$ticket->getDeadline() or $worked < $reglamented) ? 'success' : 'error' ?>">
         <td><a href="<?php echo url_for('tickets/show?id='.$ticket->getId()) ?>"><?php echo $ticket->getId() ?></a></td>
         <td>@<?php echo $ticket->getCreator()->getUsername() ?></td>
         <td><?php echo $ticket->getName() ?></td>
         <td><?php echo $ticket->getCategory() ?></td>
-        <td><?php echo $ticket->getCreatedAt() ?></td>
-        <td><?php if ($ticket->getIsClosed()): $closingComment = $ticket->getClosingComments()->getFirst(); ?>
-          Заявку закрыл @<?php echo $closingComment->getCreator()->getUsername() ?>
-          <?php echo date('d.m.Y H:i:s', strtotime($closingComment->getCreatedAt())) ?>
+        <td><?php echo date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) ?></td>
+        <td><?php echo $ticket->getDeadline() ? date('d.m.Y H:i:s', strtotime($ticket->getDeadline())) : '—' ?></td>
+        <td><?php if ($ticket->getIsClosed()): ?>
+          Заявку закрыл @<?php echo $closer->getCreator()->getUsername() ?>
+          <?php echo date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) ?>
         <?php else: ?>
           не закрыта
         <?php endif ?></td>
 
-        <td><?php echo $ticket->getDeadline() ?></td>
+        <td>
+          <?php echo $worked ?> секунд
+        </td>
+
+        <td><?php if ($reglamented): ?>
+          <?php echo $reglamented ?> секунд
+        <?php else: ?>
+          —
+        <?php endif ?></td>
+
       </tr>
     <?php endforeach; ?></tbody>
   </table>

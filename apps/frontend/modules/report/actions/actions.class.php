@@ -109,21 +109,11 @@ class reportActions extends sfActions
       ->from('Ticket t')
       ->leftJoin('t.Creator')
       ->leftJoin('t.Category')
-      ->leftJoin('t.Comments closingComments WITH closingComments.changed_ticket_state_to = "closed"')
-      ->leftJoin('closingComments.Creator')
-
-      ->leftJoin('t.Comments openingComments WITH openingComments.changed_ticket_state_to = "opened"')
-      ->leftJoin('openingComments.Creator')
-
-      // ->leftJoin('t.Comments applyingComments WITH applyingComments.changed_ticket_state_to = "applyed"')
-
       ->addWhere('t.created_at >= ? and t.created_at <= ?', array($this->period['from'], $this->period['to']))
       ->andWhereIn('t.category_id', $this->categoryIds)
       ->andWhereIn('t.company_id', $this->companyIds)
-      ->addOrderBy('closingComments.created_at desc')
+      // ->addOrderBy('c.created_at desc')
       ->execute()
     ;
-
-    print_r($this->tickets->toArray(true));die;
   }
 }

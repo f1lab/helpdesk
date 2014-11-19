@@ -26,4 +26,28 @@ class Ticket extends BaseTicket
   public function preUpdate($event) {
     $this->correctDeadline();
   }
+
+  public function getCloser() {
+    return Doctrine_Query::create()
+      ->from('Comment c')
+      ->addWhere('c.ticket_id = ?', $this->getId())
+      ->addWhere('c.changed_ticket_state_to = ?', 'closed')
+      ->leftJoin('c.Creator')
+      ->limit(1)
+      ->addOrderBy('c.created_at desc')
+      ->fetchOne()
+    ;
+  }
+
+  public function getApplier() {
+    return Doctrine_Query::create()
+      ->from('Comment c')
+      ->addWhere('c.ticket_id = ?', $this->getId())
+      ->addWhere('c.changed_ticket_state_to = ?', 'applied')
+      ->leftJoin('c.Creator')
+      ->limit(1)
+      ->addOrderBy('c.created_at desc')
+      ->fetchOne()
+    ;
+  }
 }
