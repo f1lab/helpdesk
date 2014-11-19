@@ -1,12 +1,5 @@
 <?php use_helper('Date') ?>
 
-<script type="text/javascript">
-function locs(){
-document.location.href="";
-}
-setTimeout("locs()", 300000);
-</script>
-
 <div class="row-fluid">
 
 <div class="span10">
@@ -15,6 +8,11 @@ setTimeout("locs()", 300000);
       <span class="who"><a href="#"><?php echo $ticket->getCreator()->getUsername() ?></a></span>
       <span class="what">opened ticket</span>
       <span class="when"><?php echo $ticket->getCreatedAt() ?></span>
+      <span class="muted pull-right">
+        <?php echo $ticket->getCreator()->getFullName() ?>
+        <?php echo $ticket->getCreator()->getEmailAddress() ?>
+        <?php echo $ticket->getCreator()->getPhone() ?>
+      </span>
     </div>
     <?php
       if (true == ($dl = $ticket->getDeadline())):
