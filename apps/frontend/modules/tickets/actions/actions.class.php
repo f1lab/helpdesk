@@ -166,9 +166,9 @@ class ticketsActions extends sfActions
 
     $this->setTemplate('edit');
   }
-  
+
   //Получение не прочитанных пользователем заявок за которые он ответственный
-  
+
   public function executeUnread(sfWebRequest $request)
   {
     if ($this->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()){
@@ -214,7 +214,7 @@ class ticketsActions extends sfActions
       'countUnreadedTickets' => $countUnreadedTickets,
     )));
   }
-  
+
   /*
     Основная страница расписания
   */
@@ -252,7 +252,7 @@ class ticketsActions extends sfActions
     // print_r($this->unpartitioned);
     $this->form =  new sheduleForm();
   }
-  
+
   /*
     Назначение времени заявке при перетаскивании
   */
@@ -266,7 +266,7 @@ class ticketsActions extends sfActions
 
     return sfView::NONE;
   }
-  
+
   /*
     Создание новой заявки посредством календаря расписания
   */
@@ -296,7 +296,7 @@ class ticketsActions extends sfActions
     $this->forward404Unless($this->ticket);
     return $this->renderPartial('modal', ['ticket' => $this->ticket]);
   }
-  
+
   /*
     Заявки с установленными датами для размещения на календаре
   */
@@ -367,9 +367,9 @@ class ticketsActions extends sfActions
       ];
     }, (array)$refs), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }
-  
+
   /*
-    Для периодической заявки. 
+    Для периодической заявки.
     Не закрывать заявку, а переносить ее на следующую дату, согласно периоду заявки.
   */
   public function executeTicketDone(sfWebRequest $request){
@@ -379,14 +379,14 @@ class ticketsActions extends sfActions
       ->limit(1)
       ->fetchOne()
     ;
-    if (($ticket->getPlannedStart()!= Null) && 
-        ($ticket->getPlannedFinish()!= Null) && 
+    if (($ticket->getPlannedStart()!= Null) &&
+        ($ticket->getPlannedFinish()!= Null) &&
         ($ticket->getPeriodId()!==" ") &&
         ($ticket->Period->getLength() > 0)
         )
         {
       $ticket->setPlannedStart(
-        date ("Y-m-d H:i:s", 
+        date ("Y-m-d H:i:s",
           mktime(
             date("H", strtotime($ticket->getPlannedStart())),
             date("i", strtotime($ticket->getPlannedStart())),

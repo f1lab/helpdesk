@@ -65,7 +65,7 @@ class TicketForm extends BaseTicketForm
       ;
 
     if (sfContext::getInstance()->getUser()->hasCredential('can set deadlines for tickets')) {
-      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormBootstrapDateTime(array(), array(
+      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormBootstrapDate(array(), array(
         'placeholder' => '',
         'class' => 'span2',
         'type' => 'date',
