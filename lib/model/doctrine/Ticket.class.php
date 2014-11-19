@@ -50,4 +50,24 @@ class Ticket extends BaseTicket
       ->fetchOne()
     ;
   }
+
+  public function postInsert($event) {
+    $company = $this->getCreator()->getGroups()->getFirst();
+
+    if ($company and true == ($notify = $company->getNotify())) {
+      $phones = [];
+      foreach ($notify as $user) {
+        if ($user->getPhone()) {
+          $phones[] = $user->getPhone();
+        }
+      }
+
+      if (count($phones)) {
+        file_get_contents("http://sms.ru/sms/send?api_id=ab037779-734f-3394-794f-7d532843ed95&to="
+          . implode(',', $phones) . "&from=f1lab&text="
+          . urlencode('Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername())
+        );
+      }
+    }
+  }
 }
