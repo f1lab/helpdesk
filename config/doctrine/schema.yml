@@ -158,7 +158,10 @@ Comment:
       type: string(255)
     changed_ticket_state_to:
       type: enum
-      values: [opened, closed]
+      values:
+        - opened # переоткрыл
+        - applied # принял в работу
+        - closed # закрыл
   relations:
     ReadedComments:
       local: id
