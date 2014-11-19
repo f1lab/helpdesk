@@ -1,8 +1,2 @@
-new:
-  credentials: [[can_create_categorys]]
-
-edit:
-  credentials: [[can_edit_categorys]]
-
-delete:
-  credentials: [[can_delete_categorys]]
+default:
+  credentials: [[can create categories for tickets]]

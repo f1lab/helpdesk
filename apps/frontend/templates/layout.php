@@ -59,7 +59,7 @@
               </li>
             <?php endif ?>
 
-            <?php if ($sf_user->hasCredential('can set categories for tickets')): ?>
+            <?php if ($sf_user->hasCredential('can create categories for tickets')): ?>
               <li <?php if ('category' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
                 <a href="<?php echo url_for('category/index') ?>">Категории заявок</a>
               </li>
