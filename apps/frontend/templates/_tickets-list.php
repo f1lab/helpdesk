@@ -6,9 +6,13 @@
       <th>№</th>
       <th>Тема</th>
       <?php if ($showDate): ?><th>Дата</th><?php endif ?>
-      <?php if ($showDeadline): ?><th>Дедлайн</th><?php endif ?>
       <?php if ($showCompanyName): ?><th>Компания</th><?php endif ?>
       <?php if ($showUserName): ?><th>Пользователь</th><?php endif ?>
+
+      <?php if ($showDeadline): ?><th>Дедлайн</th><?php endif ?>
+      <?php if (!isset($dontShowApply)): ?>
+        <th>В работе</th>
+      <?php endif ?>
       <th> </th>
     </tr>
   </thead>
@@ -64,6 +68,16 @@
       ?></td><?php endif ?>
 
       <?php if ($showUserName): ?><td>@<?php echo $ticket->getCreator()->getUsername() ?></td><?php endif ?>
+
+      <?php if (!isset($dontShowApply)): $applier = $ticket->getApplier(); ?>
+        <td>
+          <?php if ($applier): ?>
+            в работе с <?php echo date('d.m.Y H:i:s', strtotime($applier->getCreatedAt())) ?>
+          <?php elseif (!$ticket->getIsClosed()): ?>
+            <a href="<?php echo url_for('tickets/apply?id=' . $ticket->getId()) ?>" class="btn">принять в работу</a>
+          <?php endif ?>
+        </td>
+      <?php endif ?>
 
       <td>
        <?php if ($allReadedCommentsForTicket->count() < $ticket->Comments->count() ){ ?>

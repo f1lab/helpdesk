@@ -24,9 +24,16 @@
       <p><span class="label label-warning">deadline: <?php echo $dl ?></span></p>
     <?php endif ?>
     <div class="content">
-      <h1><?php echo $ticket->getName() ?></h1>
-
-      <hr />
+      <h1 class="page-header">
+        <?php echo $ticket->getName() ?>
+        <small><?php $applier = $ticket->getApplier(); ?>
+          <?php if ($applier): ?>
+            в работе с <?php echo date('d.m.Y H:i:s', strtotime($applier->getCreatedAt())) ?>
+          <?php elseif (!$ticket->getIsClosed()): ?>
+            <a href="<?php echo url_for('tickets/apply?id=' . $ticket->getId()) ?>" class="btn">принять в работу</a>
+          <?php endif ?>
+        </small>
+      </h1>
 
     <?php if (true == ($description = $sf_data->getRaw('ticket')->getDescription())): ?>
       <?php echo $description ?>

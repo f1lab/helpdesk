@@ -414,4 +414,16 @@ class ticketsActions extends sfActions
   public function executeShedulePrint(sfWebRequest $request){
 
   }
+
+  public function executeApply(sfWebRequest $request) {
+    $ticket = Doctrine_Core::getTable('Ticket')->findOneById($request->getParameter('id'));
+    $this->forward404Unless($ticket);
+
+    $applier = Comment::createFromArray([
+      'changed_ticket_state_to' => 'applied'
+      , 'ticket_id' => $ticket->getId()
+      , 'text' => 'Принял в работу'
+    ]);
+    $applier->save() and $this->redirect($request->getReferer());
+  }
 }
