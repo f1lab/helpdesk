@@ -19,8 +19,7 @@ class emailActions extends sfActions
     ;
 
     $ticket = Ticket::createFromArray([
-      'category_id' => 10
-      , 'name' => $request->getParameter('subject')
+      'name' => $request->getParameter('subject')
       , 'description' =>
         ($from ? '' : '<div class="alert alert-info">Письмо пришло от ' . htmlspecialchars($request->getParameter('from')) . '</div>')
         . '<pre>' . $request->getParameter('body-plain') . '</pre>'
