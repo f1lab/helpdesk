@@ -25,17 +25,17 @@ default:
 
   javascripts:
     - wysihtml5.min.js
-    - jquery.min
+    - jquery.min.js
     - bootstrap-wysihtml5-0.0.2.js
     - bootstrap.min.js
     - bootstrap-datepicker
     - bootstrap-timepicker
-    - fullcalendar.min
-    - jquery-ui.custom.min
+    - fullcalendar.min.js
+    - jquery-ui.custom.min.js
     - chosen.jquery.min.js
     - jquery-migrate-1.2.1.min.js
     - main
-    
+
 
   has_layout:     true
   layout:         layout
