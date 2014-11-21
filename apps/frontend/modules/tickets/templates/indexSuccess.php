@@ -39,8 +39,9 @@
       'tickets' => $tickets['assigned_to_me'],
       'showDate' => true,
       'showDeadline' => true,
-      'showCompanyName' => false,
-      'showUserName' => false
+      'showCompanyName' => true,
+      'showUserName' => true,
+      'showCategories' => true,
     )) ?>
   </section>
 <?php
