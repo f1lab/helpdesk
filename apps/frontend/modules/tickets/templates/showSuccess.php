@@ -1,4 +1,12 @@
-<?php use_helper('Date') ?>
+<?php
+  use_helper('Date');
+
+  // редактировать, закрывать и переокрывать тикет может его создатель, обладатель прав или it-admin
+  $canManipulateThisTicket = $ticket->getCreatedBy() === $sf_user->getGuardUser()->getId()
+    || $sf_user->hasCredential('can_edit_tickets')
+    || $sf_user->getGuardUser()->getType() === 'it-admin'
+  ;
+?>
 
 <div class="row-fluid">
 
@@ -75,7 +83,7 @@
     Комментариев: <?php echo $ticket->getComments()->count() ?>
   </div>
 
-  <?php if ($sf_user->hasCredential('can_edit_tickets')): ?>
+  <?php if ($canManipulateThisTicket): ?>
     <div class="center">
       <a href="<?php echo url_for('@tickets-edit?id=' . $ticket->getId()) ?>" class="btn btn-mini">
         <i class="icon icon-pencil"></i>
@@ -170,7 +178,7 @@
 
 <hr class="hidden"/>
 
-<?php echo $form->renderFormTag(url_for('@comments-create?id=' . $ticket->getId()), array('class' => 'well form-fluid add-comment')) ?>
+<form action="url_for('@comments-create?id=' . $ticket->getId()" method="post" class="well form-fluid add-comment" enctype="multipart/form-data">
   <h3>Добавить комментарий к заявке</h3>
   <?php echo $form->renderUsing('bootstrap') ?>
   <div class="form-actions">
@@ -179,7 +187,7 @@
       Комментировать
     </button>
 
-<?php if ($sf_user->getGuardUser()->getGroups()->getFirst()->getIsExecutor()): ?>
+<?php if ($canManipulateThisTicket): ?>
   <?php if ($ticket->getIsClosed()): ?>
     <button type="submit" class="btn pull-right ticket-open">
       <i class="icon-ok"></i>
