@@ -178,7 +178,7 @@
 
 <hr class="hidden"/>
 
-<form action="url_for('@comments-create?id=' . $ticket->getId()" method="post" class="well form-fluid add-comment" enctype="multipart/form-data">
+<form action="<?php echo url_for('@comments-create?id=' . $ticket->getId()) ?>" method="post" class="well form-fluid add-comment" enctype="multipart/form-data">
   <h3>Добавить комментарий к заявке</h3>
   <?php echo $form->renderUsing('bootstrap') ?>
   <div class="form-actions">

@@ -12,21 +12,41 @@
  */
 class Comment extends BaseComment
 {
-  public function isRead(){
+  public function isRead() {
     $temp = Doctrine_Core::getTable('ReadedComments')->createQuery('a')
       ->Where('a.user_id = ?',sfContext::getInstance()->getUser()->getGuardUser()->getId())
       ->andWhere('a.comment_id = ?',$this->getId())
       ->execute()
     ;
 
-    if (0 == $temp->count()){
+    if (0 == $temp->count()) {
       $record = new ReadedComments();
       $record->setUser_id(sfContext::getInstance()->getUser()->getGuardUser()->getId());
       $record->setComment_id($this->getId());
       $record->save();
-
     }
 
-    return   $temp->count();
+    return $temp->count();
+  }
+
+  public function postInsert($event) {
+    // send message to ticket creator
+    if ($this->getChangedTicketStateTo() === 'applied' or $this->getChangedTicketStateTo() === 'closed' or $this->getChangedTicketStateTo() === 'opened') {
+      $texts = [
+        'applied' => 'Ваша заявка принята в работу! Не переживайте, мы уже над ней работаем!',
+        'closed' => 'Заявка выполнена! Рады были помочь!',
+        'opened' => 'Заявка переоткрыта.',
+      ];
+
+      $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
+      $domain = "helpdesk.f1lab.ru";
+
+      $result = $mgClient->sendMessage($domain, array(
+        'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
+        'to'      => $this->getTicket()->getCreator()->getEmailAddress(),
+        'subject' => 'Re: ' . $this->getTicket()->getName(),
+        'text'    => $texts[ $this->getChangedTicketStateTo() ],
+      ));
+    }
   }
 }
