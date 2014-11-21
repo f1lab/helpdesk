@@ -54,7 +54,8 @@
       'showDate' => true,
       'showDeadline' => true,
       'showCompanyName' => true,
-      'showUserName' => true
+      'showUserName' => true,
+      'showCategories' => true,
     )) ?>
   </section>
 <?php

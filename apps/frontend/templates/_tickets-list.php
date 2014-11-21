@@ -5,6 +5,7 @@
     <tr>
       <th>№</th>
       <th>Тема</th>
+      <?php if (isset($showCategories) and $showCategories): ?><th>Категория</th><?php endif ?>
       <?php if ($showDate): ?><th>Дата</th><?php endif ?>
       <?php if ($showCompanyName): ?><th>Компания</th><?php endif ?>
       <?php if ($showUserName): ?><th>Пользователь</th><?php endif ?>
@@ -50,6 +51,9 @@
 
       <td><?php echo $ticket->getId() ?></td>
       <td><a href="<?php echo url_for('@tickets-show?id=' . $ticket->getId()) ?>"><?php echo $ticket->getName() ?></a></td>
+
+      <?php if (isset($showCategories) and $showCategories): ?><td><?php echo $ticket->getCategory() ?></td><?php endif ?>
+
       <?php if ($showDate): ?><td title="<?php echo $ticket->getCreatedAt() ?>">
         <?php echo time_ago_in_words(strtotime($ticket->getCreatedAt())) ?> назад
       </td><?php endif ?>
