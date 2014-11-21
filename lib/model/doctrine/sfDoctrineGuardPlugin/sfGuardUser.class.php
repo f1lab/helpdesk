@@ -22,7 +22,7 @@ class sfGuardUser extends PluginsfGuardUser
         ->execute(),
     );
 
-    if (sfContext::getInstance()->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()) {
+    if (true || sfContext::getInstance()->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()) {
       $query = "
         SELECT `s3`.`id` AS `id`
         FROM `sf_guard_user` `s`
@@ -40,6 +40,7 @@ class sfGuardUser extends PluginsfGuardUser
 
       $return['assigned_to_me'] = Doctrine_Query::create()
           ->from('Ticket a, a.Comments b, a.Creator c')
+          ->leftJoin('a.Category')
           ->andWhere('a.isClosed = ?', false)
           ->andWhere('a.id in (select ticket_id from ref_ticket_responsible where user_id = ?)', $this->getId())
           ->orderBy('a.created_at desc')
@@ -48,6 +49,7 @@ class sfGuardUser extends PluginsfGuardUser
 
       $return['auto_assigned_to_me'] = Doctrine_Query::create()
           ->from('Ticket a, a.Comments b, a.Creator c')
+          ->leftJoin('a.Category')
           ->andWhere('a.isClosed = ?', false)
           ->andWhereIn('a.created_by', $users)
           ->orderBy('a.created_at desc')
