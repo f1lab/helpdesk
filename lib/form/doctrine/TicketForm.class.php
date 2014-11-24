@@ -30,8 +30,7 @@ class TicketForm extends BaseTicketForm
           'model' => 'sfGuardUser',
           'query' => Doctrine_Query::create()
             ->from('sfGuardUser a')
-            ->leftJoin('a.Groups b')
-            ->where('b.isExecutor = ?', true),
+            ->where('a.type = ?', 'it-admin'),
         ), array(
           'class' => 'chzn-select',
           'data-placeholder' => 'Выберите…',
