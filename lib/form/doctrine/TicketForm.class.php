@@ -35,22 +35,26 @@ class TicketForm extends BaseTicketForm
           'class' => 'chzn-select',
           'data-placeholder' => 'Выберите…',
         )))
-      ;
-    } else {
-      unset ($this['responsibles_list']);
-    }
 
-    $this->getWidgetSchema()
         ->offsetSet('company_id', new sfWidgetFormDoctrineChoice(array(
           'multiple' => false,
           'model' => 'sfGuardUser',
+          'add_empty' => true,
           'query' => Doctrine_Query::create()
-            ->from('sfGuardGroup a'),
+            ->from('sfGuardGroup a')
+            ->addWhere('a.id in (select group_id from ref_company_responsible where user_id = ?)', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+          ,
         ), array(
           'class' => 'chzn-select',
           'data-placeholder' => 'Выберите…',
         )))
       ;
+    } else {
+      unset (
+        $this['responsibles_list']
+        , $this['company_id']
+      );
+    }
 
     $this->getWidgetSchema()
       ->offsetSet('name', new sfWidgetFormInputText(array(), array(
