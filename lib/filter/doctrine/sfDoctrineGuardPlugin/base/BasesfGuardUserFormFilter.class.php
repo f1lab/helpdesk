@@ -29,6 +29,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'updated_at'                   => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
       'groups_list'                  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'permissions_list'             => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission')),
+      'categories_list'              => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Category')),
       'responsible_for_company_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'notify_for_company_list'      => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup')),
       'responsible_for_tickets_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Ticket')),
@@ -51,6 +52,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'updated_at'                   => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
       'groups_list'                  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'permissions_list'             => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardPermission', 'required' => false)),
+      'categories_list'              => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Category', 'required' => false)),
       'responsible_for_company_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'notify_for_company_list'      => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'sfGuardGroup', 'required' => false)),
       'responsible_for_tickets_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Ticket', 'required' => false)),
@@ -98,6 +100,24 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
     $query
       ->leftJoin($query->getRootAlias().'.sfGuardUserPermission sfGuardUserPermission')
       ->andWhereIn('sfGuardUserPermission.permission_id', $values)
+    ;
+  }
+
+  public function addCategoriesListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query
+      ->leftJoin($query->getRootAlias().'.RefUserCategory RefUserCategory')
+      ->andWhereIn('RefUserCategory.category_id', $values)
     ;
   }
 
@@ -180,6 +200,7 @@ abstract class BasesfGuardUserFormFilter extends BaseFormFilterDoctrine
       'updated_at'                   => 'Date',
       'groups_list'                  => 'ManyKey',
       'permissions_list'             => 'ManyKey',
+      'categories_list'              => 'ManyKey',
       'responsible_for_company_list' => 'ManyKey',
       'notify_for_company_list'      => 'ManyKey',
       'responsible_for_tickets_list' => 'ManyKey',

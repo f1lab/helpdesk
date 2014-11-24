@@ -21,6 +21,7 @@
  * @property Doctrine_Collection $Permissions
  * @property Doctrine_Collection $Tickets
  * @property Doctrine_Collection $Comments
+ * @property Doctrine_Collection $Categories
  * @property Doctrine_Collection $ResponsibleForCompany
  * @property Doctrine_Collection $NotifyForCompany
  * @property Doctrine_Collection $sfGuardUserPermission
@@ -49,6 +50,7 @@
  * @method Doctrine_Collection   getPermissions()           Returns the current record's "Permissions" collection
  * @method Doctrine_Collection   getTickets()               Returns the current record's "Tickets" collection
  * @method Doctrine_Collection   getComments()              Returns the current record's "Comments" collection
+ * @method Doctrine_Collection   getCategories()            Returns the current record's "Categories" collection
  * @method Doctrine_Collection   getResponsibleForCompany() Returns the current record's "ResponsibleForCompany" collection
  * @method Doctrine_Collection   getNotifyForCompany()      Returns the current record's "NotifyForCompany" collection
  * @method Doctrine_Collection   getSfGuardUserPermission() Returns the current record's "sfGuardUserPermission" collection
@@ -76,6 +78,7 @@
  * @method sfGuardUser           setPermissions()           Sets the current record's "Permissions" collection
  * @method sfGuardUser           setTickets()               Sets the current record's "Tickets" collection
  * @method sfGuardUser           setComments()              Sets the current record's "Comments" collection
+ * @method sfGuardUser           setCategories()            Sets the current record's "Categories" collection
  * @method sfGuardUser           setResponsibleForCompany() Sets the current record's "ResponsibleForCompany" collection
  * @method sfGuardUser           setNotifyForCompany()      Sets the current record's "NotifyForCompany" collection
  * @method sfGuardUser           setSfGuardUserPermission() Sets the current record's "sfGuardUserPermission" collection
@@ -189,6 +192,11 @@ abstract class BasesfGuardUser extends sfDoctrineRecord
              'local' => 'id',
              'foreign' => 'created_by',
              'onDelete' => 'CASCADE'));
+
+        $this->hasMany('Category as Categories', array(
+             'refClass' => 'RefUserCategory',
+             'local' => 'user_id',
+             'foreign' => 'category_id'));
 
         $this->hasMany('sfGuardGroup as ResponsibleForCompany', array(
              'refClass' => 'RefCompanyResponsible',

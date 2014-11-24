@@ -19,6 +19,13 @@ class reportActions extends sfActions
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
 
+    $seesCategories = Doctrine_Query::create()
+      ->from('RefUserCategory ref')
+      ->select('ref.category_id')
+      ->addWhere('ref.user_id = ?', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
       ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
@@ -32,6 +39,9 @@ class reportActions extends sfActions
         'model' => 'Category',
         'label' => 'Категории',
         'multiple' => true,
+        'query' => Doctrine_Query::create()
+          ->from('Category c')
+          ->andWhereIn('c.id', $seesCategories)
       ), ['class' => 'chzn-select']))
 
       ->offsetSet('company_id', new sfWidgetFormDoctrineChoice(array(

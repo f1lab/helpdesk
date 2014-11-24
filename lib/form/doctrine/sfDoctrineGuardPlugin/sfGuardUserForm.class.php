@@ -59,6 +59,10 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       ->setAttribute('placeholder', '+71234567890')
     ;
 
+    $this->getWidgetSchema()->offsetGet('categories_list')
+      ->setAttribute('class', 'chzn-select')
+    ;
+
     $this->validatorSchema['password'] = new sfValidatorString(array('required' => false, 'max_length' => 32));
 
     $this->widgetSchema->setLabels(array(
@@ -71,6 +75,7 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       'responsible_for_company_list' => 'Отвечает за компанию',
       'type' => 'Тип пользователя',
       'phone' => 'Номер телефона',
+      'categories_list' => 'Видит категории',
     ));
   }
 }

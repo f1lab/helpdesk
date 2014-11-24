@@ -22,6 +22,12 @@ sfGuardUser:
       local: id
       foreign: created_by
       onDelete: CASCADE
+    Categories:
+      class: Category
+      refClass: RefUserCategory
+      local: user_id
+      foreign: category_id
+      foreignAlias: SeesCategories
 
 sfGuardGroup:
   columns:
@@ -128,6 +134,18 @@ Category:
     name:
       type: string(255)
       notnull: true
+
+RefUserCategory:
+  columns:
+    category_id: integer
+    user_id: integer
+  relations:
+    Category:
+      local: category_id
+      foreign: id
+    User:
+      local: user_id
+      foreign: id
 
 RefTicketResponsible:
   columns:
