@@ -31,7 +31,7 @@
   </section>
 <?php
   endif;
-  if (isset($tickets['assigned_to_me']) and count($tickets['assigned_to_me'])):
+  if (isset($tickets['assigned_to_me'])):
 ?>
   <section>
     <h2>Я назначен ответственным</h2>
@@ -46,7 +46,7 @@
   </section>
 <?php
   endif;
-  if (isset($tickets['auto_assigned_to_me']) and count($tickets['auto_assigned_to_me'])):
+  if (isset($tickets['auto_assigned_to_me'])):
 ?>
   <section>
     <h2>От моих компаний</h2>
