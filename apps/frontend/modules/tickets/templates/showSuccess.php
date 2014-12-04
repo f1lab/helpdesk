@@ -38,10 +38,10 @@
         <small><?php $applier = $ticket->getApplier(); ?>
           <?php if ($applier): ?>
             в работе с <?php echo date('d.m.Y H:i:s', strtotime($applier->getCreatedAt())) ?>
-          <?php elseif (!$ticket->getIsClosed() and $sf_user->getGuardUser()->getType() === 'it-admin'): ?>
+          <?php elseif (!$ticket->getIsClosed() and $sf_user->getGuardUser()->getType() === 'it-admin' and Helpdesk::checkIfImInList($sf_user->getRawValue()->getGuardUser(), $ticket->getRawValue()->getResponsibles())): ?>
             <a href="<?php echo url_for('tickets/apply?id=' . $ticket->getId()) ?>" class="btn">принять в работу</a>
           <?php else: ?>
-            ещё не в работе
+            ещё не обработана
           <?php endif ?>
         </small>
       </h1>
