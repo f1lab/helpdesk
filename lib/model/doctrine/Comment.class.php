@@ -33,10 +33,22 @@ class Comment extends BaseComment
     // send message to ticket creator
     if ($this->getChangedTicketStateTo() === 'applied' or $this->getChangedTicketStateTo() === 'closed' or $this->getChangedTicketStateTo() === 'opened') {
       $texts = [
-        'applied' => 'Ваша заявка принята в работу! Не переживайте, мы уже над ней работаем!',
         'closed' => 'Заявка выполнена! Рады были помочь!',
         'opened' => 'Заявка переоткрыта.',
       ];
+
+      if ($this->getChangedTicketStateTo() === 'applied') {
+        $texts['applied'] = 'Ваша заявка принята в работу! Не переживайте, мы уже над ней работаем!';
+
+        $responsibles = $this->getTicket()->getResponsibles();
+        if (count($responsibles)) {
+          $result = [];
+          foreach ($responsibles as $responsible) {
+            $result[] = $responsible->getFullName();
+          }
+          $texts['applied'] .= "\nОтветственные за выполнение: " . implode(', ', $result) . '.';
+        }
+      }
 
       $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
       $domain = "helpdesk.f1lab.ru";
