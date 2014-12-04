@@ -109,8 +109,8 @@ class reportActions extends sfActions
           $this->categoryIds = (array)$this->form->getValue('category_id');
         }
 
-        if ($this->form->getValue('companyIds')) {
-          $this->company_id = (array)$this->form->getValue('companyIds');
+        if ($this->form->getValue('company_id')) {
+          $this->company_id = (array)$this->form->getValue('company_id');
         }
       }
     }
@@ -121,7 +121,7 @@ class reportActions extends sfActions
       ->leftJoin('t.Category')
       ->addWhere('t.created_at >= ? and t.created_at <= ?', array($this->period['from'], $this->period['to']))
       ->andWhereIn('t.category_id', $this->categoryIds)
-      ->andWhereIn('t.company_id', $this->companyIds)
+      ->andWhereIn('t.company_id', $this->company_id)
       // ->addOrderBy('c.created_at desc')
       ->execute()
     ;

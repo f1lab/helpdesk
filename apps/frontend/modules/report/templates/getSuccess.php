@@ -46,8 +46,8 @@
         <td><?php echo date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) ?></td>
         <td><?php echo $ticket->getDeadline() ? date('d.m.Y H:i:s', strtotime($ticket->getDeadline())) : '—' ?></td>
         <td><?php if ($ticket->getIsClosed()): ?>
-          Заявку закрыл @<?php echo $closer->getCreator()->getUsername() ?>
-          <?php echo date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) ?>
+          Заявку закрыл @<?php echo $closer ? $closer->getCreator()->getUsername() : 'неизвестно кто' ?>
+          <?php echo $closer ? date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) : 'неизвестно когда' ?>
         <?php else: ?>
           не закрыта
         <?php endif ?></td>
