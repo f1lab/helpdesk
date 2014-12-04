@@ -71,15 +71,16 @@ class Ticket extends BaseTicket
       }
     }
 
-    // send email to creator
-    $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
-    $domain = "helpdesk.f1lab.ru";
+    if ($this->getCreator()->getEmailAddress() !== 'support@helpdesk.f1lab.ru') {
+      // send email to creator
+      $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
+      $domain = "helpdesk.f1lab.ru";
 
-    $result = $mgClient->sendMessage($domain, array(
-      'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
-      'to'      => $this->getCreator()->getEmailAddress(),
-      'subject' => 'Re: ' . $this->getName(),
-      'text'    => 'В системе зарегистрировано Обращение № ' . $this->getId() . '
+      $result = $mgClient->sendMessage($domain, array(
+        'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
+        'to'      => $this->getCreator()->getEmailAddress(),
+        'subject' => 'Re: ' . $this->getName(),
+        'text'    => 'В системе зарегистрировано Обращение № ' . $this->getId() . '
 Время создания: ' . date('d.m.Y H:i:s', strtotime($this->getCreatedAt())) . '
 Тема: ' . $this->getName() . '
 Описание: ' . $this->getDescription() . '
@@ -87,6 +88,7 @@ class Ticket extends BaseTicket
 В ближайшее время Заявка будет рассмотрена!
 С уважением, команда F1 Lab
 ',
-    ));
+      ));
+    }
   }
 }

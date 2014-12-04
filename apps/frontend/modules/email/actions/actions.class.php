@@ -12,6 +12,10 @@ class emailActions extends sfActions
 {
   public function executePost(sfWebRequest $request)
   {
+    if ($request->getParameter('sender') === 'support@helpdesk.f1lab.ru') {
+      $this->forward404();
+    }
+
     $from = Doctrine_Query::create()
       ->from('sfGuardUser u')
       ->addWhere('u.email_address = ?', $request->getParameter('sender'))
