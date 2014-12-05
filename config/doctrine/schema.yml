@@ -104,6 +104,7 @@ Ticket:
       type: timestamp
     period_id: integer
     company_id: integer
+    real_sender: string(255)
   relations:
     Comments:
       class: Comment

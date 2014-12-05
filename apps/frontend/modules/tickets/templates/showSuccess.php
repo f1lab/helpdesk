@@ -32,6 +32,9 @@
       <p><span class="label label-warning">deadline: <?php echo $dl ?></span></p>
     <?php endif ?>
     <div class="content">
+      <?php if ($ticket->getRealSender()): ?>
+        <div class="alert alert-info">Письмо пришло от <a href="mailto:<?php echo $ticket->getRealSender() ?>"><?php echo $ticket->getRealSender() ?></a>.</div>
+      <?php endif ?>
       <h1 class="page-header">
         <?php echo $ticket->getName() ?>
 

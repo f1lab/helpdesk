@@ -13,7 +13,7 @@ class emailActions extends sfActions
   public function executePost(sfWebRequest $request)
   {
     if ($request->getParameter('sender') === 'support@helpdesk.f1lab.ru') {
-      $this->forward404();
+      die;
     }
 
     $from = Doctrine_Query::create()
@@ -24,11 +24,13 @@ class emailActions extends sfActions
 
     $ticket = Ticket::createFromArray([
       'name' => $request->getParameter('subject')
-      , 'description' =>
-        ($from ? '' : '<div class="alert alert-info">Письмо пришло от ' . htmlspecialchars($request->getParameter('from')) . '</div>')
-        . '<pre>' . $request->getParameter('body-plain') . '</pre>'
+      , 'description' =>'<pre>' . $request->getParameter('body-plain') . '</pre>'
       , 'created_by' => $from ? $from->getId() : 82
     ]);
+
+    if (!$from) {
+      $ticket->setRealSender($request->getParameter('sender'));
+    }
 
     $ticket->save();
     die;

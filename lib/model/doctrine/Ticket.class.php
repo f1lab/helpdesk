@@ -71,14 +71,15 @@ class Ticket extends BaseTicket
       }
     }
 
-    if ($this->getCreator()->getEmailAddress() !== 'support@helpdesk.f1lab.ru') {
+    $to = $this->getRealSender() ? $this->getRealSender() : $this->getCreator()->getEmailAddress();
+    if ($to !== 'support@helpdesk.f1lab.ru') {
       // send email to creator
       $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
       $domain = "helpdesk.f1lab.ru";
 
       $result = $mgClient->sendMessage($domain, array(
         'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
-        'to'      => $this->getCreator()->getEmailAddress(),
+        'to'      => $to,
         'subject' => 'Re: ' . $this->getName(),
         'text'    => 'В системе зарегистрировано Обращение № ' . $this->getId() . '
 Время создания: ' . date('d.m.Y H:i:s', strtotime($this->getCreatedAt())) . '

@@ -21,6 +21,7 @@ class TicketForm extends BaseTicketForm
       $this['planned_start'],
       $this['planned_finish'],
       $this['deleted_at']
+      , $this['real_sender']
     );
 
     if (sfContext::getInstance()->getUser()->hasCredential('can_set_responsibles_for_tickets')) {
