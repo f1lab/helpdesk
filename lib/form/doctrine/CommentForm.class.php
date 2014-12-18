@@ -44,19 +44,27 @@ class CommentForm extends BaseCommentForm
     $states = array (0 => 'opened', 1 => 'closed');
     $statesRu = array ('открыта' => 'opened', 'закрыта' => 'closed');
 
+    $requestParameters = sfContext::getInstance()->getRequest()->getParameter($this->getName());
+    $ticket = $this->getObject()->getTicket();
+    $user = sfContext::getInstance()->getUser();
+
     if (parent::save($con)) {
-      if (sfContext::getInstance()->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()
-        and $request=sfContext::getInstance()->getRequest()->getParameter($this->getName())
-        and isset($request['changed_ticket_state_to'])
-        and in_array($request['changed_ticket_state_to'], $states)
+      if (isset($requestParameters['changed_ticket_state_to'])
+        and in_array($requestParameters['changed_ticket_state_to'], $states)
+        and (
+          $ticket->getCreatedBy() === $user->getGuardUser()->getId()
+          || $user->hasCredential('can_edit_tickets')
+          || $user->getGuardUser()->getType() === 'it-admin'
+        )
       ) {
-        $this->getObject()->getTicket()
-          ->setIsClosed((bool)array_search($request['changed_ticket_state_to'], $states))
-        ->save();
-        sfContext::getInstance()->getUser()->setFlash('message', array(
+        $ticket
+          ->setIsClosed((bool)array_search($requestParameters['changed_ticket_state_to'], $states))
+          ->save()
+        ;
+        $user->setFlash('message', array(
           'success',
           'Отлично!',
-          'Комментарий добавлен, заявка ' . array_search($request['changed_ticket_state_to'], $statesRu) . '.'
+          'Комментарий добавлен, заявка ' . array_search($requestParameters['changed_ticket_state_to'], $statesRu) . '.'
         ));
       }
     }
