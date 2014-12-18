@@ -37,7 +37,18 @@ class usersActions extends sfActions
 
     $this->form = new sfGuardUserForm();
 
-        $this->processForm($request, $this->form,array('success', '', 'Пользователь добавлен.'));
+    $this->processForm($request, $this->form, ['success', '', 'Пользователь добавлен.']);
+
+    $groups = $this->form->getObject()->getGroups();
+    if (count($groups) and true == ($group = $groups->getFirst())) {
+      $redirect = 'companies/show?id=' . $group->getId();
+    } else {
+      $redirect = false;
+    }
+
+    if ($redirect) {
+      $this->redirect($redirect);
+    }
 
     $this->setTemplate('new');
   }
@@ -54,7 +65,14 @@ class usersActions extends sfActions
     $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('id')));
     $this->form = new sfGuardUserForm($sf_guard_user);
 
-        $this->processForm($request, $this->form,array('success', '', 'Пользователь обновлен.'));
+    $groups = $this->form->getObject()->getGroups();
+    if (count($groups) and true == ($group = $groups->getFirst())) {
+      $redirect = 'companies/show?id=' . $group->getId();
+    } else {
+      $redirect = false;
+    }
+
+    $this->processForm($request, $this->form, ['success', '', 'Пользователь обновлен.'], $redirect);
 
     $this->setTemplate('edit');
   }
@@ -72,8 +90,7 @@ class usersActions extends sfActions
   protected function processForm(sfWebRequest $request, sfForm $form, $flash=false, $redirect=false)
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-    if ($form->isValid())
-    {
+    if ($form->isValid()) {
       $sf_guard_user = $form->save();
       if ($flash and is_array($flash)) {
         $this->getUser()->setFlash('message', $flash);

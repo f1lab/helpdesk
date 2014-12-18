@@ -14,10 +14,11 @@
   <?php echo $form->renderUsing('bootstrap') ?>
 
   <div class="form-actions">
-    <a class = "btn btn-default" href="<?php echo url_for('users/index') ?>">Все пользователи</a>
+    <a class = "btn btn-link" href="<?php echo url_for('users/index') ?>">Все пользователи</a>
+    <input class = "btn btn-primary" type="submit" value="Сохранить"/>
+
     <?php if (!$form->getObject()->isNew()): ?>
-      &nbsp;<?php echo link_to('Удалить', 'users/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
+      <?php echo link_to('Удалить', 'users/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class' => 'btn btn-danger pull-right')) ?>
     <?php endif; ?>
-    <input class = "btn btn-default" type="submit" value="Сохранить"/>
   </div>
 </form>
