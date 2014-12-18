@@ -22,5 +22,37 @@ class RefTicketResponsible extends BaseRefTicketResponsible
         . urlencode('Вы были назначены ответственным за выполнение заявки ' . $this->getTicketId())
       );
     }
+
+    // add comment to ticket
+    if ($responsible) {
+      $comment = Comment::createFromArray([
+        'ticket_id' => $this->getTicketId()
+        , 'created_by' => $this->getCreatedBy()
+        , 'text' => 'Добавил в список ответственных ' . $responsible
+      ]);
+
+      $comment->save();
+    }
+  }
+
+  public function preDqlDelete($event) {
+    $parameters = $event->getQuery()->getParams()['where'];
+    $ticketId = array_shift($parameters);
+    $usersIds = $parameters;
+
+    foreach ($usersIds as $userId) {
+      $responsible = Doctrine_Core::getTable('sfGuardUser')->find($userId);
+
+      // add comment to ticket
+      if ($responsible) {
+        $comment = Comment::createFromArray([
+          'ticket_id' => $ticketId
+          , 'created_by' => sfContext::getInstance()->getUser()->getGuardUser()->getId()
+          , 'text' => 'Убрал из списка ответственных ' . $responsible
+        ]);
+
+        $comment->save();
+      }
+    }
   }
 }

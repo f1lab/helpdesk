@@ -149,6 +149,8 @@ RefUserCategory:
       foreign: id
 
 RefTicketResponsible:
+  actAs:
+    - Signable
   columns:
     ticket_id: integer
     user_id: integer
