@@ -67,7 +67,7 @@ class categoryActions extends sfActions
     if ($form->isValid()) {
       $category = $form->save();
 
-      $this->redirect('category/edit?id='.$category->getId());
+      $this->redirect('category/index');
     }
   }
 }
