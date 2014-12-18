@@ -1,13 +1,5 @@
 <?php slot('title', 'Tickets List') ?>
 
-<?php function formatTime($seconds) {
-  $hours = floor($seconds / 3600);
-  $mins = floor(($seconds - ($hours*3600)) / 60);
-  $secs = floor($seconds % 60);
-
-  return sprintf('%02d:%02d:%02d', $hours, $mins, $secs);
-} ?>
-
 <h1 class="page-header">
   Отчёт
 </h1>
@@ -53,11 +45,11 @@
         <?php endif ?></td>
 
         <td>
-          <?php echo formatTime($worked) ?>
+          <?php echo Helpdesk::formatDuration($worked) ?>
         </td>
 
         <td><?php if ($reglamented): ?>
-          <?php echo formatTime($reglamented) ?>
+          <?php echo Helpdesk::formatDuration($reglamented) ?>
         <?php else: ?>
           —
         <?php endif ?></td>
