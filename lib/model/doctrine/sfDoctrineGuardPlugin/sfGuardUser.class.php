@@ -12,14 +12,12 @@
  */
 class sfGuardUser extends PluginsfGuardUser
 {
-  public function getTicketsOpened()
+  public function getPreparedQueriesForTickets()
   {
     $return = array (
       'created_by_me' => Doctrine_Core::getTable('Ticket')->createQuery('a, a.Comments b, a.Creator c')
         ->where('a.created_by = ?', $this->getId())
-        ->andWhere('a.isClosed = ?', false)
         ->orderBy('a.created_at desc')
-        ->execute(),
     );
 
     if (true || sfContext::getInstance()->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()) {
@@ -41,10 +39,8 @@ class sfGuardUser extends PluginsfGuardUser
       $return['assigned_to_me'] = Doctrine_Query::create()
         ->from('Ticket a, a.Comments b, a.Creator c')
         ->leftJoin('a.Category')
-        ->andWhere('a.isClosed = ?', false)
         ->andWhere('a.id in (select ticket_id from ref_ticket_responsible where user_id = ?)', $this->getId())
         ->orderBy('a.created_at desc')
-        ->execute()
       ;
 
       $seesCategories = Doctrine_Query::create()
@@ -57,10 +53,22 @@ class sfGuardUser extends PluginsfGuardUser
       $return['auto_assigned_to_me'] = Doctrine_Query::create()
         ->from('Ticket a, a.Comments b, a.Creator c')
         ->leftJoin('a.Category')
-        ->andWhere('a.isClosed = ?', false)
         ->andWhereIn('a.created_by', $users)
         ->andWhereIn('a.category_id', $seesCategories)
         ->orderBy('a.created_at desc')
+      ;
+    }
+
+    return $return;
+  }
+
+  public function getTicketsOpened()
+  {
+    $prepared = $this->getPreparedQueriesForTickets();
+    $return = [];
+    foreach ($prepared as $name => $query) {
+      $return[ $name ] = $query
+        ->andWhere('a.isClosed = ?', false)
         ->execute()
       ;
     }
@@ -70,19 +78,27 @@ class sfGuardUser extends PluginsfGuardUser
 
   public function getTicketsClosed()
   {
-    return array (
-      'created_by_me' => Doctrine_Core::getTable('Ticket')->createQuery('a')
-        ->where('a.created_by = ?', $this->getId())
+    $prepared = $this->getPreparedQueriesForTickets();
+    $return = [];
+    foreach ($prepared as $name => $query) {
+      $return[ $name ] = $query
         ->andWhere('a.isClosed = ?', true)
         ->execute()
-    );
+      ;
+    }
+
+    return $return;
   }
 
   public function getTIcketsAll()
   {
-    return array (
-      'created_by_me' => $this->getTickets()
-    );
+    $prepared = $this->getPreparedQueriesForTickets();
+    $return = [];
+    foreach ($prepared as $name => $query) {
+      $return[ $name ] = $query->execute();
+    }
+
+    return $return;
   }
 
   public function getFullName() {
