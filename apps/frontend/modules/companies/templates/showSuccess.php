@@ -27,7 +27,7 @@
   <?php endif ?>
   </div>
   <div class="btn-group">
-    <a href="<?php echo url_for('/users/new?company=' . $company->getId()) ?>" class="btn btn-primary">
+    <a href="<?php echo url_for('users/new?company=' . $company->getId()) ?>" class="btn btn-primary">
       <i class="icon-plus icon-white"></i>
       Добавить пользователя
     </a>

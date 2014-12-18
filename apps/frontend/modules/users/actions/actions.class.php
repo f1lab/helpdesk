@@ -26,6 +26,9 @@ class usersActions extends sfActions
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new sfGuardUserForm();
+    if ($request->hasParameter('company')) {
+      $this->form->setDefault('groups_list', $request->getParameter('company'));
+    }
   }
 
   public function executeCreate(sfWebRequest $request)
