@@ -24,7 +24,7 @@ class emailActions extends sfActions
 
     $ticket = Ticket::createFromArray([
       'name' => $request->getParameter('subject')
-      , 'description' =>'<pre>' . $request->getParameter('body-plain') . '</pre>'
+      , 'description' => str_replace("\n", "<br/>\n", $request->getParameter('body-plain'))
       , 'created_by' => $from ? $from->getId() : 82
     ]);
 
