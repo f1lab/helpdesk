@@ -196,6 +196,8 @@
       <i class="icon-ok"></i>
       Комментировать и открыть
     </button>
+  <?php elseif ($ticket->getCategoryId() === null): ?>
+    <div class="alert alert-info pull-right" style="display: inline-block">Нельзя закрыть заявку без категории.</div>
   <?php else: ?>
     <button type="submit" class="btn pull-right ticket-close">
       <i class="icon-remove"></i>
