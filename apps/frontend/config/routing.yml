@@ -8,7 +8,7 @@ homepage:
 shedule-source:
   url:   /tickets/eventsource
   param: { module: tickets, action: eventSource}
- 
+
 shedule-modal:
   url:   /tickets/modal/:id
   param: { module: tickets, action: sheduleModal}
@@ -20,7 +20,7 @@ shedule-events:
 
 shedule-events-new:
   url:   /tickets/sheduleEventNew
-  param: { module: tickets, action: sheduleEventNew}  
+  param: { module: tickets, action: sheduleEventNew}
 
 ticket-done:
   url:   /tickets/done/:id
@@ -47,7 +47,7 @@ tickets-performed:
   options: { model: Ticket, type: object }
   param: { module: tickets, action: performed }
   requirements: { id: \d+ }
-  
+
 tickets-create:
   url:   /tickets/create
   param: { module: tickets, action: create }
@@ -118,13 +118,6 @@ companies-delete:
   param: { module: companies, action: delete }
   requirements: { id: \d+ }
 
-users:
-  class: sfDoctrineRouteCollection
-  options:
-    model: sfGuardUser
-    prefix_path: /sfGuardUser
-    module: users
-
 dashboard:
   url:   /dashboard
   param: { module: dashboard, action: index }
@@ -138,7 +131,7 @@ dashboard-comments:
   url:   /dashboard/comments/:state
   param: { module: dashboard, action: comments, state: comments }
   requirements: { state: comments|all }
-  
+
 dashboard-settings:
   url:   /dashboard/settings
   param: { module: dashboard, action: settings, state: comments }
@@ -146,10 +139,10 @@ dashboard-settings:
 unread:
   url: /tickets/unread
   param: { module: tickets, action: unread }
- 
+
 shedule:
   url:  /shedule
-  param: { module: tickets, action: shedule } 
+  param: { module: tickets, action: shedule }
 
 default_index:
   url:   /:module
