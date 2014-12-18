@@ -84,7 +84,7 @@ class Ticket extends BaseTicket
         'text'    => 'В системе зарегистрировано Обращение № ' . $this->getId() . '
 Время создания: ' . date('d.m.Y H:i:s', strtotime($this->getCreatedAt())) . '
 Тема: ' . $this->getName() . '
-Описание: ' . $this->getDescription() . '
+Описание: ' . str_replace('<br/>', '', $this->getDescription()) . '
 
 В ближайшее время Заявка будет рассмотрена!
 С уважением, команда F1 Lab
