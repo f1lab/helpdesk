@@ -5,3 +5,16 @@
 all:
   sf_guard_plugin:
     success_signin_url: tickets/my
+
+  mailgun:
+    enabled: false
+    key:
+
+    domain: helpdesk.f1lab.ru
+    from: Helpdesk <support@helpdesk.f1lab.ru>
+
+  sms:
+    enabled: false
+    key:
+
+    from: f1lab

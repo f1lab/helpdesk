@@ -17,10 +17,7 @@ class RefTicketResponsible extends BaseRefTicketResponsible
 
     // send sms to responsible
     if ($responsible and $responsible->getPhone()) {
-      file_get_contents("http://sms.ru/sms/send?api_id=ab037779-734f-3394-794f-7d532843ed95&to="
-        . $responsible->getPhone() . "&from=f1lab&text="
-        . urlencode('Вы были назначены ответственным за выполнение заявки ' . $this->getTicketId())
-      );
+      Sms::send([$responsible->getPhone()], 'Вы были назначены ответственным за выполнение заявки ' . $this->getTicketId());
     }
 
     // add comment to ticket

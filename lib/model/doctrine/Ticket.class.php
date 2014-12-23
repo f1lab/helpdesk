@@ -63,21 +63,14 @@ class Ticket extends BaseTicket
         }
       }
 
-      if (count($phones)) {
-        file_get_contents("http://sms.ru/sms/send?api_id=ab037779-734f-3394-794f-7d532843ed95&to="
-          . implode(',', $phones) . "&from=f1lab&text="
-          . urlencode('Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername())
-        );
-      }
+      Sms::send($phones, 'Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername());
     }
 
     // send email to creator
     $to = $this->getRealSender() ? $this->getRealSender() : $this->getCreator()->getEmailAddress();
     if ($to !== 'support@helpdesk.f1lab.ru') {
-      $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
-      $domain = "helpdesk.f1lab.ru";
 
-$message = '
+      $message = '
 В системе зарегистрировано Обращение № ' . $this->getId() . '
 Время создания: ' . date('d.m.Y H:i:s', strtotime($this->getCreatedAt())) . '
 Тема: ' . $this->getName() . '
@@ -91,13 +84,7 @@ $message = '
 --
 С уважением, команда F1 Lab
 ';
-
-      $result = $mgClient->sendMessage($domain, [
-        'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
-        'to'      => $to,
-        'subject' => '[F1LAB-HLPDSK-' . $this->getId() . '] ' . $this->getName(),
-        'text'    => $message,
-      ]);
+      Email::send($to, '[F1LAB-HLPDSK-' . $this->getId() . '] ' . $this->getName(), $message);
     }
   }
 }

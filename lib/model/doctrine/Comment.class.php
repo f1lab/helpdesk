@@ -50,17 +50,9 @@ class Comment extends BaseComment
         }
       }
 
-      $mgClient = new Mailgun\Mailgun('key-8979ce7637d74052059dacc30b0ab30e');
-      $domain = "helpdesk.f1lab.ru";
-
       $to = $this->getTicket()->getRealSender() ? $this->getTicket()->getRealSender() : $this->getTicket()->getCreator()->getEmailAddress();
       if ($to !== 'support@helpdesk.f1lab.ru') {
-        $result = $mgClient->sendMessage($domain, array(
-          'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
-          'to'      => $to,
-          'subject' => 'Re: [F1LAB-HLPDSK-' . $this->getTicket()->getId() . '] ' . $this->getTicket()->getName(),
-          'text'    => $texts[ $this->getChangedTicketStateTo() ],
-        ));
+        Email::send($to, 'Re: [F1LAB-HLPDSK-' . $this->getTicket()->getId() . '] ' . $this->getTicket()->getName(), $texts[ $this->getChangedTicketStateTo() ]);
       }
     }
   }
