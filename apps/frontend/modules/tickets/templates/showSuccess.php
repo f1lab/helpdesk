@@ -16,11 +16,6 @@
       <span class="who"><a href="#"><?php echo $ticket->getCreator()->getUsername() ?></a></span>
       <span class="what">opened ticket</span>
       <span class="when"><?php echo $ticket->getCreatedAt() ?></span>
-      <span class="muted pull-right">
-        <?php echo $ticket->getCreator()->getFullName() ?>
-        <?php echo $ticket->getCreator()->getEmailAddress() ?>
-        <?php echo $ticket->getCreator()->getPhone() ?>
-      </span>
     </div>
     <?php
       if (true == ($dl = $ticket->getDeadline())):
@@ -119,6 +114,20 @@
       <ul style="text-align:left"><?php foreach ($responsibles as $user): ?>
         <li><a href="#"><?php echo $user->getUsername() ?></a></li>
       <?php endforeach ?></ul>
+    </div>
+  <?php endif ?>
+
+  <?php if ($ticket->getCreatedBy() != 82): $creator = $ticket->getCreator()->getRawValue(); ?>
+    <div>
+      Об авторе: <ul>
+        <li>Имя: <?php echo $creator->getFirstName() ?: '—' ?></li>
+        <li>Фамилия: <?php echo $creator->getLastName() ?: '—' ?></li>
+        <li>Должность: <?php echo $creator->getPosition() ?: '—' ?></li>
+        <li>Телефон: <?php echo $creator->getPhone() ?: '—' ?></li>
+        <li>Телефон рабочий: <?php echo $creator->getWorkPhone() ?: '—' ?></li>
+        <li>Username: <?php echo $creator->getUsername() ?: '—' ?></li>
+        <li>Email: <?php echo $creator->getEmailAddress() ?: '—' ?></li>
+      </ul>
     </div>
   <?php endif ?>
 </div>
