@@ -9,6 +9,10 @@ sfGuardUser:
       default: user
     phone:
       type: string(255)
+    work_phone:
+      type: string(255)
+    position:
+      type: string(255)
   relations:
     Tickets:
       class: Ticket

@@ -17,6 +17,8 @@
  * @property timestamp $last_login
  * @property enum $type
  * @property string $phone
+ * @property string $work_phone
+ * @property string $position
  * @property Doctrine_Collection $Groups
  * @property Doctrine_Collection $Permissions
  * @property Doctrine_Collection $Tickets
@@ -46,6 +48,8 @@
  * @method timestamp             getLastLogin()             Returns the current record's "last_login" value
  * @method enum                  getType()                  Returns the current record's "type" value
  * @method string                getPhone()                 Returns the current record's "phone" value
+ * @method string                getWorkPhone()             Returns the current record's "work_phone" value
+ * @method string                getPosition()              Returns the current record's "position" value
  * @method Doctrine_Collection   getGroups()                Returns the current record's "Groups" collection
  * @method Doctrine_Collection   getPermissions()           Returns the current record's "Permissions" collection
  * @method Doctrine_Collection   getTickets()               Returns the current record's "Tickets" collection
@@ -74,6 +78,8 @@
  * @method sfGuardUser           setLastLogin()             Sets the current record's "last_login" value
  * @method sfGuardUser           setType()                  Sets the current record's "type" value
  * @method sfGuardUser           setPhone()                 Sets the current record's "phone" value
+ * @method sfGuardUser           setWorkPhone()             Sets the current record's "work_phone" value
+ * @method sfGuardUser           setPosition()              Sets the current record's "position" value
  * @method sfGuardUser           setGroups()                Sets the current record's "Groups" collection
  * @method sfGuardUser           setPermissions()           Sets the current record's "Permissions" collection
  * @method sfGuardUser           setTickets()               Sets the current record's "Tickets" collection
@@ -157,6 +163,14 @@ abstract class BasesfGuardUser extends sfDoctrineRecord
              'default' => 'user',
              ));
         $this->hasColumn('phone', 'string', 255, array(
+             'type' => 'string',
+             'length' => 255,
+             ));
+        $this->hasColumn('work_phone', 'string', 255, array(
+             'type' => 'string',
+             'length' => 255,
+             ));
+        $this->hasColumn('position', 'string', 255, array(
              'type' => 'string',
              'length' => 255,
              ));
