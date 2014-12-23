@@ -11,9 +11,13 @@ class Sms
       return false;
     }
 
-    return file_get_contents('http://sms.ru/sms/send?api_id=' . $key . '&to='
-      . implode(',', $to) . '&from=' . $from . '&text='
-      . urlencode($text)
-    );
+    $query = http_build_query([
+      'api_id' => $key
+      , 'to' => implode(',', $to)
+      , 'from' => $from
+      , 'text' => $text
+    ]);
+
+    return file_get_contents('http://sms.ru/sms/send?' . $query);
   }
 }
