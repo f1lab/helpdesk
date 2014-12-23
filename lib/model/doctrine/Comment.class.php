@@ -58,7 +58,7 @@ class Comment extends BaseComment
         $result = $mgClient->sendMessage($domain, array(
           'from'    => 'Helpdesk <support@helpdesk.f1lab.ru>',
           'to'      => $to,
-          'subject' => 'Re: ' . $this->getTicket()->getName(),
+          'subject' => 'Re: [F1LAB-HLPDSK-' . $this->getTicket()->getId() . '] ' . $this->getTicket()->getName(),
           'text'    => $texts[ $this->getChangedTicketStateTo() ],
         ));
       }
