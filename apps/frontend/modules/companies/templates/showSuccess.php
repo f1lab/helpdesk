@@ -58,26 +58,35 @@
   <div class="alert alert-info">Нет пользователей.</div>
 <?php endif ?>
 
-<h3>Кого оповещать</h3>
-<?php if ($company->getNotify()->count()): ?>
-  <table class="table table-striped table-bordered table-condensed rows-clickable">
-    <thead>
-      <tr>
-      <th>№</th>
-      <th>Username</th>
-      <th>Имя</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($company->getNotify() as $user): ?>
-      <tr>
-      <td><?php echo $user->getId() ?></td>
-      <td>@<a href="<?php echo url_for('/users/edit?id=' . $user->getId()) ?>"><?php echo $user->getUsername() ?></a></td>
-      <td><?php echo $user->getName() ?></td>
-    </tr>
-    <?php endforeach; ?>
-    </tbody>
-  </table>
-<?php else: ?>
-  <div class="alert alert-info">Никого.</div>
-<?php endif ?>
+<?php
+  $notifyes = [
+    ['name' => 'SMS', 'method' => 'getNotifySms'],
+    ['name' => 'Email', 'method' => 'getNotifyEmail'],
+  ];
+?>
+
+<?php foreach ($notifyes as $notify): ?>
+  <h3>Кого оповещать по <?php echo $notify['name'] ?></h3>
+  <?php if ($company->$notify['method']()->count()): ?>
+    <table class="table table-striped table-bordered table-condensed rows-clickable">
+      <thead>
+        <tr>
+        <th>№</th>
+        <th>Username</th>
+        <th>Имя</th>
+      </tr>
+      </thead>
+      <tbody>
+      <?php foreach ($company->$notify['method']() as $user): ?>
+        <tr>
+        <td><?php echo $user->getId() ?></td>
+        <td>@<a href="<?php echo url_for('/users/edit?id=' . $user->getId()) ?>"><?php echo $user->getUsername() ?></a></td>
+        <td><?php echo $user->getName() ?></td>
+      </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+  <?php else: ?>
+    <div class="alert alert-info">Никого.</div>
+  <?php endif ?>
+<?php endforeach; ?>

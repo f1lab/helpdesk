@@ -50,12 +50,18 @@ sfGuardGroup:
       local: group_id
       foreign: user_id
       foreignAlias: ResponsibleForCompany
-    Notify:
+    NotifySms:
       class: sfGuardUser
       refClass: RefCompanyNotify
       local: group_id
       foreign: user_id
-      foreignAlias: NotifyForCompany
+      foreignAlias: NotifySmsForCompany
+    NotifyEmail:
+      class: sfGuardUser
+      refClass: RefCompanyNotifyEmail
+      local: group_id
+      foreign: user_id
+      foreignAlias: NotifyEmailForCompany
 
 RefCompanyResponsible:
   columns:
@@ -71,7 +77,7 @@ RefCompanyResponsible:
       local: user_id
       foreign: id
 
-RefCompanyNotify:
+RefCompanyNotify: # sms
   columns:
     group_id: integer
     user_id: integer
@@ -80,7 +86,21 @@ RefCompanyNotify:
       class: sfGuardGroup
       local: group_id
       foreign: id
-    Notify:
+    NotifySms:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefCompanyNotifyEmail:
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    NotifyEmail:
       class: sfGuardUser
       local: user_id
       foreign: id

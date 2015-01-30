@@ -39,7 +39,19 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
         'data-placeholder' => 'Выберите…',
       )))
 
-      ->offsetSet('notify_list', new sfWidgetFormDoctrineChoice(array(
+      ->offsetSet('notify_sms_list', new sfWidgetFormDoctrineChoice(array(
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->where('u.type = ?', 'it-admin')
+        ,
+      ), array(
+        'class' => 'chzn-select',
+        'data-placeholder' => 'Выберите…',
+      )))
+
+      ->offsetSet('notify_email_list', new sfWidgetFormDoctrineChoice(array(
         'multiple' => true,
         'model' => 'sfGuardUser',
         'query' => Doctrine_Query::create()
@@ -67,7 +79,8 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
       'users_list' => 'Пользователи',
       'description' => 'Наименование',
       'responsibles_list' => 'Ответственные',
-      'notify_list' => 'Кого оповещать',
+      'notify_sms_list' => 'Кого оповещать по SMS',
+      'notify_email_list' => 'Кого оповещать по Email',
       'sms_title' => 'Заголовок смс-сообщения',
     ));
   }
