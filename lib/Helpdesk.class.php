@@ -13,7 +13,12 @@ final class Helpdesk
   }
 
   static public final function formatDuration($duration) {
-    $remained = $duration;
+    if (is_string($duration)) {
+      $remained = time() - strtotime($duration);
+    } else {
+      $remained = $duration;
+    }
+
     $result = [];
 
     $months = floor($remained / 2635200);

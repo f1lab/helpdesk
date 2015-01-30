@@ -19,43 +19,32 @@
   </thead>
   <tbody>
 
+  <?php
+    $existQuery = Doctrine_Core::getTable('ReadedTickets')->createQuery('a')
+      ->where('a.user_id = ?')
+      ->andWhere('a.ticket_id = ?')
+    ;
+
+    $commentsQuery = Doctrine_Core::getTable('ReadedComments')->createQuery('a')
+      ->where('a.Comment.ticket_id = ?')
+      ->andWhere('a.user_id = ?')
+    ;
+  ?>
+
   <?php foreach ($tickets as $ticket): ?>
-
     <?php
-          $exist = Doctrine_Core::getTable('ReadedTickets')->createQuery('a')
-            ->where('a.user_id = ?', $sf_user->getGuardUser()->getId())
-            ->andWhere('a.ticket_id = ?', $ticket->getId())
-            ->execute()
-          ;
-
-          $allReadedCommentsForTicket = Doctrine_Core::getTable('ReadedComments')->createQuery('a')
-            ->where('a.Comment.ticket_id = ?',$ticket->getId())
-            ->andWhere('a.user_id = ?',$sf_user->getGuardUser()->getId())
-            ->execute()
-          ;
-
+          $exist = $existQuery->count([$sf_user->getGuardUser()->getId(), $ticket->getId()]);
+          $allReadedCommentsForTicket = $commentsQuery->count([$ticket->getId(), $sf_user->getGuardUser()->getId()]);
     ?>
 
-    <tr class="
-      <?php
-        if ($exist->count() == 0)
-        {
-          echo 'alert-success';
-        }
-        else
-        {
-          echo '';
-        }
-      ?>
-    ">
-
+    <tr class="<?= $exist === 0 ? 'alert-success' : ''?>">
       <td><?php echo $ticket->getId() ?></td>
       <td><a href="<?php echo url_for('@tickets-show?id=' . $ticket->getId()) ?>"><?php echo $ticket->getName() ?></a></td>
 
       <?php if (isset($showCategories) and $showCategories): ?><td><?php echo $ticket->getCategory() ?></td><?php endif ?>
 
       <?php if ($showDate): ?><td title="<?php echo $ticket->getCreatedAt() ?>">
-        <?php echo time_ago_in_words(strtotime($ticket->getCreatedAt())) ?> назад
+        <?php echo Helpdesk::formatDuration($ticket->getCreatedAt()); ?> назад
       </td><?php endif ?>
 
       <?php if ($showCompanyName): ?><td>#<?php
@@ -87,7 +76,7 @@
       <?php endif ?>
 
       <td>
-       <?php if ($allReadedCommentsForTicket->count() < $ticket->Comments->count() ){ ?>
+       <?php if ($allReadedCommentsForTicket < $ticket->getComments()->count() ){ ?>
             <span class="badge badge-warning"> <?php echo $ticket->getComments()->count() ?> </span>
         <?php } else{ ?>
              <span class="badge "> <?php echo $ticket->getComments()->count() ?> </span>
