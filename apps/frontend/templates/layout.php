@@ -43,12 +43,6 @@
               </li>
             <?php endif ?>
 
-            <?php if ($sf_user->hasCredential('view_company_tickets')): ?>
-              <li <?php if ('tickets-company' == $currentRoute): ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('@tickets-company') ?>">Заявки компании</a>
-              </li>
-            <?php endif ?>
-
             <?php if ($sf_user->hasCredential('can_use_dashboard')): ?>
               <li <?php if (in_array($currentRoute, array(
                 'dashboard',
