@@ -72,18 +72,20 @@
             <?php endif ?>
           </ul>
 
-          <div class="pull-right">
-            <div class="btn-group">
-              <a class="btn dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-user"></i>
-                <?php echo $sf_user->getUsername() ?>
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu fluid">
-                <li><a href="<?php echo url_for('guard/logout') ?>">Выйти</a></li>
-              </ul>
-            </div>
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" href="#" data-toggle="dropdown">
+              <i class="icon-user"></i>
+              <?php echo $sf_user->getUsername() ?>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu fluid">
+              <li><a href="<?php echo url_for('guard/logout') ?>">Выйти</a></li>
+            </ul>
           </div>
+
+          <form action="<?php echo url_for('tickets/show'); ?>" method="get" class="navbar-search pull-right">
+            <input type="number" min="1" name="id" required class="span2 search-query" placeholder="Номер заявки + &#9166;">
+          </form>
         <?php endif ?></div>
       </div>
     </div>
