@@ -174,30 +174,30 @@ class ticketsActions extends sfActions
     if ($this->getUser()->getGuardUser()->getGroups()->getFirst()->getIsExecutor()){
       $user = $this->getUser()->getGuardUser()->getId();
       $query = "
-      select distinct t.`id`
-      from `ticket` t
-      left join `ref_ticket_responsible` rftr on rftr.`ticket_id` = t.`id`
+      select distinct t.id
+      from ticket t
+      left join ref_ticket_responsible rftr on rftr.ticket_id = t.id
       where
       t.deleted_at IS NULL
       AND
       t.isclosed != 1
       AND
-      (rftr.`user_id`= ".$user."
+      (rftr.user_id= ".$user."
       or
-      t.`created_by` in (SELECT `s3`.`id` AS `id`
-      FROM `sf_guard_user` `s`
-      LEFT JOIN `ref_company_responsible` `r` ON (`s`.`id` = `r`.`user_id`)
-      LEFT JOIN `sf_guard_group` `s2` ON `s2`.`id` = `r`.`group_id`
-      LEFT JOIN `sf_guard_user_group` `s4` ON (`s2`.`id` = `s4`.`group_id`)
-      LEFT JOIN `sf_guard_user` `s3` ON `s3`.`id` = `s4`.`user_id`
-      WHERE (`s`.`id` = ".$user.")
+      t.created_by in (SELECT s3.id AS id
+      FROM sf_guard_user s
+      LEFT JOIN ref_company_responsible r ON (s.id = r.user_id)
+      LEFT JOIN sf_guard_group s2 ON s2.id = r.group_id
+      LEFT JOIN sf_guard_user_group s4 ON (s2.id = s4.group_id)
+      LEFT JOIN sf_guard_user s3 ON s3.id = s4.user_id
+      WHERE (s.id = ".$user.")
       ORDER BY id))
       AND
-      t.`id`
+      t.id
       NOT in
-      (select t.`id`
-      from `ticket` t
-      left join `readed_tickets` rt on rt.`ticket_id` = t.`id` WHERE rt.`user_id`="
+      (select t.id
+      from ticket t
+      left join readed_tickets rt on rt.ticket_id = t.id WHERE rt.user_id="
       .$user.
       "
       )
@@ -222,27 +222,27 @@ class ticketsActions extends sfActions
     $user =  $this->getContext()->getUser()->getGuardUser()->getId();
     //НЕРАЗМЕЧЕННЫЕ ЗАЯВКИ
     $query = "select *
-		from `ticket` t
-		left join `ref_ticket_responsible` rftr on rftr.`ticket_id` = t.`id`
+		from ticket t
+		left join ref_ticket_responsible rftr on rftr.ticket_id = t.id
 		where
 		t.deleted_at IS NULL
     AND
-    t.isclosed != 1
+    t.isclosed = false
     AND
 		( t.planned_start IS NULL or t.planned_finish IS NULL )
 		AND
-		(rftr.`user_id`= ".$user."
+		(rftr.user_id= ".$user."
 		or
-		t.`created_by` in (SELECT `s3`.`id` AS `id`
-		FROM `sf_guard_user` `s`
-		LEFT JOIN `ref_company_responsible` `r` ON (`s`.`id` = `r`.`user_id`)
-		LEFT JOIN `sf_guard_group` `s2` ON `s2`.`id` = `r`.`group_id`
-		LEFT JOIN `sf_guard_user_group` `s4` ON (`s2`.`id` = `s4`.`group_id`)
-		LEFT JOIN `sf_guard_user` `s3` ON `s3`.`id` = `s4`.`user_id`
-		WHERE (`s`.`id` = ".$user.")
+		t.created_by in (SELECT s3.id AS id
+		FROM sf_guard_user s
+		LEFT JOIN ref_company_responsible r ON (s.id = r.user_id)
+		LEFT JOIN sf_guard_group s2 ON s2.id = r.group_id
+		LEFT JOIN sf_guard_user_group s4 ON (s2.id = s4.group_id)
+		LEFT JOIN sf_guard_user s3 ON s3.id = s4.user_id
+		WHERE (s.id = ".$user.")
 		ORDER BY id)
     or
-		t.`created_by` = ".$user."
+		t.created_by = ".$user."
     )
 		";
     $this->unpartitioned = Doctrine_Manager::connection()
