@@ -3,8 +3,11 @@ log/*
 web/uploads/*
 lib/vendor/symfony
 lib/model/doctrine/base/*
+lib/model/doctrine/*Plugin/base/Base*
 lib/form/doctrine/base/*
+lib/form/doctrine/*Plugin/base/Base*
 lib/filter/doctrine/base/*
+lib/filter/doctrine/*Plugin/base/Base*
 config/databases.yml
 
 vendor
