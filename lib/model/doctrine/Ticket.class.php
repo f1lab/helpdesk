@@ -12,21 +12,6 @@
  */
 class Ticket extends BaseTicket
 {
-  private function correctDeadline() {
-    $deadline = $this->getDeadline();
-    if ($deadline) {
-      $this->setDeadline(date('Y.m.d 23:59', strtotime($deadline)));
-    }
-  }
-
-  public function preInsert($event) {
-    $this->correctDeadline();
-  }
-
-  public function preUpdate($event) {
-    $this->correctDeadline();
-  }
-
   public function getCloser() {
     return Doctrine_Query::create()
       ->from('Comment c')
