@@ -8,6 +8,11 @@ $(function() {
 		today: "Сегодня"
 	};
 
+  $('.datetimepickable').datetimepicker({
+    'language': 'ru',
+    'weekStart': 1
+  });
+
   $('table.tickets tbody')
     .find('tr')
       .each(function() {

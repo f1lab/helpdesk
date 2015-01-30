@@ -18,6 +18,7 @@ default:
     - bootstrap-datepicker
     - fullcalendar
     - timepicker
+    - datetimepicker
     - bootstrap-wysihtml5-0.0.2.css
     - chosen
     - style
@@ -29,6 +30,8 @@ default:
     - bootstrap-wysihtml5-0.0.2.js
     - bootstrap.min.js
     - bootstrap-datepicker
+    - bootstrap-datetimepicker
+    - bootstrap-datetimepicker.ru.js
     - bootstrap-timepicker
     - fullcalendar.min.js
     - jquery-ui.custom.min.js
