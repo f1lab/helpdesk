@@ -12,13 +12,31 @@ class Email
       return false;
     }
 
+    if ($to === '' or is_array($to) && count($to) < 1) {
+      return false;
+    }
+
     $mgClient = new Mailgun\Mailgun($key);
 
-    return $mgClient->sendMessage($domain, [
-      'from'    => $from,
-      'to'      => $to,
-      'subject' => $subject,
-      'text'    => $text,
-    ]);
+    if (is_array($to)) {
+      $to = implode(',', $to);
+    }
+
+    $result = false;
+    try {
+      $result = $mgClient->sendMessage($domain, [
+        'from'    => $from,
+        'to'      => $to,
+        'subject' => $subject,
+        'text'    => $text,
+      ]);
+    } catch (Exception $e) {
+      file_put_contents(
+        sfConfig::get('sf_upload_dir') . DIRECTORY_SEPARATOR . 'email-bugs' . DIRECTORY_SEPARATOR . 'email@' . time()
+        , print_r([$e->getMessage(), $to, $subject, $text], true)
+      );
+    }
+
+    return $result;
   }
 }

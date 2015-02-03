@@ -39,16 +39,36 @@ class Ticket extends BaseTicket
   public function postInsert($event) {
     $company = $this->getCreator()->getGroups()->getFirst();
 
-    // send sms
-    if ($company and true == ($notify = $company->getNotify())) {
-      $phones = [];
-      foreach ($notify as $user) {
-        if ($user->getPhone()) {
-          $phones[] = $user->getPhone();
+    // notify it-admins
+    if ($company) {
+      $subject = 'Новая заявка';
+      $text = 'Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername() . PHP_EOL
+            . 'http://helpdesk.f1lab.ru/tickets/' . $this->getId()
+      ;
+
+      // sms
+      if (true == ($notify = $company->getNotifySms())) {
+        $phones = [];
+        foreach ($notify as $user) {
+          if ($user->getPhone()) {
+            $phones[] = $user->getPhone();
+          }
         }
+
+        Sms::send($phones, $text);
       }
 
-      Sms::send($phones, 'Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername());
+      // email
+      if (true == ($notify = $company->getNotifyEmail())) {
+        $emails = [];
+        foreach ($notify as $user) {
+          if ($user->getEmailAddress()) {
+            $emails[] = $user->getEmailAddress();
+          }
+        }
+
+        Email::send($emails, $subject, $text);
+      }
     }
 
     // send email to creator
