@@ -149,38 +149,38 @@
 
       <div class="header">
         <span class="who"><a href="#"><?php echo $comment->getCreator()->getUsername() ?></a></span>
-        <span class="what">commented<?php if ($state=$comment->getChangedTicketStateTo()): ?> and <?php echo $state; endif ?></span>
+        <span class="what">добавил комментарий<?php if ($comment->getChangedTicketStateTo()): ?> и <strong><?php echo $comment->getChangedTicketStateToLabel(); ?> </strong><?php endif ?></span>
         <span class="when pull-right">
           <a href="#ticketcomment-<?php echo $comment->getId() ?>">
-            <?php echo time_ago_in_words(strtotime($comment->getCreatedAt())) ?> назад
+            <?php echo date('d.m.Y H:i:s', strtotime($comment->getCreatedAt())) ?>
           </a>
         </span>
       </div>
 
       <div class="content">
-      <?php if ($sf_user->hasCredential('can_delete_comments')): ?>
-        <ul class="actions unstyled visible-phone visible-tablet hidden-desktop">
-          <li class="pull-left">
-            <a href="#" class="btn btn-mini" rel="tooltip" title="edit" onclick="alert('not implemented yet'); return false">
-              <i class="icon-pencil"></i>
-            </a>
-          </li>
-          <li class="pull-left">
-            <a href="#" class="btn btn-mini comment-deleter" rel="tooltip" title="delete" data-delete-uri="<?php
-              echo url_for('@comments-delete?id=' . $ticket->getId() . '&comment=' . $comment->getId()) ?>">
-              <i class="icon-remove"></i>
-            </a>
-          </li>
-        </ul>
-      <?php endif ?>
+        <?php if ($sf_user->hasCredential('can_delete_comments')): ?>
+          <ul class="actions unstyled visible-phone visible-tablet hidden-desktop">
+            <li class="pull-left">
+              <a href="#" class="btn btn-mini" rel="tooltip" title="edit" onclick="alert('not implemented yet'); return false">
+                <i class="icon-pencil"></i>
+              </a>
+            </li>
+            <li class="pull-left">
+              <a href="#" class="btn btn-mini comment-deleter" rel="tooltip" title="delete" data-delete-uri="<?php
+                echo url_for('@comments-delete?id=' . $ticket->getId() . '&comment=' . $comment->getId()) ?>">
+                <i class="icon-remove"></i>
+              </a>
+            </li>
+          </ul>
+        <?php endif ?>
         <?php echo simple_format_text($comment->getText()) ?>
-      <?php if ($attachment=$comment->getAttachment()): ?>
-        <hr />
-        Вложения:
-        <ul>
-          <li><a href="/uploads/comment-attachments/<?php echo $attachment ?>" target="_blank"><?php echo $attachment ?></a></li>
-        </ul>
-      <?php endif ?>
+
+        <?php if ($attachment=$comment->getAttachment()): ?><p>
+          <a href="/uploads/comment-attachments/<?php echo $attachment ?>" target="_blank" class="btn btn-link">
+            <span class="icon icon-download"></span>
+            <?php echo $attachment ?>
+          </a>
+        </p><?php endif ?>
       </div>
     </div>
   </div>

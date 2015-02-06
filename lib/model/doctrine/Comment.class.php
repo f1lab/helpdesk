@@ -56,4 +56,15 @@ class Comment extends BaseComment
       }
     }
   }
+
+  public function getChangedTicketStateToLabel()
+  {
+    static $states = [
+      'applied' => 'принял в работу',
+      'closed' => 'закрыл',
+      'opened' => 'переоткрыл',
+    ];
+
+    return $states[ $this->getChangedTicketStateTo() ];
+  }
 }

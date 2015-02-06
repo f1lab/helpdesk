@@ -40,8 +40,13 @@ class ticketsActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->ticket = Doctrine_Core::getTable('Ticket')->createQuery('a, a.Creator, a.Comments as ac, ac.Creator')
-      ->where('id = ?', $request->getParameter('id'))
+    $this->ticket = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->leftJoin('t.Creator')
+      ->leftJoin('t.Comments comments')
+      ->leftJoin('comments.Creator')
+      ->addOrderBy('comments.created_at asc')
+      ->where('t.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
 

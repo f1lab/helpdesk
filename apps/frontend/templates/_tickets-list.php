@@ -44,7 +44,7 @@
       <?php if (isset($showCategories) and $showCategories): ?><td><?php echo $ticket->getCategory() ?></td><?php endif ?>
 
       <?php if ($showDate): ?><td title="<?php echo $ticket->getCreatedAt() ?>">
-        <?php echo Helpdesk::formatDuration($ticket->getCreatedAt()); ?> назад
+        <?php echo date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) ?>
       </td><?php endif ?>
 
       <?php if ($showCompanyName): ?><td>#<?php
