@@ -17,21 +17,32 @@ class sfGuardUser extends PluginsfGuardUser
     $return = [];
 
     $return['created_by_me'] = Doctrine_Query::create()
-      ->from('Ticket a, a.Comments b, a.Creator c')
-      ->leftJoin('a.Responsibles')
-      ->leftJoin('a.Category')
-      ->leftJoin('a.Creator.Groups')
-      ->where('a.created_by = ?', $this->getId())
-      ->orderBy('a.created_at desc')
+      ->from('Ticket t')
+      ->leftJoin('t.Category')
+      ->leftJoin('t.Comments')
+      ->leftJoin('t.Creator.Groups')
+      ->where('t.created_by = ?', $this->getId())
+      ->orderBy('t.created_at desc')
     ;
 
     $return['assigned_to_me'] = Doctrine_Query::create()
-      ->from('Ticket a, a.Comments b, a.Creator c')
-      ->leftJoin('a.Category')
-      ->leftJoin('a.Creator.Groups')
-      ->leftJoin('a.Responsibles')
-      ->andWhere('a.id in (select ticket_id from ref_ticket_responsible where user_id = ?)', $this->getId())
-      ->orderBy('a.created_at desc')
+      ->from('Ticket t')
+      ->leftJoin('t.Category')
+      ->leftJoin('t.Comments')
+      ->leftJoin('t.Creator.Groups')
+      ->leftJoin('t.Responsibles r')
+      ->andWhere('r.id = ?', $this->getId())
+      ->orderBy('t.created_at desc')
+    ;
+
+    $return['observed-by-me'] = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->leftJoin('t.Category')
+      ->leftJoin('t.Comments')
+      ->leftJoin('t.Creator.Groups')
+      ->leftJoin('t.Observers o')
+      ->addWhere('o.id = ?', $this->getId())
+      ->orderBy('t.created_at desc')
     ;
 
     $query = "
@@ -57,13 +68,13 @@ class sfGuardUser extends PluginsfGuardUser
     ;
 
     $return['auto_assigned_to_me'] = Doctrine_Query::create()
-      ->from('Ticket a, a.Comments b, a.Creator c')
-      ->leftJoin('a.Responsibles')
-      ->leftJoin('a.Category')
-      ->leftJoin('a.Creator.Groups')
-      ->andWhereIn('a.created_by', $users)
-      ->andWhereIn('a.category_id', $seesCategories)
-      ->orderBy('a.created_at desc')
+      ->from('Ticket t, t.Comments b, t.Creator c')
+      ->leftJoin('t.Responsibles')
+      ->leftJoin('t.Category')
+      ->leftJoin('t.Creator.Groups')
+      ->andWhereIn('t.created_by', $users)
+      ->andWhereIn('t.category_id', $seesCategories)
+      ->orderBy('t.created_at desc')
     ;
 
     return $return;
@@ -75,7 +86,7 @@ class sfGuardUser extends PluginsfGuardUser
     $return = [];
     foreach ($prepared as $name => $query) {
       $return[ $name ] = $query
-        ->andWhere('a.isClosed = ?', false)
+        ->andWhere('t.isClosed = ?', false)
         ->execute()
       ;
     }
@@ -89,7 +100,7 @@ class sfGuardUser extends PluginsfGuardUser
     $return = [];
     foreach ($prepared as $name => $query) {
       $return[ $name ] = $query
-        ->andWhere('a.isClosed = ?', true)
+        ->andWhere('t.isClosed = ?', true)
         ->execute()
       ;
     }

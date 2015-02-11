@@ -108,6 +108,15 @@
     </div>
   <?php endif ?>
 
+  <?php if (true == ($observers = $ticket->getObservers()) and count($observers)): ?>
+    <div>
+      Наблюдатели:
+      <ul style="text-align:left"><?php foreach ($observers as $user): ?>
+        <li><a href="#"><?php echo $user->getUsername() ?></a></li>
+      <?php endforeach ?></ul>
+    </div>
+  <?php endif ?>
+
   <?php $company = $ticket->getCreator()->getGroups()->getFirst(); if ($company && true == ($responsibles = $company->getResponsibles()) and count($responsibles)): ?>
     <div>
       Ответственные за компанию:

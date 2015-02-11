@@ -66,6 +66,16 @@ class TicketForm extends BaseTicketForm
         'rows' => 15,
       )))
       ->offsetSet('attach', new sfWidgetFormInputFile())
+      ->offsetSet('observers_list', new sfWidgetFormDoctrineChoice(array(
+          'multiple' => true,
+          'model' => 'sfGuardUser',
+          'query' => Doctrine_Query::create()
+            ->from('sfGuardUser a')
+            ->addOrderBy('a.first_name, a.last_name')
+        ), array(
+          'class' => 'chzn-select',
+          'data-placeholder' => 'Выберите…',
+        )))
       ;
 
     if (sfContext::getInstance()->getUser()->hasCredential('can set deadlines for tickets')) {
@@ -93,6 +103,7 @@ class TicketForm extends BaseTicketForm
       'period_id' => 'Период',
       'company_id' => 'На компанию',
       'category_id' => 'Категория',
+      'observers_list' => 'Наблюдатели',
     ));
 
     $this->validatorSchema['attach'] = new sfValidatorFile(array(

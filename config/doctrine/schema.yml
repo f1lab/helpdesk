@@ -153,6 +153,12 @@ Ticket:
     Category:
       local: category_id
       foreign: id
+    Observers:
+      class: sfGuardUser
+      refClass: RefTicketObserver
+      local: ticket_id
+      foreign: user_id
+      foreignAlias: ObserverForTickets
 
 Category:
   columns:
@@ -167,6 +173,20 @@ RefUserCategory:
   relations:
     Category:
       local: category_id
+      foreign: id
+    User:
+      local: user_id
+      foreign: id
+
+RefTicketObserver:
+  actAs:
+    - Signable
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
       foreign: id
     User:
       local: user_id

@@ -16,48 +16,49 @@
   </div>
 </div>
 
-<?php
-  if (isset($tickets['created_by_me'])):
-?>
-  <section>
-    <h2>Созданы мной</h2>
-    <?php include_partial('global/tickets-list', array(
-      'tickets' => $tickets['created_by_me'],
-      'showDate' => true,
-      'showDeadline' => true,
-      'showCompanyName' => false,
-      'showUserName' => false
-    )) ?>
-  </section>
-<?php
-  endif;
-  if (isset($tickets['assigned_to_me'])):
-?>
-  <section>
-    <h2>Я назначен ответственным</h2>
-    <?php include_partial('global/tickets-list', array(
-      'tickets' => $tickets['assigned_to_me'],
-      'showDate' => true,
-      'showDeadline' => true,
-      'showCompanyName' => true,
-      'showUserName' => true,
-      'showCategories' => true,
-    )) ?>
-  </section>
-<?php
-  endif;
-  if (isset($tickets['auto_assigned_to_me'])):
-?>
-  <section>
-    <h2>От моих компаний</h2>
-    <?php include_partial('global/tickets-list', array(
-      'tickets' => $tickets['auto_assigned_to_me'],
-      'showDate' => true,
-      'showDeadline' => true,
-      'showCompanyName' => true,
-      'showUserName' => true,
-      'showCategories' => true,
-    )) ?>
-  </section>
-<?php
-  endif;
+<section>
+  <h2>Созданы мной</h2>
+  <?php include_partial('global/tickets-list', array(
+    'tickets' => $tickets['created_by_me'],
+    'showDate' => true,
+    'showDeadline' => true,
+    'showCompanyName' => false,
+    'showUserName' => false
+  )) ?>
+</section>
+
+<section>
+  <h2>Я назначен ответственным</h2>
+  <?php include_partial('global/tickets-list', array(
+    'tickets' => $tickets['assigned_to_me'],
+    'showDate' => true,
+    'showDeadline' => true,
+    'showCompanyName' => true,
+    'showUserName' => true,
+    'showCategories' => true,
+  )) ?>
+</section>
+
+<section>
+  <h2>Я назначен наблюдателем</h2>
+  <?php include_partial('global/tickets-list', array(
+    'tickets' => $tickets['observed-by-me'],
+    'showDate' => true,
+    'showDeadline' => true,
+    'showCompanyName' => true,
+    'showUserName' => true,
+    'showCategories' => true,
+  )) ?>
+</section>
+
+<section>
+  <h2>От моих компаний</h2>
+  <?php include_partial('global/tickets-list', array(
+    'tickets' => $tickets['auto_assigned_to_me'],
+    'showDate' => true,
+    'showDeadline' => true,
+    'showCompanyName' => true,
+    'showUserName' => true,
+    'showCategories' => true,
+  )) ?>
+</section>
