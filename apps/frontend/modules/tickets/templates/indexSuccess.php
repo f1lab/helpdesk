@@ -19,7 +19,7 @@
 <section>
   <h2>Созданы мной</h2>
   <?php include_partial('global/tickets-list', array(
-    'tickets' => $tickets['created_by_me'],
+    'tickets' => $tickets['created-by-me'],
     'showDate' => true,
     'showDeadline' => true,
     'showCompanyName' => false,
@@ -30,7 +30,7 @@
 <section>
   <h2>Я назначен ответственным</h2>
   <?php include_partial('global/tickets-list', array(
-    'tickets' => $tickets['assigned_to_me'],
+    'tickets' => $tickets['assigned-to-me'],
     'showDate' => true,
     'showDeadline' => true,
     'showCompanyName' => true,
@@ -54,7 +54,7 @@
 <section>
   <h2>От моих компаний</h2>
   <?php include_partial('global/tickets-list', array(
-    'tickets' => $tickets['auto_assigned_to_me'],
+    'tickets' => $tickets['auto-assigned-to-me'],
     'showDate' => true,
     'showDeadline' => true,
     'showCompanyName' => true,

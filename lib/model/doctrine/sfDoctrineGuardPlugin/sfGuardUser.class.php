@@ -16,7 +16,7 @@ class sfGuardUser extends PluginsfGuardUser
   {
     $return = [];
 
-    $return['created_by_me'] = Doctrine_Query::create()
+    $return['created-by-me'] = Doctrine_Query::create()
       ->from('Ticket t')
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
@@ -25,7 +25,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->orderBy('t.created_at desc')
     ;
 
-    $return['assigned_to_me'] = Doctrine_Query::create()
+    $return['assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t')
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
@@ -67,7 +67,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
 
-    $return['auto_assigned_to_me'] = Doctrine_Query::create()
+    $return['auto-assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t, t.Comments b, t.Creator c')
       ->leftJoin('t.Responsibles')
       ->leftJoin('t.Category')
