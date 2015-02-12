@@ -11,3 +11,5 @@ lib/filter/doctrine/*Plugin/base/Base*
 config/databases.yml
 
 vendor
+
+web/bower_components

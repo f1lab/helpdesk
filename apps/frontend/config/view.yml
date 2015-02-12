@@ -22,6 +22,10 @@ default:
     - bootstrap-wysihtml5-0.0.2.css
     - chosen
     - style
+
+    - /bower_components/select2/select2.css
+    - /bower_components/angular-ui-select/dist/select.css
+
     - main
 
   javascripts:
@@ -37,6 +41,12 @@ default:
     - jquery-ui.custom.min.js
     - chosen.jquery.min.js
     - jquery-migrate-1.2.1.min.js
+
+    - /bower_components/angular/angular.min.js
+    - /bower_components/ngstorage/ngStorage.js
+    - /bower_components/coffee-script/extras/coffee-script.js
+    - /bower_components/angular-ui-select/dist/select.js
+
     - main
 
 

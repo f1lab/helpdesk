@@ -3,6 +3,10 @@
   width: 99% !important;
 }*/
 
+.select2-result-single {
+  margin-left: 0;
+}
+
 body {
   min-width: 570px;
   max-width: 1440px;

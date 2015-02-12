@@ -1,0 +1,17 @@
+{
+  "name": "helpdesk",
+  "version": "0.0.0",
+  "homepage": "https://github.com/f1lab/helpdesk",
+  "authors": [
+    "Anatoly Pashin <anatoly.pashin@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular-ui-select": "~0.9.6",
+    "angular": "<=1.4.0",
+    "ngstorage": "~0.3.0",
+    "coffee-script": "https://github.com/jashkenas/coffeescript.git#~1.9.0",
+    "select2": "~3.4.5"
+  }
+}
