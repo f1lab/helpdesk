@@ -16,6 +16,11 @@ class ticketsActions extends sfActions
     $this->tickets = $this->getUser()->getGuardUser()->$state();
   }
 
+  public function executeV2()
+  {
+
+  }
+
   public function executeCompany(sfWebRequest $request)
   {
     $this->forward404Unless($this->getUser()->hasCredential('view_company_tickets'));
