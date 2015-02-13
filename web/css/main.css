@@ -7,6 +7,10 @@
   margin-left: 0;
 }
 
+.collapse.in {
+  overflow: visible;
+}
+
 body {
   min-width: 570px;
   max-width: 1440px;

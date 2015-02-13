@@ -1,39 +1,70 @@
 <section ng-controller="TicketsPageController">
-  <h1>{{hello}}</h1>
+  <div class="accordion">
+    <div class="accordion-group">
+      <h4 class="accordion-heading" style="margin: 0;">
+        <a class="accordion-toggle" href="" ng-click="filter.collapsed = !filter.collapsed">
+          Фильтр
+        </a>
+      </h4>
+      <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: filter.collapsed }">
+        <div class="accordion-inner">
+          <form action="" class="form-horizontal">
+            <div class="control-group">
+              <label class="control-label">Компании</label>
+              <div class="controls">
+                <ui-select multiple ng-model="filter.company_id" style="width: 300px;">
+                  <ui-select-match placeholder="Выберите компании">{{$item.name}}</ui-select-match>
+                  <ui-select-choices repeat="company.id as company in filterSelects.companies | filter:$select.search">
+                    {{company.name}}
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
 
-  <form action="" class="well form-horizontal">
-    <div class="control-group">
-      <label class="control-label">Компании</label>
-      <div class="controls">
-        <ui-select multiple ng-model="filter.company_id" style="width: 300px;">
-          <ui-select-match placeholder="Выберите компании">{{$item.name}}</ui-select-match>
-          <ui-select-choices repeat="company.id as company in filterSelects.companies | filter:$select.search">
-            {{company.name}}
-          </ui-select-choices>
-        </ui-select>
+            <div class="control-group">
+              <label class="control-label">Категории</label>
+              <div class="controls">
+                <ui-select multiple ng-model="filter.category_id" style="width: 300px;">
+                  <ui-select-match placeholder="Выберите категории…">{{$item.name}}</ui-select-match>
+                  <ui-select-choices repeat="category.id as category in filterSelects.categories | filter:$select.search">
+                    {{category.name}}
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Ответственный за выполнение</label>
+              <div class="controls">
+                <ui-select multiple ng-model="filter.responsible_id" style="width: 300px;">
+                  <ui-select-match placeholder="Выберите ответственных…">{{$item.first_name}} {{$item.last_name}} ({{$item.username}})</ui-select-match>
+                  <ui-select-choices repeat="responsible.id as responsible in filterSelects.responsibles | filter:$select.search">
+                    {{responsible.first_name}} {{responsible.last_name}} ({{responsible.username}})
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox" ng-model="filter.closed"> Только закрытые заявки
+                </label>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox" ng-model="filter.without_responsibles"> Не назначен ответственный
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-    <div class="control-group">
-      <label class="control-label">Категории</label>
-      <div class="controls">
-        <ui-select multiple ng-model="filter.category_id" style="width: 300px;">
-          <ui-select-match placeholder="Выберите категории…">{{$item.name}}</ui-select-match>
-          <ui-select-choices repeat="category.id as category in filterSelects.categories | filter:$select.search">
-            {{category.name}}
-          </ui-select-choices>
-        </ui-select>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" ng-model="filter.closed"> Только закрытые заявки
-        </label>
-      </div>
-    </div>
-  </form>
+  </div>
 
   <pre>{{filter}}</pre>
   <ul class="nav nav-tabs">
@@ -89,8 +120,6 @@
   app.controller 'TicketsPageController', [
     '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage'
     ($scope, $http, $timeout, $filter, $q, $sessionStorage) ->
-      $scope.hello = 'test'
-
       $scope.filterSelects =
         categories: [{id: null, name: 'Без категории'}].concat(
           <?php echo json_encode(Doctrine_Query::create()
@@ -112,11 +141,24 @@
           ) ?>
         )
 
+        responsibles: [].concat(
+          <?php echo json_encode(Doctrine_Query::create()
+            ->from('sfGuardUser u')
+            ->select('u.id, u.first_name, u.last_name, u.username')
+            ->addWhere('u.type = ?', 'it-admin')
+            ->addOrderBy('u.first_name, u.last_name')
+            ->execute([], Doctrine_Core::HYDRATE_ARRAY)
+          ) ?>
+        )
+
       $scope.filter = $sessionStorage.$default
+        collapsed: true
         tab: null
         closed: false
         category_id: []
         company_id: []
+        responsible_id: []
+        without_responsibles: false
 
       delete $scope.filter.$default
       delete $scope.filter.$reset

@@ -189,6 +189,7 @@ RefTicketObserver:
       local: ticket_id
       foreign: id
     User:
+      class: sfGuardUser
       local: user_id
       foreign: id
 
@@ -203,6 +204,7 @@ RefTicketResponsible:
       local: ticket_id
       foreign: id
     User:
+      class: sfGuardUser
       local: user_id
       foreign: id
 

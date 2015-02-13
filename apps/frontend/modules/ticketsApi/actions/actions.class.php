@@ -33,6 +33,7 @@ class ticketsApiActions extends sfActions
       ->addWhere('t.isClosed = ?', self::$filter['closed'])
       ->andWhereIn('t.category_id', self::$filter['category_id'])
       ->andWhereIn('t.company_id', self::$filter['company_id'])
+      ->andWhereIn('r.id', self::$filter['responsible_id'])
     ;
 
     return $query;
@@ -41,11 +42,30 @@ class ticketsApiActions extends sfActions
   public function executeGetCounters(sfWebRequest $request)
   {
     $queries = $this->getUser()->getGuardUser()->getPreparedQueriesForTickets();
-    $counters = array_map(function($query) use ($request) {
-      return self::addFilterParametersToQuery($request, $query)->count();
-    }, $queries);
+    $this->fillFilter($request);
 
-    self::returnJson($counters);
+    $result = [];
+    if (self::$filter['without_responsibles']) {
+      foreach ($queries as $tab => $query) {
+        self::addFilterParametersToQuery($request, $query);
+        $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
+
+        $counter = 0;
+        foreach ($tickets as $ticket) {
+          if (count($ticket['Responsibles']) === 0) {
+            $counter++;
+          }
+        }
+
+        $result[ $tab ] = $counter;
+      }
+    } else {
+      $result = array_map(function($query) use ($request) {
+        return self::addFilterParametersToQuery($request, $query)->count();
+      }, $queries);
+    }
+
+    self::returnJson($result);
   }
 
   public function executeGetTickets(sfWebRequest $request)
@@ -61,6 +81,18 @@ class ticketsApiActions extends sfActions
     self::addFilterParametersToQuery($request, $query);
 
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
-    self::returnJson($tickets);
+
+    $result = [];
+    if (self::$filter['without_responsibles']) {
+      foreach ($tickets as $ticket) {
+        if (count($ticket['Responsibles']) === 0) {
+          $result[] = $ticket;
+        }
+      }
+    } else {
+      $result = $tickets;
+    }
+
+    self::returnJson($result);
   }
 }

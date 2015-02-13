@@ -21,6 +21,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
       ->leftJoin('t.Creator.Groups')
+      ->leftJoin('t.Responsibles r')
       ->where('t.created_by = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;
@@ -41,6 +42,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('t.Comments')
       ->leftJoin('t.Creator.Groups')
       ->leftJoin('t.Observers o')
+      ->leftJoin('t.Responsibles r')
       ->addWhere('o.id = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;
@@ -69,7 +71,7 @@ class sfGuardUser extends PluginsfGuardUser
 
     $return['auto-assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t, t.Comments b, t.Creator c')
-      ->leftJoin('t.Responsibles')
+      ->leftJoin('t.Responsibles r')
       ->leftJoin('t.Category')
       ->leftJoin('t.Creator.Groups')
       ->andWhereIn('t.created_by', $users)
