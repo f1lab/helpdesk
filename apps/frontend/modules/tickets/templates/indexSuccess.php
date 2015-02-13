@@ -2,6 +2,10 @@
   <h1>Мои заявки</h1>
 </div>
 
+<div class="alert alert-block alert-info">
+  <h4>Попробуйте «<a href="<?php echo url_for('tickets/v2') ?>">Мои заявки 2.0</a>»</h4>
+</div>
+
 <div class="btn-toolbar">
   <div class="btn-group"><?php $state = $sf_context->getRequest()->getParameter('state') ?>
     <a class="btn<?php if ('opened' == $state): ?> active<?php endif ?>" href="<?php echo url_for('@tickets-my') ?>">Открытые</a>

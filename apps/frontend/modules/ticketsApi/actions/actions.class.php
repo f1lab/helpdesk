@@ -29,12 +29,16 @@ class ticketsApiActions extends sfActions
       self::fillFilter($request);
     }
 
-    $query
-      ->addWhere('t.isClosed = ?', self::$filter['closed'])
-      ->andWhereIn('t.category_id', self::$filter['category_id'])
-      ->andWhereIn('t.company_id', self::$filter['company_id'])
-      ->andWhereIn('r.id', self::$filter['responsible_id'])
-    ;
+    if (!self::$filter['collapsed']) {
+      $query
+        ->addWhere('t.isClosed = ?', self::$filter['closed'])
+        ->andWhereIn('t.category_id', self::$filter['category_id'])
+        ->andWhereIn('t.company_id', self::$filter['company_id'])
+        ->andWhereIn('r.id', self::$filter['responsible_id'])
+      ;
+    } else {
+      $query->addWhere('t.isClosed = ?', false);
+    }
 
     return $query;
   }

@@ -1,12 +1,17 @@
-<section ng-controller="TicketsPageController">
+<div class="page-header">
+  <h1>Мои заявки 2.0</h1>
+</div>
+
+<section ng-controller="TicketsPageController" ng-cloack>
   <div class="accordion">
     <div class="accordion-group">
       <h4 class="accordion-heading" style="margin: 0;">
-        <a class="accordion-toggle" href="" ng-click="filter.collapsed = !filter.collapsed">
+        <span class="accordion-toggle" ng-click="filter.collapsed = !filter.collapsed">
           Фильтр
-        </a>
+          <span class="label" ng-class="{ 'label-warning': !filter.collapsed }">{{filter.collapsed ? 'выключен' : 'включен'}}</span>
+        </span>
       </h4>
-      <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: filter.collapsed }">
+      <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: !filter.collapsed }">
         <div class="accordion-inner">
           <form action="" class="form-horizontal">
             <div class="control-group">
@@ -66,7 +71,10 @@
     </div>
   </div>
 
-  <pre>{{filter}}</pre>
+  <?php if ($sf_request->getParameter('dev', false)): ?>
+    <pre>{{filter}}</pre>
+  <?php endif ?>
+
   <ul class="nav nav-tabs">
     <li ng-repeat="tab in tabs" ng-class="{ active: tab.id === filter.tab }">
       <a href="" ng-click="selectTab(tab.id)">
@@ -77,7 +85,7 @@
   </ul>
 
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю тикеты…</div>
-  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-bordered table-condensed tickets">
+  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>№</th>
@@ -96,8 +104,10 @@
     </thead>
     <tbody>
       <tr ng-repeat="ticket in tickets">
-        <td>{{ticket.id}}</td>
-        <td>{{ticket.name}}</td>
+        <td class="span1">{{ticket.id}}</td>
+        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" target="_blank">
+          {{ticket.name}}
+        </a></td>
       </tr>
     </tbody>
   </table>
