@@ -46,6 +46,7 @@ default:
     - /bower_components/ngstorage/ngStorage.js
     - /bower_components/coffee-script/extras/coffee-script.js
     - /bower_components/angular-ui-select/dist/select.js
+    - /bower_components/momentjs/min/moment.min.js
 
     - main
 

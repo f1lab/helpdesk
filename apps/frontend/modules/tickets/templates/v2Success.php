@@ -88,29 +88,29 @@
   </ul>
 
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю тикеты…</div>
-  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-bordered table-condensed">
+  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-bordered table-condensed nowrap-td">
     <thead>
       <tr>
-        <th>№</th>
-        <th>Тема</th>
-        <!--<?php if (isset($showCategories) and $showCategories): ?><th>Категория</th><?php endif ?>
-        <?php if ($showDate): ?><th>Дата</th><?php endif ?>
-        <?php if ($showCompanyName): ?><th>Компания</th><?php endif ?>
-        <?php if ($showUserName): ?><th>Пользователь</th><?php endif ?>
-
-        <?php if ($showDeadline): ?><th>Дедлайн</th><?php endif ?>
-        <?php if (!isset($dontShowApply)): ?>
-          <th>В работе</th>
-        <?php endif ?>
-        <th> </th>-->
+        <th class="span1">№</th>
+        <th class="span12">Тема</th>
+        <th>Дата</th>
+        <th>Категория</th>
+        <th>Компания</th>
+        <th>Пользователь</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="ticket in tickets" ng-class="{ 'alert-success': ticket.ReadedTickets.length === 0 }">
-        <td class="span1">{{ticket.id}}</td>
+        <td>{{ticket.id}}</td>
         <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}">
           {{ticket.name}}
         </a></td>
+        <td>{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+        <td>{{ticket.Category ? ticket.Category.name : ''}}</td>
+        <td>{{ticket.ToCompany ? ticket.ToCompany.name : ''}}</td>
+        <td>{{ticket.Creator.username}}</td>
+        <td><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length < ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
       </tr>
     </tbody>
   </table>
@@ -228,6 +228,9 @@
       if not $scope.filter.tab?
         $scope.selectTab $scope.tabs[0].id
   ]
+
+  app.filter 'moment', ->
+    (datetime) -> moment(datetime).toDate()
 
   angular.element(document).ready -> angular.bootstrap document, ['helpdesk']
 </script>
