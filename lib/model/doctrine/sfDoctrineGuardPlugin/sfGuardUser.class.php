@@ -18,6 +18,7 @@ class sfGuardUser extends PluginsfGuardUser
 
     $return['created-by-me'] = Doctrine_Query::create()
       ->from('Ticket t')
+      ->leftJoin('t.ReadedTickets read with read.user_id = ?', $this->getId())
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
       ->leftJoin('t.Creator.Groups')
@@ -28,6 +29,7 @@ class sfGuardUser extends PluginsfGuardUser
 
     $return['assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t')
+      ->leftJoin('t.ReadedTickets read with read.user_id = ?', $this->getId())
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
       ->leftJoin('t.Creator.Groups')
@@ -38,6 +40,7 @@ class sfGuardUser extends PluginsfGuardUser
 
     $return['observed-by-me'] = Doctrine_Query::create()
       ->from('Ticket t')
+      ->leftJoin('t.ReadedTickets read with read.user_id = ?', $this->getId())
       ->leftJoin('t.Category')
       ->leftJoin('t.Comments')
       ->leftJoin('t.Creator.Groups')
@@ -71,6 +74,7 @@ class sfGuardUser extends PluginsfGuardUser
 
     $return['auto-assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t, t.Comments b, t.Creator c')
+      ->leftJoin('t.ReadedTickets read with read.user_id = ?', $this->getId())
       ->leftJoin('t.Responsibles r')
       ->leftJoin('t.Category')
       ->leftJoin('t.Creator.Groups')

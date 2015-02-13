@@ -1,8 +1,11 @@
-<div class="page-header">
-  <h1>Мои заявки 2.0</h1>
-</div>
+<section ng-controller="TicketsPageController">
+  <div class="page-header">
+    <h1>
+      Мои заявки 2.0
+      <small><a href="" ng-click="refresh()" title="Обновить список тикетов" rel="tooltip"><span class="icon icon-refresh"></span></a></small>
+    </h1>
+  </div>
 
-<section ng-controller="TicketsPageController" ng-cloack>
   <div class="accordion">
     <div class="accordion-group">
       <h4 class="accordion-heading" style="margin: 0;">
@@ -103,9 +106,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="ticket in tickets">
+      <tr ng-repeat="ticket in tickets" ng-class="{ 'alert-success': ticket.ReadedTickets.length === 0 }">
         <td class="span1">{{ticket.id}}</td>
-        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" target="_blank">
+        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}">
           {{ticket.name}}
         </a></td>
       </tr>
@@ -169,9 +172,12 @@
         company_id: []
         responsible_id: []
         without_responsibles: false
+        refresh: 0
 
       delete $scope.filter.$default
       delete $scope.filter.$reset
+
+      $scope.refresh = -> $scope.filter.refresh++
 
       $scope.tabs = [
         {id: 'created-by-me', name: 'Созданы мной', count: 0}
