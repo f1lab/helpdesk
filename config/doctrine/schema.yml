@@ -136,6 +136,11 @@ Ticket:
       local: id
       foreign: ticket_id
       onDelete: CASCADE
+    CommentsAgain:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
     Responsibles:
       class: sfGuardUser
       refClass: RefTicketResponsible

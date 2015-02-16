@@ -97,6 +97,7 @@
         <th>Категория</th>
         <th>Компания</th>
         <th>Пользователь</th>
+        <th>Статус</th>
         <th></th>
       </tr>
     </thead>
@@ -110,6 +111,16 @@
         <td>{{ticket.Category ? ticket.Category.name : ''}}</td>
         <td>{{ticket.ToCompany ? ticket.ToCompany.name : ''}}</td>
         <td>{{ticket.Creator.username}}</td>
+        <td>
+          <span ng-if="ticket.CommentsAgain.length === 0">
+            ещё не в работе
+          </span>
+
+          <span ng-if="ticket.CommentsAgain.length !== 0" ng-init="applier = ticket.CommentsAgain[ticket.CommentsAgain.length - 1]">
+            в работе с {{applier.created_at | moment | date:'dd.MM.yyyy HH:mm:ss'}}
+            у {{applier.Creator.username}}
+          </span>
+        </td>
         <td><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
       </tr>
     </tbody>
