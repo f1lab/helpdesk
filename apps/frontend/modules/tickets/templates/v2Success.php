@@ -68,6 +68,14 @@
                 </label>
               </div>
             </div>
+
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox" ng-model="filter.without_appliers"> Не принят в работу
+                </label>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -183,6 +191,7 @@
         company_id: []
         responsible_id: []
         without_responsibles: false
+        without_appliers: false
         refresh: 0
 
       delete $scope.filter.$default

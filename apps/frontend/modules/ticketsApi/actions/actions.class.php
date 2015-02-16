@@ -49,20 +49,33 @@ class ticketsApiActions extends sfActions
     $this->fillFilter($request);
 
     $result = [];
-    if (self::$filter['without_responsibles']) {
+    if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
       foreach ($queries as $tab => $query) {
         self::addFilterParametersToQuery($request, $query);
         $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
         $counter = 0;
         foreach ($tickets as $ticket) {
-          if (count($ticket['Responsibles']) === 0) {
-            $counter++;
+          $alreadyCounted = false;
+
+          if (self::$filter['without_responsibles']) {
+            if (count($ticket['Responsibles']) === 0) {
+              $counter++;
+              $alreadyCounted = true;
+            }
+          }
+
+          if (self::$filter['without_appliers'] and !$alreadyCounted) {
+            if (count($ticket['CommentsAgain']) === 0) {
+              $counter++;
+              $alreadyCounted = true;
+            }
           }
         }
 
         $result[ $tab ] = $counter;
       }
+
     } else {
       $result = array_map(function($query) use ($request) {
         return self::addFilterParametersToQuery($request, $query)->count();
@@ -87,12 +100,24 @@ class ticketsApiActions extends sfActions
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
     $result = [];
-    if (self::$filter['without_responsibles']) {
+    if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
       foreach ($tickets as $ticket) {
-        if (count($ticket['Responsibles']) === 0) {
-          $result[] = $ticket;
+        $alreadyCounted = false;
+        if (self::$filter['without_responsibles']) {
+          if (count($ticket['Responsibles']) === 0) {
+            $result[] = $ticket;
+            $alreadyCounted = true;
+          }
+        }
+
+        if (self::$filter['without_appliers'] and !$alreadyCounted) {
+          if (count($ticket['CommentsAgain']) === 0) {
+            $result[] = $ticket;
+            $alreadyCounted = true;
+          }
         }
       }
+
     } else {
       $result = $tickets;
     }
