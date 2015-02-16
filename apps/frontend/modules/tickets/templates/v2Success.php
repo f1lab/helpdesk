@@ -90,35 +90,13 @@
     <li ng-repeat="tab in tabs" ng-class="{ active: tab.id === filter.tab }">
       <a href="" ng-click="selectTab(tab.id)">
         {{tab.name}}
-        <span class="badge">{{tab.count}}</span>
+        <span class="badge" ng-class="{ 'badge-warning': tab.count !== 0 }">{{tab.count}}</span>
       </a>
     </li>
   </ul>
 
-  <style>
-    .tickets20 {}
-    .tickets20 th {
-      font-size: 1.2em;
-    }
-    .tickets20 td {
-      white-space: nowrap;
-      background-color: #f5f5f5;
-    }
-    .tickets20 .unread {
-      font-weight: bolder;
-    }
-    .tickets20 .unread td {
-      background-color: #fff;
-    }
-    .tickets20 ul {
-      margin-bottom: 0;
-    }
-    .tickets20 tr:hover td {
-      background-color: #dff0d8;
-    }
-  </style>
-
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю тикеты…</div>
+
   <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
     <thead>
       <tr>
@@ -158,10 +136,34 @@
       </tr>
     </tbody>
   </table>
+
   <div class="alert alert-info" ng-show="!ticketsLoading && tickets.length === 0">
     Нет тикетов.
   </div>
 </section>
+
+<style>
+  .tickets20 {}
+  .tickets20 th {
+    font-size: 1.2em;
+  }
+  .tickets20 td {
+    white-space: nowrap;
+    background-color: #f5f5f5;
+  }
+  .tickets20 .unread {
+    font-weight: bolder;
+  }
+  .tickets20 .unread td {
+    background-color: #fff;
+  }
+  .tickets20 ul {
+    margin-bottom: 0;
+  }
+  .tickets20 tr:hover td {
+    background-color: #dff0d8;
+  }
+</style>
 
 <script type="text/coffeescript">
   URL =
@@ -180,8 +182,8 @@
       $scope.filterSelects =
         categories: [{id: null, name: 'Без категории'}].concat(
           <?php echo json_encode(Doctrine_Query::create()
-            ->from('Category c')
             ->select('c.id, c.name')
+            ->from('Category c')
             // ->leftJoin('c.RefUserCategory ref')
             // ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
             ->addOrderBy('c.name')
@@ -191,8 +193,10 @@
 
         companies: [{id: null, name: 'Без компании'}].concat(
           <?php echo json_encode(Doctrine_Query::create()
-            ->from('sfGuardGroup g')
             ->select('g.id, g.name')
+            ->from('sfGuardGroup g')
+            ->leftJoin('g.RefCompanyResponsible ref')
+            ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
             ->addOrderBy('g.name')
             ->execute([], Doctrine_Core::HYDRATE_ARRAY)
           ) ?>
@@ -200,8 +204,8 @@
 
         responsibles: [].concat(
           <?php echo json_encode(Doctrine_Query::create()
-            ->from('sfGuardUser u')
             ->select('u.id, u.first_name, u.last_name, u.username')
+            ->from('sfGuardUser u')
             ->addWhere('u.type = ?', 'it-admin')
             ->addOrderBy('u.first_name, u.last_name')
             ->execute([], Doctrine_Core::HYDRATE_ARRAY)
