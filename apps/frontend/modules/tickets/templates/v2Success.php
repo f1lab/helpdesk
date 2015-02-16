@@ -8,13 +8,12 @@
 
   <div class="accordion">
     <div class="accordion-group">
-      <h4 class="accordion-heading" style="margin: 0;">
-        <span class="accordion-toggle" ng-click="filter.collapsed = !filter.collapsed">
-          Фильтр
-          <span class="label" ng-class="{ 'label-warning': !filter.collapsed }">{{filter.collapsed ? 'выключен' : 'включен'}}</span>
-        </span>
-      </h4>
-      <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: !filter.collapsed }">
+      <div class="accordion-heading" style="margin: 0;">
+        <label class="accordion-toggle checkbox" style="margin-bottom: 0; padding-left: 30px;">
+          <input type="checkbox" ng-model="filter.enabled"> Использовать фильтр
+        </label>
+      </div>
+      <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: filter.enabled }">
         <div class="accordion-inner">
           <form action="" class="form-horizontal">
             <div class="control-group">
@@ -120,9 +119,8 @@
         <td>{{ticket.Creator.username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
         <td>
           <span ng-if="ticket.CommentsAgain.length === 0">
-            не в работе
-            <span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span>
-            <span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
+            не в работе<span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span
+            ><span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
               <li ng-repeat="responsible in ticket.Responsibles">{{responsible.username}}</li>
             </ul></span>
           </span>
@@ -137,9 +135,9 @@
     </tbody>
   </table>
 
-  <div class="alert alert-info" ng-show="!ticketsLoading && tickets.length === 0">
+  <h4 ng-show="!ticketsLoading && tickets.length === 0">
     Нет тикетов.
-  </div>
+  </h4>
 </section>
 
 <style>
@@ -213,7 +211,7 @@
         )
 
       $scope.filter = $sessionStorage.$default
-        collapsed: true
+        enabled: true
         tab: null
         closed: false
         category_id: []

@@ -102,11 +102,5 @@
 
     <?php echo $sf_content ?>
   </div>
-
-  <footer>
-    <div class="container">
-      —
-    </div>
-  </footer>
 </body>
 </html>
