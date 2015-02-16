@@ -110,7 +110,7 @@
         <td>{{ticket.Category ? ticket.Category.name : ''}}</td>
         <td>{{ticket.ToCompany ? ticket.ToCompany.name : ''}}</td>
         <td>{{ticket.Creator.username}}</td>
-        <td><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length < ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
+        <td><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
       </tr>
     </tbody>
   </table>

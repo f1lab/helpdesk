@@ -13,20 +13,26 @@
 class Comment extends BaseComment
 {
   public function isRead() {
-    $temp = Doctrine_Core::getTable('ReadedComments')->createQuery('a')
-      ->Where('a.user_id = ?',sfContext::getInstance()->getUser()->getGuardUser()->getId())
-      ->andWhere('a.comment_id = ?',$this->getId())
-      ->execute()
+    $userId = sfContext::getInstance()->getUser()->getGuardUser()->getId();
+
+    $read = Doctrine_Query::create()
+      ->from('ReadedComments read')
+      ->addWhere('read.user_id = ?', $userId)
+      ->addWhere('read.comment_id = ?', $this->getId())
+      ->addWhere('read.ticket_id = ?', $this->getTicketId())
+      ->count() !== 0
     ;
 
-    if (0 == $temp->count()) {
-      $record = new ReadedComments();
-      $record->setUser_id(sfContext::getInstance()->getUser()->getGuardUser()->getId());
-      $record->setComment_id($this->getId());
-      $record->save();
+    if (!$read) {
+      $readRecord = ReadedComments::createFromArray([
+        'user_id' => $userId,
+        'ticket_id' => $this->getTicketId(),
+        'comment_id' => $this->getId(),
+      ]);
+      $readRecord->save();
     }
 
-    return $temp->count();
+    return $read;
   }
 
   public function postInsert($event) {

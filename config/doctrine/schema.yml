@@ -253,10 +253,15 @@ ReadedComments:
   actAs: [Timestampable]
   columns:
     user_id: integer
+    ticket_id: integer
     comment_id: integer
   relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
     Comment:
-      foreignAlias: Comments
+      local: comment_id
+      foreign: id
     User:
       class: sfGuardUser
       local: user_id
