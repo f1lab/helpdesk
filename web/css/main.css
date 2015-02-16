@@ -11,10 +11,6 @@
   overflow: visible;
 }
 
-.nowrap-td td {
-  white-space: nowrap;
-}
-
 body {
   min-width: 570px;
   max-width: 1440px;

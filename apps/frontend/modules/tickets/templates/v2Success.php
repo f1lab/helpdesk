@@ -95,33 +95,58 @@
     </li>
   </ul>
 
+  <style>
+    .tickets20 {}
+    .tickets20 th {
+      font-size: 1.2em;
+    }
+    .tickets20 td {
+      white-space: nowrap;
+      background-color: #f5f5f5;
+    }
+    .tickets20 .unread {
+      font-weight: bolder;
+    }
+    .tickets20 .unread td {
+      background-color: #fff;
+    }
+    .tickets20 ul {
+      margin-bottom: 0;
+    }
+    .tickets20 tr:hover td {
+      background-color: #dff0d8;
+    }
+  </style>
+
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю тикеты…</div>
-  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-bordered table-condensed nowrap-td">
+  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
     <thead>
       <tr>
         <th class="span1">№</th>
         <th class="span12">Тема</th>
         <th>Дата</th>
         <th>Категория</th>
-        <th>Компания</th>
-        <th>Пользователь</th>
+        <th>Пользователь@Компания</th>
         <th>Статус</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="ticket in tickets" ng-class="{ 'alert-success': ticket.ReadedTickets.length === 0 }">
+      <tr ng-repeat="ticket in tickets" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
         <td>{{ticket.id}}</td>
-        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}">
+        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" style="display: block;">
           {{ticket.name}}
         </a></td>
         <td>{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm:ss'}}</td>
         <td>{{ticket.Category ? ticket.Category.name : ''}}</td>
-        <td>{{ticket.ToCompany ? ticket.ToCompany.name : ''}}</td>
-        <td>{{ticket.Creator.username}}</td>
+        <td>{{ticket.Creator.username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
         <td>
           <span ng-if="ticket.CommentsAgain.length === 0">
-            ещё не в работе
+            не в работе
+            <span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span>
+            <span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
+              <li ng-repeat="responsible in ticket.Responsibles">{{responsible.username}}</li>
+            </ul></span>
           </span>
 
           <span ng-if="ticket.CommentsAgain.length !== 0" ng-init="applier = ticket.CommentsAgain[ticket.CommentsAgain.length - 1]">
