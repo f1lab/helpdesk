@@ -2,8 +2,8 @@
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
 homepage:
-  url:   /tickets/my
-  param: { module: tickets, action: index, state: opened }
+  url:   /tickets/v2
+  param: { module: tickets, action: v2 }
 
 shedule-source:
   url:   /tickets/eventsource

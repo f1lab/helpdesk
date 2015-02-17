@@ -29,7 +29,7 @@ class ticketsApiActions extends sfActions
       self::fillFilter($request);
     }
 
-    if (!self::$filter['enabled']) {
+    if (self::$filter['enabled']) {
       $query
         ->addWhere('t.isClosed = ?', self::$filter['closed'])
         ->andWhereIn('t.category_id', self::$filter['category_id'])

@@ -4,7 +4,7 @@
 # default values
 all:
   sf_guard_plugin:
-    success_signin_url: tickets/my
+    success_signin_url: tickets/v2
 
   mailgun:
     enabled: false

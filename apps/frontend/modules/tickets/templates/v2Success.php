@@ -6,6 +6,8 @@
     </h1>
   </div>
 
+  <div class="alert alert-info">Если что-то работает не так, воспользуйтесь <a href="<?php echo url_for('tickets/my') ?>">старой версией</a>.</div>
+
   <div class="accordion">
     <div class="accordion-group">
       <div class="accordion-heading" style="margin: 0;">
@@ -71,7 +73,7 @@
             <div class="control-group">
               <div class="controls">
                 <label class="checkbox">
-                  <input type="checkbox" ng-model="filter.without_appliers"> Не принят в работу
+                  <input type="checkbox" ng-model="filter.without_appliers"> Не принята в работу
                 </label>
               </div>
             </div>
@@ -94,7 +96,7 @@
     </li>
   </ul>
 
-  <div class="alert alert-info" ng-show="ticketsLoading">Загружаю тикеты…</div>
+  <div class="alert alert-info" ng-show="ticketsLoading">Загружаю заявки…</div>
 
   <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
     <thead>
@@ -136,7 +138,7 @@
   </table>
 
   <h4 ng-show="!ticketsLoading && tickets.length === 0">
-    Нет тикетов.
+    Нет заявок.
   </h4>
 </section>
 
