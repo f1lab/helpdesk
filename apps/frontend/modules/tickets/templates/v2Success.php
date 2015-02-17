@@ -1,14 +1,26 @@
 <section ng-controller="TicketsPageController">
-  <div>
-    <h1>
-      Мои заявки 2.0
-      <small><a href="" ng-click="refresh()" title="Обновить список тикетов" rel="tooltip"><span class="icon icon-refresh"></span></a></small>
-    </h1>
+  <h1>
+    Мои заявки 2.0
+    <small></small>
+  </h1>
+
+  <div class="btn-toolbar">
+    <div class="btn-group">
+      <a href="/frontend_dev.php/tickets/new" class="btn">
+        <i class="icon icon-plus"></i>
+        Добавить заявку
+      </a>
+    </div>
+
+    <div class="btn-group">
+      <a href="" class="btn" ng-click="refresh()">
+        <i class="icon icon-refresh"></i>
+        Обновить список заявок
+      </a>
+    </div>
   </div>
 
-  <div class="alert alert-info">Если что-то работает не так, воспользуйтесь <a href="<?php echo url_for('tickets/my') ?>">старой версией</a>.</div>
-
-  <div class="accordion">
+  <div class="accordion" style="margin-top: 20px;">
     <div class="accordion-group">
       <div class="accordion-heading" style="margin: 0;">
         <label class="accordion-toggle checkbox" style="margin-bottom: 0; padding-left: 30px;">
