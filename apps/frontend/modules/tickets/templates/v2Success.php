@@ -1,5 +1,5 @@
 <section ng-controller="TicketsPageController">
-  <div class="page-header">
+  <div>
     <h1>
       Мои заявки 2.0
       <small><a href="" ng-click="refresh()" title="Обновить список тикетов" rel="tooltip"><span class="icon icon-refresh"></span></a></small>
@@ -17,64 +17,70 @@
       </div>
       <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: filter.enabled }">
         <div class="accordion-inner">
-          <form action="" class="form-horizontal">
-            <div class="control-group">
-              <label class="control-label">Компании</label>
-              <div class="controls">
-                <ui-select multiple ng-model="filter.company_id" style="width: 300px;">
-                  <ui-select-match placeholder="Выберите компании">{{$item.name}}</ui-select-match>
-                  <ui-select-choices repeat="company.id as company in filterSelects.companies | filter:$select.search">
-                    {{company.name}}
-                  </ui-select-choices>
-                </ui-select>
-              </div>
-            </div>
+          <form action="" class="form-horizontal" style="margin-bottom: 0;">
+            <div class="row">
+              <div class="span6">
+                <div class="control-group">
+                  <label class="control-label">Компании</label>
+                  <div class="controls">
+                    <ui-select multiple ng-model="filter.company_id" style="width: 300px;">
+                      <ui-select-match placeholder="Выберите компании">{{$item.name}}</ui-select-match>
+                      <ui-select-choices repeat="company.id as company in filterSelects.companies | filter:$select.search">
+                        {{company.name}}
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </div>
 
-            <div class="control-group">
-              <label class="control-label">Категории</label>
-              <div class="controls">
-                <ui-select multiple ng-model="filter.category_id" style="width: 300px;">
-                  <ui-select-match placeholder="Выберите категории…">{{$item.name}}</ui-select-match>
-                  <ui-select-choices repeat="category.id as category in filterSelects.categories | filter:$select.search">
-                    {{category.name}}
-                  </ui-select-choices>
-                </ui-select>
-              </div>
-            </div>
+                <div class="control-group">
+                  <label class="control-label">Категории</label>
+                  <div class="controls">
+                    <ui-select multiple ng-model="filter.category_id" style="width: 300px;">
+                      <ui-select-match placeholder="Выберите категории…">{{$item.name}}</ui-select-match>
+                      <ui-select-choices repeat="category.id as category in filterSelects.categories | filter:$select.search">
+                        {{category.name}}
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </div>
 
-            <div class="control-group">
-              <label class="control-label">Ответственный за выполнение</label>
-              <div class="controls">
-                <ui-select multiple ng-model="filter.responsible_id" style="width: 300px;">
-                  <ui-select-match placeholder="Выберите ответственных…">{{$item.first_name}} {{$item.last_name}} ({{$item.username}})</ui-select-match>
-                  <ui-select-choices repeat="responsible.id as responsible in filterSelects.responsibles | filter:$select.search">
-                    {{responsible.first_name}} {{responsible.last_name}} ({{responsible.username}})
-                  </ui-select-choices>
-                </ui-select>
+                <div class="control-group">
+                  <label class="control-label">Ответственный за выполнение</label>
+                  <div class="controls">
+                    <ui-select multiple ng-model="filter.responsible_id" style="width: 300px;">
+                      <ui-select-match placeholder="Выберите ответственных…">{{$item.first_name}} {{$item.last_name}} ({{$item.username}})</ui-select-match>
+                      <ui-select-choices repeat="responsible.id as responsible in filterSelects.responsibles | filter:$select.search">
+                        {{responsible.first_name}} {{responsible.last_name}} ({{responsible.username}})
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div class="control-group">
-              <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox" ng-model="filter.closed"> Только закрытые заявки
-                </label>
-              </div>
-            </div>
+              <div class="span6">
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="filter.closed"> Только закрытые заявки
+                    </label>
+                  </div>
+                </div>
 
-            <div class="control-group">
-              <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox" ng-model="filter.without_responsibles"> Не назначен ответственный
-                </label>
-              </div>
-            </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="filter.without_responsibles"> Не назначен ответственный
+                    </label>
+                  </div>
+                </div>
 
-            <div class="control-group">
-              <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox" ng-model="filter.without_appliers"> Не принята в работу
-                </label>
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="filter.without_appliers"> Не принята в работу
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
