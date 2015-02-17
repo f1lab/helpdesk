@@ -39,4 +39,8 @@ class Email
 
     return $result;
   }
+
+  static public function generateSubject(Ticket $ticket) {
+    return 'Re: [F1LAB-HLPDSK-' . $ticket->getId() . '] ' . $ticket->getName();
+  }
 }

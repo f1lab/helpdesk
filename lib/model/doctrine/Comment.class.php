@@ -36,6 +36,30 @@ class Comment extends BaseComment
   }
 
   public function postInsert($event) {
+    // send messages to mentioned users
+    $mentions = Helpdesk::findMentions($this->getText());
+    if (count($mentions) > 0) {
+      foreach ($mentions as $mention) {
+        if ($mention->getId() !== $this->getTicket()->getCreatedBy()) {
+          Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), 'Вас упомянули в комментарии к заявке http://helpdesk.f1lab.ru/tickets/' . $this->getTicket()->getId());
+
+          $observingAlready = Doctrine_Query::create()
+            ->from('RefTicketObserver ref')
+            ->addWhere('ref.user_id = ?', $mention->getId())
+            ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
+            ->count() !== 0
+          ;
+          if (!$observingAlready) {
+            $observeRecord = RefTicketObserver::createFromArray([
+              'user_id' => $mention->getId(),
+              'ticket_id' => $this->getTicket()->getId(),
+            ]);
+            $observeRecord->save();
+          }
+        }
+      }
+    }
+
     // send message to ticket creator
     if ($this->getChangedTicketStateTo() === 'applied' or $this->getChangedTicketStateTo() === 'closed' or $this->getChangedTicketStateTo() === 'opened') {
       $texts = [
@@ -58,7 +82,7 @@ class Comment extends BaseComment
 
       $to = $this->getTicket()->getRealSender() ? $this->getTicket()->getRealSender() : $this->getTicket()->getCreator()->getEmailAddress();
       if ($to !== 'support@helpdesk.f1lab.ru') {
-        Email::send($to, 'Re: [F1LAB-HLPDSK-' . $this->getTicket()->getId() . '] ' . $this->getTicket()->getName(), $texts[ $this->getChangedTicketStateTo() ]);
+        Email::send($to, Email::generateSubject($this->getTicket()), $texts[ $this->getChangedTicketStateTo() ]);
       }
     }
   }

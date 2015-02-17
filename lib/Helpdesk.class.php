@@ -52,4 +52,20 @@ final class Helpdesk
 
     return implode(', ', $result);
   }
+
+  static public final function findMentions($text) {
+    preg_match_all('/@([a-zA-Z0-9\.\-_]+)/', $text, $matches);
+    $usernames = $matches[1];
+
+    $users = [];
+    if (count($usernames)) {
+      $users = Doctrine_Query::create()
+        ->from('sfGuardUser u')
+        ->andWhereIn('u.username', $usernames)
+        ->execute()
+      ;
+    }
+
+    return $users;
+  }
 }

@@ -89,7 +89,7 @@ class Ticket extends BaseTicket
 --
 С уважением, команда F1 Lab
 ';
-      Email::send($to, '[F1LAB-HLPDSK-' . $this->getId() . '] ' . $this->getName(), $message);
+      Email::send($to, Email::generateSubject($this), $message);
     }
   }
 }
