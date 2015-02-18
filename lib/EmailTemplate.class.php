@@ -24,7 +24,7 @@ final class EmailTemplate {
     if ($comment->getChangedTicketStateTo() === 'applied') {
       $text = '';
       $result = [];
-      $responsibles = $this->getTicket()->getResponsibles();
+      $responsibles = $comment->getTicket()->getResponsibles();
       if (count($responsibles)) {
         foreach ($responsibles as $responsible) {
           $result[] = $responsible->getFullName();
