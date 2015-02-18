@@ -26,6 +26,7 @@ class RefTicketResponsible extends BaseRefTicketResponsible
         'ticket_id' => $this->getTicketId()
         , 'created_by' => $this->getCreatedBy()
         , 'text' => 'Добавил в список ответственных ' . $responsible
+        , 'skip_notification' => true
       ]);
 
       $comment->save();
@@ -46,6 +47,7 @@ class RefTicketResponsible extends BaseRefTicketResponsible
           'ticket_id' => $ticketId
           , 'created_by' => sfContext::getInstance()->getUser()->getGuardUser()->getId()
           , 'text' => 'Убрал из списка ответственных ' . $responsible
+          , 'skip_notification' => true
         ]);
 
         $comment->save();

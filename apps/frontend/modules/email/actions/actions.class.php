@@ -85,6 +85,7 @@ class emailActions extends sfActions
             , 'text' => 'Добавлен файл из письма: ' . $file['name']
             , 'attachment' => $newName
             , 'created_by' => $from ? $from->getId() : 82
+            , 'skip_notification' => true
           ]);
 
           $comment->save();

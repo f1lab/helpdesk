@@ -41,7 +41,7 @@ class Ticket extends BaseTicket
 
     // notify it-admins
     if ($company) {
-      $subject = 'Новая заявка';
+      $subject = Email::generateSubject($this);
       $text = 'Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername() . PHP_EOL
             . 'http://helpdesk.f1lab.ru/tickets/' . $this->getId()
       ;
@@ -72,24 +72,7 @@ class Ticket extends BaseTicket
     }
 
     // send email to creator
-    $to = $this->getRealSender() ? $this->getRealSender() : $this->getCreator()->getEmailAddress();
-    if ($to !== 'support@helpdesk.f1lab.ru') {
-
-      $message = '
-В системе зарегистрировано Обращение № ' . $this->getId() . '
-Время создания: ' . date('d.m.Y H:i:s', strtotime($this->getCreatedAt())) . '
-Тема: ' . $this->getName() . '
-Описание: ' . str_replace(['--', '<br/>'], '', $this->getDescription()) . '
-
-В ближайшее время Заявка будет рассмотрена!
-
-Если вы хотите что-то дополнить, то можете ответить на это письмо
-или сделать это онлайн на странице http://helpdesk.f1lab.ru/tickets/' . $this->getId() . '
-
---
-С уважением, команда F1 Lab
-';
-      Email::send($to, Email::generateSubject($this), $message);
-    }
+    $to = $this->getRealSender() ?: $this->getCreator()->getEmailAddress();
+    Email::send($to, Email::generateSubject($this), EmailTemplate::newTicket($this));
   }
 }

@@ -36,12 +36,29 @@ class Comment extends BaseComment
   }
 
   public function postInsert($event) {
+    // send message to ticket creator and observers
+    if (!$this->getSkipNotification()) {
+      // to creator
+      if ($this->getCreatedBy() != $this->getTicket()->getCreatedBy()) {
+        $to = $this->getTicket()->getRealSender() ?: $this->getTicket()->getCreator()->getEmailAddress();
+        Email::send($to, Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
+      }
+
+      // to observers
+      $observers = $this->getTicket()->getObservers();
+      foreach ($observers as $observer) {
+        if ($observer->getId() != $this->getCreatedBy() and $observer->getId() != $this->getTicket()->getCreatedBy()) {
+          Email::send($observer->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
+        }
+      }
+    }
+
     // send messages to mentioned users
     $mentions = Helpdesk::findMentions($this->getText());
     if (count($mentions) > 0) {
       foreach ($mentions as $mention) {
-        if ($mention->getId() !== $this->getTicket()->getCreatedBy()) {
-          Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), 'Вас упомянули в комментарии к заявке http://helpdesk.f1lab.ru/tickets/' . $this->getTicket()->getId());
+        if ($mention->getId() != $this->getCreatedBy() and $mention->getId() != $this->getTicket()->getCreatedBy()) {
+          Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this, 'mention'));
 
           $observingAlready = Doctrine_Query::create()
             ->from('RefTicketObserver ref')
@@ -57,32 +74,6 @@ class Comment extends BaseComment
             $observeRecord->save();
           }
         }
-      }
-    }
-
-    // send message to ticket creator
-    if ($this->getChangedTicketStateTo() === 'applied' or $this->getChangedTicketStateTo() === 'closed' or $this->getChangedTicketStateTo() === 'opened') {
-      $texts = [
-        'closed' => 'Заявка выполнена! Рады были помочь!',
-        'opened' => 'Заявка переоткрыта.',
-      ];
-
-      if ($this->getChangedTicketStateTo() === 'applied') {
-        $texts['applied'] = 'Ваша заявка принята в работу! Не переживайте, мы уже над ней работаем!';
-
-        $responsibles = $this->getTicket()->getResponsibles();
-        if (count($responsibles)) {
-          $result = [];
-          foreach ($responsibles as $responsible) {
-            $result[] = $responsible->getFullName();
-          }
-          $texts['applied'] .= "\nОтветственные за выполнение: " . implode(', ', $result) . '.';
-        }
-      }
-
-      $to = $this->getTicket()->getRealSender() ? $this->getTicket()->getRealSender() : $this->getTicket()->getCreator()->getEmailAddress();
-      if ($to !== 'support@helpdesk.f1lab.ru') {
-        Email::send($to, Email::generateSubject($this->getTicket()), $texts[ $this->getChangedTicketStateTo() ]);
       }
     }
   }
