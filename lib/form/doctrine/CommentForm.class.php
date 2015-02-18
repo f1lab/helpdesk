@@ -18,6 +18,7 @@ class CommentForm extends BaseCommentForm
       $this['created_by'],
       $this['updated_by'],
       $this['ticket_id']
+      , $this['skip_notification']
     );
 
     $this->getWidgetSchema()

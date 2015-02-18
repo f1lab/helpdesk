@@ -230,6 +230,10 @@ Comment:
         - opened # переоткрыл
         - applied # принял в работу
         - closed # закрыл
+    skip_notification:
+      type: boolean
+      notnull: true
+      default: false
   relations:
     ReadedComments:
       local: id
