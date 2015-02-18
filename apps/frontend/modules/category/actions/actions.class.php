@@ -14,6 +14,7 @@ class categoryActions extends sfActions
   {
     $this->categorys = Doctrine_Query::create()
       ->from('Category c')
+      ->addOrderBy('c.name')
       ->execute()
     ;
   }

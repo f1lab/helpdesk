@@ -12,12 +12,18 @@ class companiesActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->companies = Doctrine_Core::getTable('sfGuardGroup')->createQuery('a')->execute();
+    $this->companies = Doctrine_Core::getTable('sfGuardGroup')->createQuery('a')->addOrderBy('a.isExecutor desc, a.name')->execute();
   }
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->company = Doctrine_Core::getTable('sfGuardGroup')->find($request->getParameter('id'));
+    $this->company = Doctrine_Query::create()
+      ->from('sfGuardGroup g')
+      ->leftJoin('g.Users u')
+      ->addWhere('g.id = ?', $request->getParameter('id'))
+      ->addOrderBy('u.username')
+      ->fetchOne()
+    ;
     $this->forward404Unless($this->company);
     $this->users = $this->company->getUsers();
   }

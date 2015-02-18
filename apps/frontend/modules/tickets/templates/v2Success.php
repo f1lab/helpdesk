@@ -231,7 +231,7 @@
         )
 
       $scope.filter = $sessionStorage.$default
-        enabled: true
+        enabled: false
         tab: null
         closed: false
         category_id: []
