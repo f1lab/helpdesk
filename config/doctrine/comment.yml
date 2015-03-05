@@ -1,0 +1,48 @@
+Comment:
+  actAs: [Timestampable, Signable]
+  columns:
+    ticket_id:
+      type: integer
+      notnull: true
+    text:
+      type: clob
+      notnull: true
+    attachment:
+      type: string(255)
+    changed_ticket_state_to:
+      type: enum
+      values:
+        - opened # переоткрыл
+        - applied # принял в работу
+        - closed # закрыл
+    skip_notification:
+      type: boolean
+      notnull: true
+      default: false
+  relations:
+    ReadedComments:
+      local: id
+      foreign: comment_id
+      onDelete: CASCADE
+
+ReadedComments:
+  actAs: [Timestampable]
+  columns:
+    user_id: integer
+    ticket_id: integer
+    comment_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    Comment:
+      local: comment_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+  indexes:
+    unique_for_user_and_comment:
+      fields: [user_id, comment_id]
+      type: unique

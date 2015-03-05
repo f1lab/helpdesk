@@ -1,0 +1,113 @@
+Ticket:
+  actAs: [Timestampable, Signable, SoftDelete]
+  columns:
+    category_id:
+      type: integer
+    isClosed:
+      type: boolean
+      default: false
+      notnull: true
+    name:
+      type: string(255)
+      notnull: true
+    description: clob
+    attach:
+      type: string(255)
+    deadline:
+      type: timestamp
+    planned_start:
+      type: timestamp
+    planned_finish:
+      type: timestamp
+    period_id: integer
+    company_id: integer
+    real_sender: string(255)
+  relations:
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
+      onDelete: CASCADE
+    CommentsAgain:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
+    Responsibles:
+      class: sfGuardUser
+      refClass: RefTicketResponsible
+      local: ticket_id
+      foreign: user_id
+      foreignAlias: ResponsibleForTickets
+    Period:
+      class: Periods
+      local: period_id
+      foreign: id
+    ToCompany:
+      class: sfGuardGroup
+      local: company_id
+      foreign: id
+    Category:
+      local: category_id
+      foreign: id
+    Observers:
+      class: sfGuardUser
+      refClass: RefTicketObserver
+      local: ticket_id
+      foreign: user_id
+      foreignAlias: ObserverForTickets
+
+RefTicketObserver:
+  actAs:
+    - Signable
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefTicketResponsible:
+  actAs:
+    - Signable
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+ReadedTickets:
+  actAs: [Timestampable]
+  columns:
+    user_id: integer
+    ticket_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+  indexes:
+    unique_for_user_and_ticket:
+      fields: [user_id, ticket_id]
+      type: unique
+
+Periods:
+  columns:
+    period_name: string(255)
+    description: clob
+    length: integer

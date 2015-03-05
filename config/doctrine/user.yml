@@ -1,0 +1,34 @@
+sfGuardUser:
+  columns:
+    type:
+      type: enum
+      values:
+        - it-admin
+        - user
+      notnull: true
+      default: user
+    phone:
+      type: string(255)
+    work_phone:
+      type: string(255)
+    position:
+      type: string(255)
+  relations:
+    Tickets:
+      class: Ticket
+      type: many
+      local: id
+      foreign: created_by
+      onDelete: CASCADE
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: created_by
+      onDelete: CASCADE
+    Categories:
+      class: Category
+      refClass: RefUserCategory
+      local: user_id
+      foreign: category_id
+      foreignAlias: SeesCategories

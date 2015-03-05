@@ -1,0 +1,17 @@
+Category:
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+
+RefUserCategory:
+  columns:
+    category_id: integer
+    user_id: integer
+  relations:
+    Category:
+      local: category_id
+      foreign: id
+    User:
+      local: user_id
+      foreign: id

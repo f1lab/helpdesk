@@ -1,0 +1,71 @@
+sfGuardGroup:
+  columns:
+    isExecutor:
+      type: boolean
+      default: false
+      notnull: true
+    isClient:
+      type: boolean
+      default: false
+      notnull: true
+  relations:
+    Responsibles:
+      class: sfGuardUser
+      refClass: RefCompanyResponsible
+      local: group_id
+      foreign: user_id
+      foreignAlias: ResponsibleForCompany
+    NotifySms:
+      class: sfGuardUser
+      refClass: RefCompanyNotify
+      local: group_id
+      foreign: user_id
+      foreignAlias: NotifySmsForCompany
+    NotifyEmail:
+      class: sfGuardUser
+      refClass: RefCompanyNotifyEmail
+      local: group_id
+      foreign: user_id
+      foreignAlias: NotifyEmailForCompany
+
+RefCompanyResponsible:
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    Responsible:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefCompanyNotify: # sms
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    NotifySms:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefCompanyNotifyEmail:
+  columns:
+    group_id: integer
+    user_id: integer
+  relations:
+    Company:
+      class: sfGuardGroup
+      local: group_id
+      foreign: id
+    NotifyEmail:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
