@@ -21,7 +21,7 @@ class emailActions extends sfActions
     // get sender user
     $from = Doctrine_Query::create()
       ->from('sfGuardUser u')
-      ->addWhere('u.email_address = ?', $request->getParameter('sender'))
+      ->addWhere('u.email_address = ?', strtolower($request->getParameter('sender')))
       ->fetchOne()
     ;
 

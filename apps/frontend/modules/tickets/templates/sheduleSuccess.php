@@ -21,24 +21,24 @@
 </div>
 
 <script>
-	$(document).ready(function() {
-		$('#external-events div.external-event').each(function() {
+  $(document).ready(function() {
+    $('#external-events div.external-event').each(function() {
       //event
-			var eventObject = {
-				title: $.trim($(this).text()), // use the element's text as the event title
+      var eventObject = {
+        title: $.trim($(this).text()), // use the element's text as the event title
         id: $(this).data('id'),
         allDay: false
-			};
-			// store the Event Object in the DOM element so we can get to it later
-			$(this).data('eventObject', eventObject);
-			// make the event draggable using jQuery UI
-			$(this).draggable({
-				zIndex: 999,
-				revert: true,      // will cause the event to go back to its
-				revertDuration: 0  //  original position after the drag
-			});	
-		});
-    
+      };
+      // store the Event Object in the DOM element so we can get to it later
+      $(this).data('eventObject', eventObject);
+      // make the event draggable using jQuery UI
+      $(this).draggable({
+        zIndex: 999,
+        revert: true,      // will cause the event to go back to its
+        revertDuration: 0  //  original position after the drag
+      });
+    });
+
     var clickHandler = function(event, e) {
       e.preventDefault();
       var modalNode = $('#event-details')
@@ -59,7 +59,7 @@
           })
           return false;
       }
-  
+
     changeHandler = function(event) {
       $.post('<?php echo url_for('/tickets/sheduleEvent') ?>', {
       event: $.extend({}, event, {
@@ -74,42 +74,42 @@
         $('#calendar').fullCalendar('refetchEvents');
       })
     }
-	
-		/* initialize the calendar
-		-----------------------------------------------------------------*/
-		$('#calendar').fullCalendar({
-			editable: true,
+
+    /* initialize the calendar
+    -----------------------------------------------------------------*/
+    $('#calendar').fullCalendar({
+      editable: true,
       selectable: true,
-			selectHelper: true,
-			select: function(start, end, allDay) {
-				var title = prompt('Тема:');
-				if (title) {
-          $.post('<?php echo url_for('/tickets/sheduleEventNew') ?>', {
-          event: $.extend({},{
-            title: title,
-            start: (new Date(start)).getTime()/1000,
-              end: (new Date(end)).getTime()/1000
-            })
-          })
-          .fail(function() {
-            alert('Ошибка создания события :(');
-          })
-          .always(function() {
-            $('#calendar').fullCalendar('refetchEvents');
-          })
-        }
+      selectHelper: true,
+      // select: function(start, end, allDay) {
+      //   var title = prompt('Тема:');
+      //   if (title) {
+      //     $.post('<?php echo url_for('/tickets/sheduleEventNew') ?>', {
+      //     event: $.extend({},{
+      //       title: title,
+      //       start: (new Date(start)).getTime()/1000,
+      //         end: (new Date(end)).getTime()/1000
+      //       })
+      //     })
+      //     .fail(function() {
+      //       alert('Ошибка создания события :(');
+      //     })
+      //     .always(function() {
+      //       $('#calendar').fullCalendar('refetchEvents');
+      //     })
+      //   }
+      // },
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
       },
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
-			},
       defaultView: 'agendaWeek',
       timeFormat: 'H:mm',
       axisFormat: 'H:mm',
       allDaySlot: false,
-      monthNames: ['Январь','Февраль','Март','Апрель','Май','οюнь','οюль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-      monthNamesShort: ['Янв.','Фев.','Март','Апр.','Май','οюнь','οюль','Авг.','Сент.','Окт.','Ноя.','Дек.'],
+      monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+      monthNamesShort: ['Янв.','Фев.','Март','Апр.','Май','Июнь','Июль','Авг.','Сент.','Окт.','Ноя.','Дек.'],
       dayNames: ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
       dayNamesShort: ["ВС","ПН","ВТ","СР","ЧТ","ПТ","СБ"],
       buttonText: {
@@ -123,12 +123,12 @@
         day: "День",
       },
       resizeble: true,
-			droppable: true, // this allows things to be dropped onto the calendar !!!
+      droppable: true, // this allows things to be dropped onto the calendar !!!
       eventSources: [
         '<?php echo url_for('tickets/eventsource') ?>'
       ],
-      
-			drop: function(date) {
+
+      drop: function(date) {
         var eventObject = $.extend($(this).data('eventObject'), {start: date})
         $('#calendar').fullCalendar('renderEvent', eventObject);
 
@@ -149,8 +149,8 @@
       eventDrop: changeHandler,
       eventResize: changeHandler,
       eventClick: clickHandler
-		});
-	});
+    });
+  });
 </script>
 
 <div class="modal hide" id="event-details">

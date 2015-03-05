@@ -35,7 +35,7 @@
       <i class="icon-ok icon-white"></i>
       Добавить
     </button>
-    <a class="btn" href="<?php echo url_for('@tickets-my') ?>">
+    <a class="btn" href="<?php echo url_for('tickets/v2') ?>">
       Вернуться
     </a>
   </div>
