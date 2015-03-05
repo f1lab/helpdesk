@@ -13,15 +13,17 @@ class TicketForm extends BaseTicketForm
   public function configure()
   {
     unset (
-      $this['created_at'],
-      $this['updated_at'],
-      $this['created_by'],
-      $this['updated_by'],
-      $this['isClosed'],
-      $this['planned_start'],
-      $this['planned_finish'],
-      $this['deleted_at']
+      $this['created_at']
+      , $this['updated_at']
+      , $this['created_by']
+      , $this['updated_by']
+      , $this['isClosed']
+      , $this['planned_start']
+      , $this['planned_finish']
+      , $this['deleted_at']
       , $this['real_sender']
+      , $this['responsibles_list']
+      , $this['company_id']
     );
 
     if (sfContext::getInstance()->getUser()->hasCredential('can_set_responsibles_for_tickets')) {
@@ -50,11 +52,6 @@ class TicketForm extends BaseTicketForm
           'data-placeholder' => 'Выберите…',
         )))
       ;
-    } else {
-      unset (
-        $this['responsibles_list']
-        , $this['company_id']
-      );
     }
 
     $this->getWidgetSchema()
@@ -109,8 +106,6 @@ class TicketForm extends BaseTicketForm
     $this->validatorSchema['attach'] = new sfValidatorFile(array(
       'required'   => false,
       'path'       => sfConfig::get('sf_upload_dir').'/ticket-attachments',
-      //'mime_types' => 'web_images',
     ));
-    $this->validatorSchema['shedule_time'] = new sfValidatorTime(array('required' => false));
   }
 }
