@@ -5,9 +5,9 @@ all:
   doctrine:
     class: sfDoctrineDatabase
     param:
-      dsn:      mysql:host=localhost;dbname=helpdesk
-      username: root
-      password: 
+      dsn:      pgsql:host=localhost;dbname=helpdesk
+      username: postgres
+      password:
       attributes:
         quote_identifier:  true
         use_native_enum:   true
