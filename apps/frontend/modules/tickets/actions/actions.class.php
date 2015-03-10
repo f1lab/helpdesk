@@ -119,7 +119,7 @@ class ticketsActions extends sfActions
         $this->getUser()->setFlash('message', array('success', 'Отлично!', 'Одной заявкой меньше.'));
       }
     }
-    $this->redirect('@tickets-my');
+    $this->redirect('tickets/v2');
   }
 
   public function executeComment(sfWebRequest $request)
