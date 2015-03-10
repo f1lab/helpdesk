@@ -15,13 +15,18 @@ Ticket:
       type: string(255)
     deadline:
       type: timestamp
+    company_id: integer
+    real_sender: string(255)
+
+    period_id: integer # deprecated
+    repeated_every_days:
+      type: integer
+      notnull: true
+      default: 0
     planned_start:
       type: timestamp
     planned_finish:
       type: timestamp
-    period_id: integer
-    company_id: integer
-    real_sender: string(255)
   relations:
     Comments:
       class: Comment
