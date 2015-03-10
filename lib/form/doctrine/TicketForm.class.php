@@ -22,8 +22,6 @@ class TicketForm extends BaseTicketForm
       , $this['planned_finish']
       , $this['deleted_at']
       , $this['real_sender']
-      , $this['responsibles_list']
-      , $this['company_id']
     );
 
     if (sfContext::getInstance()->getUser()->hasCredential('can_set_responsibles_for_tickets')) {
@@ -52,6 +50,11 @@ class TicketForm extends BaseTicketForm
           'data-placeholder' => 'Выберите…',
         )))
       ;
+    } else {
+      unset (
+        $this['responsibles_list']
+        , $this['company_id']
+      );
     }
 
     $this->getWidgetSchema()
