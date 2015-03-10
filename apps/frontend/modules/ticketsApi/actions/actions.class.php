@@ -124,4 +124,32 @@ class ticketsApiActions extends sfActions
 
     self::returnJson($result);
   }
+
+  // for shedule: mark as done and replan ticket for next period
+  public function executeTicketDone(sfWebRequest $request){
+    $ticket = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->where('t.id = ?', $request->getParameter('id'))
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    if ($ticket and $ticket->getPlannedStart() and $ticket->getRepeatedEveryDays() > 0) {
+      $ticket
+        ->planNextStart()
+        ->save()
+      ;
+
+      $comment = Comment::createFromArray([
+        'ticket_id' => $ticket->getId(),
+        'text' => 'Выполнил регламентную работу.',
+      ]);
+      $comment->save();
+    } else {
+      var_dump([$ticket->getPlannedStart(), $ticket->getRepeatedEveryDays()]);
+      die;
+    }
+
+    // $this->redirect('shedule/index');
+  }
 }

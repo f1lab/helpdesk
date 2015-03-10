@@ -140,10 +140,6 @@ unread:
   url: /tickets/unread
   param: { module: tickets, action: unread }
 
-shedule:
-  url:  /shedule
-  param: { module: tickets, action: shedule }
-
 default_index:
   url:   /:module
   param: { action: index }

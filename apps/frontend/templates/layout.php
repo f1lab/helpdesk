@@ -38,8 +38,8 @@
             </li>
 
             <?php if ($sf_user->hasCredential('can_use_schedule')): ?>
-              <li <?php  if ('shedule' == $currentRoute):  ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('@shedule') ?>">Моё расписание</a>
+              <li <?php  if ('shedule' == $sf_context->getModuleName()):  ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('shedule/index') ?>">Расписание</a>
               </li>
             <?php endif ?>
 

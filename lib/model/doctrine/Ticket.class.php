@@ -36,6 +36,20 @@ class Ticket extends BaseTicket
     ;
   }
 
+  public function preInsert($event)
+  {
+    if ($event->getInvoker()->getPlannedStart() === null and $event->getInvoker()->getRepeatedEveryDays() > 0) {
+      $this->setPlannedStart(date('Y-m-d H:i:s'));
+    }
+  }
+
+  public function preUpdate($event)
+  {
+    if ($event->getInvoker()->getPlannedStart() === null and $event->getInvoker()->getRepeatedEveryDays() > 0) {
+      $this->setPlannedStart(date('Y-m-d H:i:s'));
+    }
+  }
+
   public function postInsert($event) {
     $company = $this->getCreator()->getGroups()->getFirst();
 
@@ -74,5 +88,14 @@ class Ticket extends BaseTicket
     // send email to creator
     $to = $this->getRealSender() ?: $this->getCreator()->getEmailAddress();
     Email::send($to, Email::generateSubject($this), EmailTemplate::newTicket($this));
+  }
+
+  public function planNextStart()
+  {
+    $this->setPlannedStart(
+      date("Y-m-d H:i:s", strtotime('+' . $this->getRepeatedEveryDays() . ' day', strtotime($this->getPlannedStart())))
+    );
+
+    return $this;
   }
 }
