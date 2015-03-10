@@ -1,7 +1,8 @@
 <div class="page-header">
   <h1>Редактировать заявку</h1>
 </div>
-<?php echo $form->renderFormTag(url_for('@tickets-update?id=' . $form->getObject()->getId()), array('class' => 'well form-fluid')) ?>
+
+<form action="<?php echo url_for('@tickets-update?id=' . $form->getObject()->getId()) ?>" method="post" enctype="multipart/form-data" class="well form-fluid">
   <?php echo $form->renderUsing('bootstrap') ?>
   <div class="form-actions ">
     <button type="submit" class="btn btn-primary">
@@ -13,3 +14,5 @@
     </a>
   </div>
 </form>
+
+<script type="text/coffeescript" src="/js/angular-RepeatedEveryDays.coffee" />

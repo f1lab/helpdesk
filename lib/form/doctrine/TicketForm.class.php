@@ -18,13 +18,15 @@ class TicketForm extends BaseTicketForm
       , $this['created_by']
       , $this['updated_by']
       , $this['isClosed']
-      , $this['planned_start']
       , $this['planned_finish']
       , $this['deleted_at']
       , $this['real_sender']
+      , $this['period_id']
     );
 
-    if (sfContext::getInstance()->getUser()->hasCredential('can_set_responsibles_for_tickets')) {
+    $user = sfContext::getInstance()->getUser();
+
+    if ($user->hasCredential('can_set_responsibles_for_tickets')) {
       $this->getWidgetSchema()
         ->offsetSet('responsibles_list', new sfWidgetFormDoctrineChoice(array(
           'multiple' => true,
@@ -43,7 +45,7 @@ class TicketForm extends BaseTicketForm
           'add_empty' => true,
           'query' => Doctrine_Query::create()
             ->from('sfGuardGroup a')
-            ->addWhere('a.id in (select group_id from ref_company_responsible where user_id = ?)', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+            ->addWhere('a.id in (select group_id from ref_company_responsible where user_id = ?)', $user->getGuardUser()->getId())
           ,
         ), array(
           'class' => 'chzn-select',
@@ -55,6 +57,34 @@ class TicketForm extends BaseTicketForm
         $this['responsibles_list']
         , $this['company_id']
       );
+    }
+
+    if (!$user->hasCredential('can_use_schedule')) {
+      unset (
+        $this['repeated_every_days']
+      );
+    }
+
+    if (!$user->hasCredential('can set observers for tickets')) {
+      unset (
+        $this['observers_list']
+      );
+    }
+
+    if ($user->hasCredential('can set deadlines for tickets')) {
+      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormBootstrapDateTime2(array(
+        'minView' => 0,
+      ), array(
+        'placeholder' => '',
+        'class' => 'span2',
+        'type' => 'date',
+      )));
+    } else {
+      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
+    }
+
+    if (!$user->hasCredential('can set categories for tickets')) {
+      $this->getWidgetSchema()->offsetSet('category_id', new sfWidgetFormInputHidden());
     }
 
     $this->getWidgetSchema()
@@ -76,35 +106,30 @@ class TicketForm extends BaseTicketForm
           'class' => 'chzn-select',
           'data-placeholder' => 'Выберите…',
         )))
-      ;
-
-    if (sfContext::getInstance()->getUser()->hasCredential('can set deadlines for tickets')) {
-      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormBootstrapDateTime2(array(
+      ->offsetSet('planned_start', new sfWidgetFormBootstrapDateTime2(array(
         'minView' => 0,
       ), array(
         'placeholder' => '',
         'class' => 'span2',
         'type' => 'date',
-      )));
-    } else {
-      $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
-    }
-
-    if (!sfContext::getInstance()->getUser()->hasCredential('can set categories for tickets')) {
-      $this->getWidgetSchema()->offsetSet('category_id', new sfWidgetFormInputHidden());
-    }
-
-    $this->widgetSchema->setLabels(array(
-      'name' => 'Тема',
-      'description' => 'Описание',
-      'attach' => 'Вложение',
-      'deadline' => 'Сделать до',
-      'responsibles_list' => 'Ответственные',
-      'period_id' => 'Период',
-      'company_id' => 'На компанию',
-      'category_id' => 'Категория',
-      'observers_list' => 'Наблюдатели',
-    ));
+      )))
+      ->offsetGet('repeated_every_days')
+        ->setAttribute('class', 'RepeatedEveryDays')
+        ->getParent()
+      ->setLabels(array(
+        'name' => 'Тема',
+        'description' => 'Описание',
+        'attach' => 'Вложение',
+        'repeated_every_days' => 'Повторять заявку каждые',
+        'planned_start' => 'Планируемая дата выполнения',
+        'deadline' => 'Деадлайн',
+        'responsibles_list' => 'Ответственные',
+        'period_id' => 'Период',
+        'company_id' => 'На компанию',
+        'category_id' => 'Категория',
+        'observers_list' => 'Наблюдатели',
+      ))
+    ;
 
     $this->validatorSchema['attach'] = new sfValidatorFile(array(
       'required'   => false,

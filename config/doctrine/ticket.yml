@@ -1,21 +1,21 @@
 Ticket:
   actAs: [Timestampable, Signable, SoftDelete]
   columns:
-    category_id:
-      type: integer
+    name:
+      type: string(255)
+      notnull: true
     isClosed:
       type: boolean
       default: false
       notnull: true
-    name:
-      type: string(255)
-      notnull: true
+    company_id: integer
+    category_id:
+      type: integer
     description: clob
     attach:
       type: string(255)
     deadline:
       type: timestamp
-    company_id: integer
     real_sender: string(255)
 
     period_id: integer # deprecated
