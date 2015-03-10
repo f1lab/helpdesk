@@ -145,11 +145,8 @@ class ticketsApiActions extends sfActions
         'text' => 'Выполнил регламентную работу.',
       ]);
       $comment->save();
-    } else {
-      var_dump([$ticket->getPlannedStart(), $ticket->getRepeatedEveryDays()]);
-      die;
     }
 
-    // $this->redirect('shedule/index');
+    $this->redirect('shedule/index');
   }
 }

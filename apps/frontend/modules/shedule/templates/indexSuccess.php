@@ -3,7 +3,9 @@
     <div class="span3">
       <div id='external-events' class = "well well-small ">
         <h4>Фильтр</h4>
-        по компании
+        <form id="shedule-filter">
+          <?php echo $filter->renderUsing("bootstrap") ?>
+        </form>
       </div>
     </div>
     <div class="span9">
@@ -117,9 +119,14 @@
       },
       resizeble: true,
       droppable: true, // this allows things to be dropped onto the calendar !!!
-      eventSources: [
-        '<?php echo url_for('shedule/eventsource') ?>'
-      ],
+      events: {
+        url: '<?php echo url_for('shedule/eventsource') ?>'
+        , data: function() {
+          return {
+            "filter": $("#shedule-filter").serialize()
+          }
+        }
+      },
 
       // drop: function(date) {
       //   var eventObject = $.extend($(this).data('eventObject'), {start: date})
@@ -142,6 +149,10 @@
       eventDrop: changeHandler,
       eventResize: changeHandler,
       eventClick: clickHandler
+    });
+
+    $('#shedule-filter input, #shedule-filter select').change(function() {
+      $('#calendar').fullCalendar('refetchEvents');
     });
   });
 </script>
