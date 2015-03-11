@@ -36,16 +36,22 @@
 
     var clickHandler = function(event, e) {
       e.preventDefault();
-      var modalNode = $('#event-details')
+      var modalNode = $('#event-details').clone()
         .find('.modal-body')
           .html('<p>Загружаю…</p>')
           .end()
         .modal()
         $.get('<?php echo url_for('shedule/modal?id=') ?>' + event.id)
           .done(function(data) {
+            modalContents = $(data);
             modalNode
               .find('.modal-body')
-                .html(data)
+                .html(modalContents.filter('.modal-body').contents())
+                .end()
+              .find('.modal-footer')
+                .html(modalContents.filter('.modal-footer').contents())
+            ;
+            modalContents.filter('.modal-header').contents().appendTo(modalNode.find('.modal-header'));
           })
           .fail(function() {
             modalNode
@@ -157,13 +163,10 @@
   });
 </script>
 
-<div class="modal hide" id="event-details">
+<div class="modal hide modal-big" id="event-details">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Подробнее!</h3>
   </div>
   <div class="modal-body"></div>
-  <div class="modal-footer hide">
-    <a href="#" class="btn btn-success">Работа выполнена</a>
-  </div>
+  <div class="modal-footer"></div>
 </div>

@@ -3,6 +3,27 @@
   width: 99% !important;
 }*/
 
+.modal-big {
+  margin: 0;
+  top: 150px;
+  width: 60%;
+  left: 20%;
+}
+
+.modal h4, .modal h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.modal-body {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.well:empty {
+  display: none;
+}
+
 .select2-result-single {
   margin-left: 0;
 }
