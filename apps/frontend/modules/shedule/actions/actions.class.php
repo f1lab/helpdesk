@@ -26,8 +26,22 @@ class sheduleActions extends sfActions
         'class' => 'chzn-select',
         'data-placeholder' => 'Выберите…',
       )))
+
+      ->offsetSet('responsibles_list', new sfWidgetFormDoctrineChoice(array(
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'add_empty' => false,
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser a')
+          ->where('a.type = ?', 'it-admin'),
+      ), array(
+        'class' => 'chzn-select',
+        'data-placeholder' => 'Выберите…',
+      )))
+
       ->setLabels([
         'company_id' => 'Компания',
+        'responsibles_list' => 'Ответственный',
       ])
     ;
   }
@@ -63,6 +77,7 @@ class sheduleActions extends sfActions
     $query = Doctrine_Query::create()
       ->from('Ticket t')
       ->leftJoin('t.ToCompany c')
+      ->leftJoin('t.Responsibles r')
       ->andWhere('t.isClosed = ?', false)
       ->andWhere('(t.planned_start >= ? and t.planned_start <= ?) or t.repeated_every_days > 0', [
         date('Y-m-d H:i:s', $request->getParameter('start')),
@@ -75,6 +90,10 @@ class sheduleActions extends sfActions
       $query->andWhereIn('t.company_id', $filter['company_id']);
     } else {
       $query->addWhere('t.company_id in (select group_id from ref_company_responsible where user_id = ?)', $this->getUser()->getGuardUser()->getId());
+    }
+
+    if (isset($filter['responsibles_list'])) {
+      $query->andWhereIn('r.id', $filter['responsibles_list']);
     }
 
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
