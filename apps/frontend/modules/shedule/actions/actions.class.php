@@ -62,6 +62,7 @@ class sheduleActions extends sfActions
   {
     $query = Doctrine_Query::create()
       ->from('Ticket t')
+      ->leftJoin('t.ToCompany c')
       ->andWhere('t.isClosed = ?', false)
       ->andWhere('(t.planned_start >= ? and t.planned_start <= ?) or t.repeated_every_days > 0', [
         date('Y-m-d H:i:s', $request->getParameter('start')),
@@ -84,15 +85,11 @@ class sheduleActions extends sfActions
       if ($period > 0) {
         $upper = $period;
         for ($i = 0; $i < 7; $i++) {
-          $element = array(
-            'id'=> $ticket['id'],
+          $element = array_merge($ticket, [
             'planned_start' => date('Y-m-d H:i:s', strtotime('+' . $upper . ' day', strtotime($ticket['planned_start']))),
-            'name' => $ticket['name'],
             'editable' => false ,
-            'ref' => true,
             'repeated' => 'event-repeated',
-            'isClosed' => $ticket['isClosed'],
-          );
+          ]);
 
           array_push($repeated, $element);
           $upper += $period;
@@ -103,25 +100,16 @@ class sheduleActions extends sfActions
     $result = array_merge($tickets, $repeated);
 
     die(json_encode(array_map(function($ticket) {
-      $editeble = true;
-      $repeated = ' ';
-      if (isset($ticket['editable'])){
-        $editeble = $ticket['editable'];
-      }
-      else {
-        $editeble = !$ticket['isClosed'];
-      }
-      if (isset($ticket['repeated'])){
-        $repeated = $ticket['repeated'];
-      }
       return [
         'id' => $ticket['id'],
-        'title' => $ticket['name'],
+        'title' => (isset($ticket['company_id']) ? $ticket['ToCompany']['name'] : 'Без компании') . ' / ' . $ticket['name'],
         'start' => $ticket['planned_start'],
         'end' => date('Y-m-d H:i:s', strtotime('+ 1 hour', strtotime($ticket['planned_start']))),
-        'className' => join(' ', ['event-completed-' . ($ticket['isClosed'] ? 'yes' : 'no'),$repeated
+        'className' => join(' ', [
+          'event-completed-' . ($ticket['isClosed'] ? 'yes' : 'no'),
+          isset($ticket['repeated']) ? $ticket['repeated'] : '',
         ]),
-        'editable' => $editeble,
+        'editable' => isset($ticket['editable']) ? $ticket['editable'] : true,
         'allDay' => false,
       ];
     }, $result), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
