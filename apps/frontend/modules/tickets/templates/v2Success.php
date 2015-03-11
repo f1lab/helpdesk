@@ -119,17 +119,42 @@
   <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
     <thead>
       <tr>
-        <th class="span1">№</th>
-        <th class="span12">Тема</th>
-        <th>Дата</th>
-        <th>Категория</th>
-        <th>Пользователь@Компания</th>
+        <th class="span1">
+          <a href="#" ng-click="orderBy('id')">
+            №
+            <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th class="span12">
+          <a href="#" ng-click="orderBy('name')">
+            Тема
+            <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="#" ng-click="orderBy('created_at')">
+            Дата
+            <span ng-show="orderByField == 'created_at'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="#" ng-click="orderBy('Category.name')">
+            Категория
+            <span ng-show="orderByField == 'Category.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="#" ng-click="orderBy(['Creator.username', 'ToCompany.name'])">
+            Пользователь@Компания
+            <span ng-show="orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
         <th>Статус</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="ticket in tickets" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
+      <tr ng-repeat="ticket in tickets | orderBy:orderByField:reverseSort" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
         <td>{{ticket.id}}</td>
         <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" style="display: block;">
           {{ticket.name}}
@@ -163,6 +188,7 @@
 <style>
   .tickets20 {}
   .tickets20 th {
+    white-space: nowrap;
     font-size: 1.2em;
   }
   .tickets20 td {
@@ -197,6 +223,14 @@
   app.controller 'TicketsPageController', [
     '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage'
     ($scope, $http, $timeout, $filter, $q, $sessionStorage) ->
+      $scope.orderByField = 'id'
+      $scope.reverseSort = false
+      $scope.orderBy = (column) ->
+        sameColumnSelected = $scope.orderByField.toString() is column.toString()
+        $scope.orderByField = column
+
+        $scope.reverseSort = if sameColumnSelected then !$scope.reverseSort else false
+
       $scope.filterSelects =
         categories: [{id: null, name: 'Без категории'}].concat(
           <?php echo json_encode(Doctrine_Query::create()
