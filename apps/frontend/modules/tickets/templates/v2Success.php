@@ -120,33 +120,33 @@
     <thead>
       <tr>
         <th class="span1">
-          <a href="#" ng-click="orderBy('id')">
+          <a href="" ng-click="orderBy('id')">
             №
-            <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField == 'id'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th class="span12">
-          <a href="#" ng-click="orderBy('name')">
+          <a href="" ng-click="orderBy('name')">
             Тема
-            <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField == 'name'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="#" ng-click="orderBy('created_at')">
+          <a href="" ng-click="orderBy('created_at')">
             Дата
-            <span ng-show="orderByField == 'created_at'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField == 'created_at'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="#" ng-click="orderBy('Category.name')">
+          <a href="" ng-click="orderBy('Category.name')">
             Категория
-            <span ng-show="orderByField == 'Category.name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField == 'Category.name'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="#" ng-click="orderBy(['Creator.username', 'ToCompany.name'])">
+          <a href="" ng-click="orderBy(['Creator.username', 'ToCompany.name'])">
             Пользователь@Компания
-            <span ng-show="orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th>Статус</th>
@@ -154,7 +154,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="ticket in tickets | orderBy:orderByField:reverseSort" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
+      <tr ng-repeat="ticket in tickets | orderBy:tableSorter.orderByField:tableSorter.reverseSort" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
         <td>{{ticket.id}}</td>
         <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" style="display: block;">
           {{ticket.name}}
@@ -221,15 +221,17 @@
   ]
 
   app.controller 'TicketsPageController', [
-    '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage'
-    ($scope, $http, $timeout, $filter, $q, $sessionStorage) ->
-      $scope.orderByField = 'id'
-      $scope.reverseSort = false
-      $scope.orderBy = (column) ->
-        sameColumnSelected = $scope.orderByField.toString() is column.toString()
-        $scope.orderByField = column
+    '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage', '$localStorage'
+    ($scope, $http, $timeout, $filter, $q, $sessionStorage, $localStorage) ->
+      $scope.tableSorter = $localStorage.$default
+        orderByField: 'id'
+        reverseSort: false
 
-        $scope.reverseSort = if sameColumnSelected then !$scope.reverseSort else false
+      $scope.orderBy = (column) ->
+        sameColumnSelected = $scope.tableSorter.orderByField.toString() is column.toString()
+        $scope.tableSorter.orderByField = column
+
+        $scope.tableSorter.reverseSort = if sameColumnSelected then !$scope.tableSorter.reverseSort else false
 
       $scope.filterSelects =
         categories: [{id: null, name: 'Без категории'}].concat(
