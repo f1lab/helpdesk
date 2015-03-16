@@ -93,6 +93,14 @@
                     </label>
                   </div>
                 </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="filter.without_periodicals"> Скрыть регламентные работы
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
@@ -275,6 +283,7 @@
         responsible_id: []
         without_responsibles: false
         without_appliers: false
+        without_periodicals: false
         refresh: 0
 
       delete $scope.filter.$default

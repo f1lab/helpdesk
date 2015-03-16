@@ -36,6 +36,10 @@ class ticketsApiActions extends sfActions
         ->andWhereIn('t.company_id', self::$filter['company_id'])
         ->andWhereIn('r.id', self::$filter['responsible_id'])
       ;
+
+      if (self::$filter['without_periodicals']) {
+        $query->addWhere('t.repeated_every_days = ?', 0);
+      }
     } else {
       $query->addWhere('t.isClosed = ?', false);
     }
