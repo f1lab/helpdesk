@@ -84,6 +84,13 @@ class sfGuardUser extends PluginsfGuardUser
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
 
+    $companies = Doctrine_Query::create()
+      ->from('RefCompanyResponsible ref')
+      ->select('ref.group_id')
+      ->addWhere('ref.user_id = ?', $this->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
     $return['auto-assigned-to-me'] = Doctrine_Query::create()
       ->from('Ticket t')
       ->leftJoin('t.ReadedTickets read with read.user_id = ?', $this->getId())
@@ -95,8 +102,14 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('applier.Creator')
       ->leftJoin('t.Category')
       ->leftJoin('t.Creator')
-      ->andWhereIn('t.created_by', $users)
+
       ->andWhereIn('t.category_id', $seesCategories)
+
+      ->andWhereIn('t.created_by', $users)
+      ->toGroup()
+      ->orWhereIn('t.company_id', $companies)
+      ->endGroup()
+
       ->orderBy('t.created_at desc')
     ;
 
