@@ -63,12 +63,27 @@ class TicketForm extends BaseTicketForm
       unset (
         $this['repeated_every_days']
       );
+    } else {
+      $this->getWidgetSchema()->offsetGet('repeated_every_days')
+        ->setAttribute('class', 'RepeatedEveryDays')
+      ;
     }
 
     if (!$user->hasCredential('can set observers for tickets')) {
       unset (
         $this['observers_list']
       );
+    } else {
+      $this->getWidgetSchema()->offsetSet('observers_list', new sfWidgetFormDoctrineChoice(array(
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser a')
+          ->addOrderBy('a.first_name, a.last_name')
+      ), array(
+        'class' => 'chzn-select',
+        'data-placeholder' => 'Выберите…',
+      )));
     }
 
     if ($user->hasCredential('can set deadlines for tickets')) {
@@ -96,16 +111,6 @@ class TicketForm extends BaseTicketForm
         'rows' => 15,
       )))
       ->offsetSet('attach', new sfWidgetFormInputFile())
-      ->offsetSet('observers_list', new sfWidgetFormDoctrineChoice(array(
-          'multiple' => true,
-          'model' => 'sfGuardUser',
-          'query' => Doctrine_Query::create()
-            ->from('sfGuardUser a')
-            ->addOrderBy('a.first_name, a.last_name')
-        ), array(
-          'class' => 'chzn-select',
-          'data-placeholder' => 'Выберите…',
-        )))
       ->offsetSet('planned_start', new sfWidgetFormBootstrapDateTime2(array(
         'minView' => 0,
       ), array(
@@ -113,9 +118,6 @@ class TicketForm extends BaseTicketForm
         'class' => 'span2',
         'type' => 'date',
       )))
-      ->offsetGet('repeated_every_days')
-        ->setAttribute('class', 'RepeatedEveryDays')
-        ->getParent()
       ->setLabels(array(
         'name' => 'Тема',
         'description' => 'Описание',
