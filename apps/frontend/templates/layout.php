@@ -43,16 +43,6 @@
               </li>
             <?php endif ?>
 
-            <?php if ($sf_user->hasCredential('can_use_dashboard')): ?>
-              <li <?php if (in_array($currentRoute, array(
-                'dashboard',
-                'dashboard-tickets',
-                'dashboard-comments',
-                ))): ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('@dashboard') ?>">Dashboard</a>
-              </li>
-            <?php endif ?>
-
             <?php if ($sf_user->hasCredential('can create categories for tickets')): ?>
               <li <?php if ('category' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
                 <a href="<?php echo url_for('category/index') ?>">Категории заявок</a>
@@ -79,6 +69,7 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu fluid">
+              <li><a href="<?php echo url_for('dashboard/settings') ?>">Настройки</a></li>
               <li><a href="<?php echo url_for('guard/logout') ?>">Выйти</a></li>
             </ul>
           </div>
