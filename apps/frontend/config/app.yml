@@ -7,14 +7,14 @@ all:
     success_signin_url: tickets/v2
 
   mailgun:
-    enabled: false
-    key:
+    enabled: true
+    key: key-8979ce7637d74052059dacc30b0ab30e
 
     domain: helpdesk.f1lab.ru
     from: Helpdesk <support@helpdesk.f1lab.ru>
 
   sms:
-    enabled: false
-    key:
+    enabled: true
+    key: ab037779-734f-3394-794f-7d532843ed95
 
     from: f1lab
