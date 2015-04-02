@@ -146,6 +146,13 @@ class ticketsActions extends sfActions
   public function executeCommentDelete(sfWebRequest $request)
   {
     if ($this->getUser()->hasCredential('can_delete_comments')) {
+      Doctrine_Query::create()
+        ->from('ReadedComments readed')
+        ->addWhere('readed.comment_id = ?', $request->getParameter('comment'))
+        ->execute()
+        ->delete()
+      ;
+
       if (Doctrine_Core::getTable('Comment')->find($request->getParameter('comment'))->delete()) {
         $this->getUser()->setFlash('message', array('success', 'Отлично!', 'Одним комментарием меньше.'));
       }
