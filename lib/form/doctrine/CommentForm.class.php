@@ -26,6 +26,7 @@ class CommentForm extends BaseCommentForm
       ->offsetSet('changed_ticket_state_to', new sfWidgetFormInputHidden())
       ->offsetSet('text', new sfWidgetFormTextarea(array(), array(
         'class' => 'fluid',
+        'required' => 'required'
       )))
     ;
 

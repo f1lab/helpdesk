@@ -1,7 +1,6 @@
 <section ng-controller="TicketsPageController">
   <h1>
     Мои заявки 2.0
-    <small></small>
   </h1>
 
   <div class="btn-toolbar">

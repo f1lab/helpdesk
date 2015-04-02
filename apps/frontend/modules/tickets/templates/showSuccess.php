@@ -203,25 +203,45 @@
   <h3>Добавить комментарий к заявке</h3>
   <?php echo $form->renderUsing('bootstrap') ?>
   <div class="form-actions">
-    <button type="submit" class="btn btn-success btn-large">
+    <button type="submit" class="btn btn-success">
       <i class="icon-comment"></i>
       Комментировать
     </button>
 
-<?php if ($canManipulateThisTicket): ?>
-  <?php if ($ticket->getIsClosed()): ?>
-    <button type="submit" class="btn pull-right ticket-open">
-      <i class="icon-ok"></i>
-      Комментировать и открыть
-    </button>
-  <?php elseif ($ticket->getCategoryId() === null): ?>
-    <div class="alert alert-info pull-right" style="display: inline-block">Нельзя закрыть заявку без категории.</div>
-  <?php else: ?>
-    <button type="submit" class="btn pull-right ticket-close">
-      <i class="icon-remove"></i>
-      Комментировать и закрыть
-    </button>
-  <?php endif ?>
-<?php endif ?>
+    <div class="pull-right">
+      <?php if ($canManipulateThisTicket): ?>
+        <?php if ($ticket->getIsClosed()): ?>
+          <button type="submit" class="btn ticket-open">
+            <i class="icon-ok"></i>
+            Комментировать и открыть
+          </button>
+        <?php elseif ($ticket->getCategoryId() === null): ?>
+          <div class="alert alert-info" style="display: inline-block">Нельзя закрыть заявку без категории.</div>
+        <?php else: ?>
+          <button type="submit" class="btn ticket-close">
+            <i class="icon-remove"></i>
+            Комментировать и закрыть
+          </button>
+        <?php endif ?>
+      <?php endif ?>
+    </div>
   </div>
 </form>
+
+<?php if ($sf_user->hasCredential('can mark tickets as duplicates')): ?>
+  <form action="<?php echo url_for('ticketsApi/closeAsDuplicate') ?>" method="post" class="well">
+    <h3>Закрыть как дубликат</h3>
+    <input type="hidden" name="id" value="<?php echo $ticket->getId() ?>">
+
+    <div class="control-group">
+      <label class="control-label" for="parent_id">Исходная заявка</label>
+      <div class="controls">
+        <input type="number" min="1" step="1" name="parent_id" required>
+
+        <button type="submit" class="btn" style="margin-bottom: 9px;">
+          Закрыть как дубликат
+        </button>
+      </div>
+    </div>
+  </form>
+<?php endif ?>

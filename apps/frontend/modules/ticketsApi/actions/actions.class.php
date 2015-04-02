@@ -130,7 +130,8 @@ class ticketsApiActions extends sfActions
   }
 
   // for shedule: mark as done and replan ticket for next period
-  public function executeTicketDone(sfWebRequest $request){
+  public function executeTicketDone(sfWebRequest $request)
+  {
     $ticket = Doctrine_Query::create()
       ->from('Ticket t')
       ->where('t.id = ?', $request->getParameter('id'))
@@ -152,5 +153,41 @@ class ticketsApiActions extends sfActions
     }
 
     $this->redirect('shedule/index');
+  }
+
+  public function executeCloseAsDuplicate(sfWebRequest $request)
+  {
+    $parent = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->where('t.id = ?', $request->getParameter('parent_id'))
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    $duplicate = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->where('t.id = ?', $request->getParameter('id'))
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    if ($parent and $duplicate) {
+      $commentForParent = Comment::createFromArray([
+        'ticket_id' => $parent->getId(),
+        'text' => 'Заявка #' . $duplicate->getId() . ' помечена дубликатом этой заявки',
+        'skip_notification' => true,
+      ]);
+      $commentForParent->save();
+
+      $duplicate->setIsClosed(true)->save();
+      $commentForDuplicate = Comment::createFromArray([
+        'ticket_id' => $duplicate->getId(),
+        'text' => 'Эта заявка помечена как дубликат заявки #' . $parent->getId() . ' и закрыта',
+        'changed_ticket_state_to' => 'closed',
+      ]);
+      $commentForDuplicate->save();
+    }
+
+    $this->redirect($request->getReferer());
   }
 }
