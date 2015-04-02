@@ -182,7 +182,7 @@
             </li>
           </ul>
         <?php endif ?>
-        <?php echo simple_format_text($comment->getText()) ?>
+        <?php echo Helpdesk::replaceTicketMentionsWithLinks(simple_format_text($comment->getText())) ?>
 
         <?php if ($attachment=$comment->getAttachment()): ?><p>
           <a href="/uploads/comment-attachments/<?php echo $attachment ?>" target="_blank" class="btn btn-link">

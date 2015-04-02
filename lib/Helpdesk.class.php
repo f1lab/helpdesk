@@ -68,4 +68,9 @@ final class Helpdesk
 
     return $users;
   }
+
+  static public final function replaceTicketMentionsWithLinks($text) {
+    $url = sfContext::getInstance()->getController()->genUrl('tickets/show?id=', false);
+    return preg_replace('/#([0-9]+)/', '#<a href="' . $url . '$1">$1</a>', $text);
+  }
 }
