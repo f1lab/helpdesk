@@ -122,6 +122,7 @@
   </ul>
 
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю заявки…</div>
+  <div class="alert alert-warning" ng-show="ticketsLoadError">Ошибка загрузки заявок. Попробуйте <a href="" ng-click="reloadPage()">обновить страницу</a>.</div>
 
   <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
     <thead>
@@ -187,7 +188,7 @@
     </tbody>
   </table>
 
-  <h4 ng-show="!ticketsLoading && tickets.length === 0">
+  <h4 ng-show="!ticketsLoading && !ticketsLoadError && tickets.length === 0">
     Нет заявок.
   </h4>
 </section>
@@ -239,6 +240,9 @@
         $scope.tableSorter.orderByField = column
 
         $scope.tableSorter.reverseSort = if sameColumnSelected then !$scope.tableSorter.reverseSort else false
+
+      $scope.reloadPage = ->
+        document.location.reload()
 
       $scope.filterSelects =
         categories: [{id: null, name: 'Без категории'}].concat(
@@ -297,11 +301,9 @@
         {id: 'auto-assigned-to-me', name: 'От моих компаний', count: 0}
       ]
 
-      $scope.tickets = [
-        {id: 1, name:'test'}
-        {id: 2, name:'test2'}
-      ]
+      $scope.tickets = []
       $scope.ticketsLoading = false
+      $scope.ticketsLoadError = false
 
       $scope.selectTab = (id) ->
         $scope.filter.tab = id
@@ -311,6 +313,7 @@
         $scope.getCounters()
         return if not newFilter?
 
+        $scope.ticketsLoadError = false
         $scope.ticketsLoading = true
         $scope.tickets.splice 0
 
@@ -326,7 +329,10 @@
         get.success (tickets) ->
           $scope.tickets = tickets
 
-        get.then ->
+        get.error ->
+          $scope.ticketsLoadError = true
+
+        get.finally ->
           $scope.ticketsLoading = false
       , true
 
