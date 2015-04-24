@@ -98,4 +98,17 @@ class Ticket extends BaseTicket
 
     return $this;
   }
+
+  public function getFirstResponsibleRef()
+  {
+    $firstRef = Doctrine_Query::create()
+      ->from('RefTicketResponsible ref')
+      ->addWhere('ref.ticket_id = ?', $this->getId())
+      ->addOrderBy('ref.created_at asc')
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    return $firstRef;
+  }
 }
