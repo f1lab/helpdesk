@@ -35,15 +35,27 @@
         $remotelyClosed += 1;
       }
 
-      if ($ticket->getToCompany()->getDeadlineForSettingResponsible() === 0 or (strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForSettingResponsible())) {
+      if (
+        $ticket->getToCompany()->getDeadlineForSettingResponsible() === 0
+        or $firstResponsibleRef === null
+        or (strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForSettingResponsible())
+      ) {
         $deadlineForResponsibleOk += 1;
       }
 
-      if ($ticket->getToCompany()->getDeadlineForApproving() === 0 or (strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForApproving())) {
+      if (
+        $ticket->getToCompany()->getDeadlineForApproving() === 0
+        or $applier === null
+        or (strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForApproving())
+      ) {
         $deadlineForApproveOk += 1;
       }
 
-      if ($ticket->getDeadline() === null or (strtotime($ticket->getDeadline()) - strtotime($ticket->getCreatedAt()) > 0)) {
+      if (
+        $ticket->getDeadline() === null
+        or $closer === null
+        or (strtotime($ticket->getDeadline()) - strtotime($closer->getCreatedAt()) > 0)
+      ) {
         $deadlineOk += 1;
       }
     ?>
