@@ -28,10 +28,17 @@ class CommentForm extends BaseCommentForm
         'class' => 'fluid',
         'required' => 'required'
       )))
+      ->offsetSet('is_remote', new sfWidgetFormChoice([
+        'choices' => [
+          true => 'Сделано удалённо',
+          false => 'Сделано на месте',
+        ],
+      ]))
     ;
 
     $this->widgetSchema->setLabels(array(
       'text' => 'Комментарий',
+      'is_remote' => ' ',
       'attachment' => 'Вложение',
     ));
 
@@ -39,38 +46,5 @@ class CommentForm extends BaseCommentForm
       'required'   => false,
       'path'       => sfConfig::get('sf_upload_dir').'/comment-attachments',
     ));
-  }
-
-  public function save($con=null)
-  {
-    $states = array (0 => 'opened', 1 => 'closed');
-    $statesRu = array ('открыта' => 'opened', 'закрыта' => 'closed');
-
-    $requestParameters = sfContext::getInstance()->getRequest()->getParameter($this->getName());
-    $ticket = $this->getObject()->getTicket();
-    $user = sfContext::getInstance()->getUser();
-
-    if (parent::save($con)) {
-      if (isset($requestParameters['changed_ticket_state_to'])
-        and in_array($requestParameters['changed_ticket_state_to'], $states)
-        and (
-          $ticket->getCreatedBy() === $user->getGuardUser()->getId()
-          || $user->hasCredential('can_edit_tickets')
-          || $user->getGuardUser()->getType() === 'it-admin'
-        )
-      ) {
-        $ticket
-          ->setIsClosed((bool)array_search($requestParameters['changed_ticket_state_to'], $states))
-          ->save()
-        ;
-        $user->setFlash('message', array(
-          'success',
-          'Отлично!',
-          'Комментарий добавлен, заявка ' . array_search($requestParameters['changed_ticket_state_to'], $statesRu) . '.'
-        ));
-      }
-    }
-
-    return $this->getObject();
   }
 }

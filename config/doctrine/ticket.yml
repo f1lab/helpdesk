@@ -27,6 +27,11 @@ Ticket:
       type: timestamp
     planned_finish:
       type: timestamp
+
+    is_closed_remotely:
+      type: boolean
+      default: true
+      notnull: true
   relations:
     Comments:
       class: Comment
