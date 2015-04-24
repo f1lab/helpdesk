@@ -16,9 +16,12 @@
         <th>Категория</th>
         <th>Дата поступления</th>
 
-
         <th>Дата назначения ответственного</th>
+        <th>Кто ответственный</th>
+
         <th>Дата принятия в работу</th>
+        <th>Кто принял в работу</th>
+
         <th>Дата закрытия</th>
         <th>Кто закрыл</th>
       </tr>
@@ -51,9 +54,22 @@
         <td><?php echo $ticket->getCategory() ?></td>
         <td><?php echo date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) ?></td>
 
-
         <td><?php echo ($firstResponsibleRef && $firstResponsibleRef->getCreatedAt() !== '2015-01-01 00:00:00') ? date('d.m.Y H:i:s', strtotime($firstResponsibleRef->getCreatedAt())) : '—' ?></td>
+        <td>
+          <?php if (count($ticket->getResponsibles()) > 1): ?>
+            <ul><?php foreach ($ticket->getResponsibles() as $responsible): ?>
+              <li><?php echo $responsible ?></li>
+            <?php endforeach ?></ul>
+          <?php elseif (count($ticket->getResponsibles()) === 1): ?>
+            <?php echo $ticket->getResponsibles()->getFirst() ?>
+          <?php else: ?>
+            —
+          <?php endif ?>
+        </td>
+
         <td><?php echo $applier ? date('d.m.Y H:i:s', strtotime($applier->getCreatedAt())) : '—' ?></td>
+        <td><?php echo $applier ? $applier->getCreator() : '—' ?></td>
+
         <td><?php echo $closer ? date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) : '—' ?></td>
         <td><?php echo $closer ? $closer->getCreator() : '—' ?></td>
       </tr>

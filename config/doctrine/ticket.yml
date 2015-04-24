@@ -44,6 +44,16 @@ Ticket:
       type: many
       local: id
       foreign: ticket_id
+    CommentsForApplier:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
+    CommentsForCloser:
+      class: Comment
+      type: many
+      local: id
+      foreign: ticket_id
     Responsibles:
       class: sfGuardUser
       refClass: RefTicketResponsible

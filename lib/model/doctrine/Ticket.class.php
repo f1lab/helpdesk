@@ -13,6 +13,7 @@
 class Ticket extends BaseTicket
 {
   public function getCloser() {
+    return $this->getCommentsForCloser()->getFirst();
     return Doctrine_Query::create()
       ->from('Comment c')
       ->addWhere('c.ticket_id = ?', $this->getId())
@@ -25,6 +26,7 @@ class Ticket extends BaseTicket
   }
 
   public function getApplier() {
+    return $this->getCommentsForApplier()->getFirst();
     return Doctrine_Query::create()
       ->from('Comment c')
       ->addWhere('c.ticket_id = ?', $this->getId())
