@@ -82,6 +82,8 @@ class sfGuardGroupForm extends PluginsfGuardGroupForm
       'notify_sms_list' => 'Кого оповещать по SMS',
       'notify_email_list' => 'Кого оповещать по Email',
       'sms_title' => 'Заголовок смс-сообщения',
+      'deadline_for_setting_responsible' => 'Время для назначения ответственного, в секундах',
+      'deadline_for_approving' => 'Время для принятия в работу, в секундах',
     ));
   }
 }

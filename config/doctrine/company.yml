@@ -8,6 +8,14 @@ sfGuardGroup:
       type: boolean
       default: false
       notnull: true
+    deadline_for_setting_responsible: # Время для назначения ответственного, в секундах
+      type: integer
+      default: 0
+      notnull: true
+    deadline_for_approving: # Время для принятия в работу, в секундах
+      type: integer
+      default: 0
+      notnull: true
   relations:
     Responsibles:
       class: sfGuardUser
