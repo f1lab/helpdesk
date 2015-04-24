@@ -81,6 +81,7 @@ RefTicketObserver:
 RefTicketResponsible:
   actAs:
     - Signable
+    - Timestampable
   columns:
     ticket_id: integer
     user_id: integer
