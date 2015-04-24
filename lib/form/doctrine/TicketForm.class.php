@@ -22,6 +22,7 @@ class TicketForm extends BaseTicketForm
       , $this['deleted_at']
       , $this['real_sender']
       , $this['period_id']
+      , $this['is_closed_remotely']
     );
 
     $user = sfContext::getInstance()->getUser();

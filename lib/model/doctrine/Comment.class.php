@@ -35,6 +35,36 @@ class Comment extends BaseComment
     return $read;
   }
 
+  public function preInsert($event) {
+    $states = [0 => 'opened', 1 => 'closed'];
+    $statesRu = ['открыта' => 'opened', 'закрыта' => 'closed'];
+
+    $comment = $event->getInvoker();
+    $ticket = $this->getTicket();
+    $user = sfContext::getInstance()->getUser();
+
+    if (isset($comment['changed_ticket_state_to'])
+      and in_array($comment['changed_ticket_state_to'], $states)
+      and (
+        $ticket->getCreatedBy() === $user->getGuardUser()->getId()
+        || $user->hasCredential('can_edit_tickets')
+        || $user->getGuardUser()->getType() === 'it-admin'
+      )
+    ) {
+      $ticket
+        ->setIsClosed((bool)array_search($comment['changed_ticket_state_to'], $states))
+        ->setIsClosedRemotely((bool)$comment['is_remote'])
+        ->save()
+      ;
+
+      $user->setFlash('message', [
+        'success',
+        'Отлично!',
+        'Комментарий добавлен, заявка ' . array_search($comment['changed_ticket_state_to'], $statesRu) . '.'
+      ]);
+    }
+  }
+
   public function postInsert($event) {
     // send message to ticket creator and observers
     if (!$this->getSkipNotification()) {

@@ -158,7 +158,13 @@
 
       <div class="header">
         <span class="who"><a href="#"><?php echo $comment->getCreator()->getUsername() ?></a></span>
-        <span class="what">добавил комментарий<?php if ($comment->getChangedTicketStateTo()): ?> и <strong><?php echo $comment->getChangedTicketStateToLabel(); ?> </strong><?php endif ?></span>
+        <span class="what">
+          добавил комментарий
+          <?php if ($comment->getChangedTicketStateTo()): ?>
+            и <strong><?php echo $comment->getChangedTicketStateToLabel(); ?> </strong>
+          <?php endif ?>
+          <?php echo $comment->getIsRemote() ? 'удалённо' : 'на месте' ?>
+        </span>
         <span class="when pull-right">
           <a href="#ticketcomment-<?php echo $comment->getId() ?>">
             <?php echo date('d.m.Y H:i:s', strtotime($comment->getCreatedAt())) ?>
