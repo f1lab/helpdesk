@@ -119,10 +119,16 @@ class reportActions extends sfActions
       ->from('Ticket t')
       ->leftJoin('t.Creator')
       ->leftJoin('t.Category')
+      ->leftJoin('t.ToCompany')
+      ->leftJoin('t.Responsibles')
+      ->leftJoin('t.CommentsForApplier applier with applier.changed_ticket_state_to = ?', 'applied')
+      ->leftJoin('t.CommentsForCloser closer with closer.changed_ticket_state_to = ?', 'closed')
       ->addWhere('t.created_at >= ? and t.created_at <= ?', array($this->period['from'], $this->period['to']))
       ->andWhereIn('t.category_id', $this->categoryIds)
       ->andWhereIn('t.company_id', $this->company_id)
       // ->addOrderBy('c.created_at desc')
+      ->leftJoin('applier.Creator')
+      ->leftJoin('closer.Creator')
       ->execute()
     ;
   }
