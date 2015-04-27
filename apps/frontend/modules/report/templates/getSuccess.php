@@ -36,16 +36,16 @@
       }
 
       if (
-        $ticket->getToCompany()->getDeadlineForSettingResponsible() === 0
-        or $firstResponsibleRef === null
+        $ticket->getToCompany()->getDeadlineForSettingResponsible() == 0
+        or !$firstResponsibleRef
         or (strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForSettingResponsible())
       ) {
         $deadlineForResponsibleOk += 1;
       }
 
       if (
-        $ticket->getToCompany()->getDeadlineForApproving() === 0
-        or $applier === null
+        $ticket->getToCompany()->getDeadlineForApproving() == 0
+        or !$applier
         or (strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForApproving())
       ) {
         $deadlineForApproveOk += 1;
@@ -53,7 +53,7 @@
 
       if (
         $ticket->getDeadline() === null
-        or $closer === null
+        or !$closer
         or (strtotime($ticket->getDeadline()) - strtotime($closer->getCreatedAt()) > 0)
       ) {
         $deadlineOk += 1;
