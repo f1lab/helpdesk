@@ -53,6 +53,15 @@ class reportActions extends sfActions
           ->andWhereIn('id', $this->companyIds)
       ), ['class' => 'chzn-select']))
 
+      ->offsetSet('responsible_id', new sfWidgetFormDoctrineChoice(array(
+        'model' => 'sfGuardUser',
+        'label' => 'Выполнивший заявку',
+        'multiple' => true,
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser')
+          ->addWhere('type = ?', 'it-admin')
+      ), ['class' => 'chzn-select']))
+
       ->setNameFormat('filter[%s]')
     ;
 
@@ -66,12 +75,17 @@ class reportActions extends sfActions
       )))
       ->offsetSet('category_id', new sfValidatorDoctrineChoice(array(
         'model' => 'Category',
-        'required' => true,
+        'required' => false,
         'multiple' => true,
       )))
       ->offsetSet('company_id', new sfValidatorDoctrineChoice(array(
         'model' => 'sfGuardGroup',
         'required' => true,
+        'multiple' => true,
+      )))
+      ->offsetSet('responsible_id', new sfValidatorDoctrineChoice(array(
+        'model' => 'sfGuardUser',
+        'required' => false,
         'multiple' => true,
       )))
     ;
@@ -82,9 +96,6 @@ class reportActions extends sfActions
     );
 
     $this->categoryIds = Doctrine_Query::create()->from('Category')->select('id')->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
-
-    $this->form->setDefault('category_id', $this->categoryIds);
-    $this->form->setDefault('company_id', $this->companyIds);
   }
 
   public function executeIndex(sfWebRequest $request)
@@ -93,45 +104,48 @@ class reportActions extends sfActions
 
   public function executeGet(sfWebRequest $request)
   {
+    $this->tickets = [];
+
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('filter'));
 
       if ($this->form->isValid()) {
+        $query = Doctrine_Query::create()
+          ->from('Ticket t')
+          ->leftJoin('t.Creator')
+          ->leftJoin('t.Category')
+          ->leftJoin('t.ToCompany')
+          ->leftJoin('t.Responsibles')
+          ->leftJoin('t.CommentsForApplier applier with applier.changed_ticket_state_to = ?', 'applied')
+          ->leftJoin('t.CommentsForCloser closer with closer.changed_ticket_state_to = ?', 'closed')
+          ->leftJoin('applier.Creator')
+          ->leftJoin('closer.Creator')
+
+          ->addWhere('t.isClosed = ?', true)
+        ;
+
         if ($this->form->getValue('from')) {
-          $this->period['from'] = $this->form->getValue('from');
+          $query->addWhere('t.created_at >= ?', $this->form->getValue('from'));
         }
 
         if ($this->form->getValue('to')) {
-          $this->period['to'] = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($this->form->getValue('to'))));
-        }
-
-        if ($this->form->getValue('category_id')) {
-          $this->categoryIds = (array)$this->form->getValue('category_id');
+          $query->addWhere('t.created_at <= ?', date('Y-m-d H:i:s', strtotime('+1 day', strtotime($this->form->getValue('to')))));
         }
 
         if ($this->form->getValue('company_id')) {
-          $this->company_id = (array)$this->form->getValue('company_id');
+          $query->andWhereIn('t.company_id', (array)$this->form->getValue('company_id'));
         }
+
+        if ($this->form->getValue('category_id')) {
+          $query->andWhereIn('t.category_id', (array)$this->form->getValue('category_id'));
+        }
+
+        if ($this->form->getValue('responsible_id')) {
+          $query->andWhereIn('closer.created_by', (array)$this->form->getValue('responsible_id'));
+        }
+
+        $this->tickets = $query->execute();
       }
     }
-
-    $this->tickets = Doctrine_Query::create()
-      ->from('Ticket t')
-      ->leftJoin('t.Creator')
-      ->leftJoin('t.Category')
-      ->leftJoin('t.ToCompany')
-      ->leftJoin('t.Responsibles')
-      ->leftJoin('t.CommentsForApplier applier with applier.changed_ticket_state_to = ?', 'applied')
-      ->leftJoin('t.CommentsForCloser closer with closer.changed_ticket_state_to = ?', 'closed')
-      // ->addOrderBy('c.created_at desc')
-      ->leftJoin('applier.Creator')
-      ->leftJoin('closer.Creator')
-
-      ->addWhere('t.isClosed = ?', true)
-      ->addWhere('t.created_at >= ? and t.created_at <= ?', array($this->period['from'], $this->period['to']))
-      ->andWhereIn('t.category_id', $this->categoryIds)
-      ->andWhereIn('t.company_id', $this->company_id)
-      ->execute()
-    ;
   }
 }
