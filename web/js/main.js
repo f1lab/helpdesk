@@ -120,4 +120,39 @@ $(function() {
 
   $('.chzn-select').chosen();
   $('.chzn-select-deselect').chosen({ allow_single_deselect: true });
+
+  (function addAcceleratorsToChosenSelects() {
+    var $fill = $('<a href="#" class="select-accelerator">добавить всё</a>')
+    var $reset = $('<a href="#" class="select-accelerator">очистить всё</a>')
+    $('.chzn-select').each(function(id, select) {
+      var $select = $(select)
+        , container = $select.parent()
+        , fill = $fill.clone()
+        , reset = $reset.clone()
+      ;
+
+      fill.click(function(event) {
+        event.preventDefault();
+        $select
+          .find('option')
+            .attr('selected', true)
+            .end()
+          .trigger('liszt:updated')
+        ;
+      });
+
+      reset.click(function(event) {
+        event.preventDefault();
+        $select
+          .find('option[selected]')
+            .removeAttr('selected')
+            .end()
+          .trigger('liszt:updated')
+        ;
+      });
+
+      container.append(fill);
+      container.append(reset);
+    });
+  })();
 });

@@ -115,3 +115,13 @@ footer {
   footer .container {
     text-align: right;
   }
+
+.select-accelerator {
+  color: #999999;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 6px;
+  margin-left: 10px;
+  border-bottom: 1px dashed;
+  text-decoration: none !important;
+}
