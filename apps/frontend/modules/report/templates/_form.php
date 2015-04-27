@@ -12,8 +12,9 @@
     </div>
   </div>
 
-  <?php echo $form['category_id']->renderRowUsing('bootstrap') ?>
   <?php echo $form['company_id']->renderRowUsing('bootstrap') ?>
+  <?php echo $form['category_id']->renderRowUsing('bootstrap') ?>
+  <?php echo $form['responsible_id']->renderRowUsing('bootstrap') ?>
 
   <?php echo $form['_csrf_token'] ?>
   <button type="submit" class="btn btn-primary">Получить отчёт</button>
