@@ -216,11 +216,7 @@
     getCounters: '<?php echo url_for('ticketsApi/getCounters') ?>'
     getTickets: '<?php echo url_for('ticketsApi/getTickets') ?>'
 
-  app = angular.module 'helpdesk', ['ngStorage', 'ui.select']
-
-  app.config ['uiSelectConfig', (uiSelectConfig) ->
-    uiSelectConfig.theme = 'select2'
-  ]
+  app = angular.module 'helpdesk', ['ngStorage']
 
   app.controller 'TicketsPageController', [
     '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage', '$localStorage'

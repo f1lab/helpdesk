@@ -23,9 +23,6 @@ default:
     - chosen
     - style
 
-    - /bower_components/select2/select2.css
-    - /bower_components/angular-ui-select/dist/select.css
-
     - main
 
   javascripts:
@@ -45,7 +42,6 @@ default:
     - /bower_components/angular/angular.min.js
     - /bower_components/ngstorage/ngStorage.js
     - /bower_components/coffee-script/extras/coffee-script.js
-    - /bower_components/angular-ui-select/dist/select.js
     - /bower_components/momentjs/min/moment.min.js
 
     - main
