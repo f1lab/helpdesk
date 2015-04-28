@@ -135,19 +135,21 @@ $(function() {
         event.preventDefault();
         $select
           .find('option')
-            .attr('selected', true)
+            .prop('selected', true)
             .end()
           .trigger('liszt:updated')
+          .trigger('change')
         ;
       });
 
       reset.click(function(event) {
         event.preventDefault();
         $select
-          .find('option[selected]')
-            .removeAttr('selected')
+          .find('option')
+            .prop('selected', false)
             .end()
           .trigger('liszt:updated')
+          .trigger('change')
         ;
       });
 

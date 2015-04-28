@@ -34,36 +34,30 @@
                 <div class="control-group">
                   <label class="control-label">Компании</label>
                   <div class="controls">
-                    <ui-select multiple ng-model="filter.company_id" style="width: 300px;">
-                      <ui-select-match placeholder="Выберите компании">{{$item.name}}</ui-select-match>
-                      <ui-select-choices repeat="company.id as company in filterSelects.companies | filter:$select.search">
-                        {{company.name}}
-                      </ui-select-choices>
-                    </ui-select>
+                    <select
+                      ng-model="filter.company_id" class="chzn-select" multiple
+                      ng-options="company.id as company.name for company in filterSelects.companies"
+                    ></select>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Категории</label>
                   <div class="controls">
-                    <ui-select multiple ng-model="filter.category_id" style="width: 300px;">
-                      <ui-select-match placeholder="Выберите категории…">{{$item.name}}</ui-select-match>
-                      <ui-select-choices repeat="category.id as category in filterSelects.categories | filter:$select.search">
-                        {{category.name}}
-                      </ui-select-choices>
-                    </ui-select>
+                    <select
+                      ng-model="filter.category_id" class="chzn-select" multiple
+                      ng-options="category.id as category.name for category in filterSelects.categories"
+                    ></select>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Ответственный за выполнение</label>
                   <div class="controls">
-                    <ui-select multiple ng-model="filter.responsible_id" style="width: 300px;">
-                      <ui-select-match placeholder="Выберите ответственных…">{{$item.first_name}} {{$item.last_name}} ({{$item.username}})</ui-select-match>
-                      <ui-select-choices repeat="responsible.id as responsible in filterSelects.responsibles | filter:$select.search">
-                        {{responsible.first_name}} {{responsible.last_name}} ({{responsible.username}})
-                      </ui-select-choices>
-                    </ui-select>
+                    <select
+                      ng-model="filter.responsible_id" class="chzn-select" multiple
+                      ng-options="responsible.id as (responsible.first_name + ' ' + responsible.last_name + ' (' + responsible.username + ')') for responsible in filterSelects.responsibles"
+                    ></select>
                   </div>
                 </div>
               </div>
@@ -109,7 +103,7 @@
   </div>
 
   <?php if ($sf_request->getParameter('dev', false)): ?>
-    <pre>{{filter}}</pre>
+    <pre>{{filter | json}}</pre>
   <?php endif ?>
 
   <ul class="nav nav-tabs">
@@ -281,8 +275,8 @@
         enabled: false
         tab: null
         closed: false
-        category_id: []
         company_id: []
+        category_id: []
         responsible_id: []
         without_responsibles: false
         without_appliers: false
@@ -344,6 +338,8 @@
 
       if not $scope.filter.tab?
         $scope.selectTab $scope.tabs[0].id
+
+      $timeout -> angular.element('.chzn-select').trigger('liszt:updated')
   ]
 
   app.filter 'moment', ->
