@@ -12,7 +12,8 @@
  */
 class RefTicketResponsible extends BaseRefTicketResponsible
 {
-  public function postInsert($event) {
+  public function postInsert($event)
+  {
     $responsible = Doctrine_Core::getTable('sfGuardUser')->find($this->getUserId());
 
     // send sms to responsible
@@ -33,7 +34,8 @@ class RefTicketResponsible extends BaseRefTicketResponsible
     }
   }
 
-  public function preDqlDelete($event) {
+  public function preDqlDelete($event)
+  {
     $parameters = $event->getQuery()->getParams()['where'];
     $ticketId = array_shift($parameters);
     $usersIds = $parameters;
@@ -53,5 +55,18 @@ class RefTicketResponsible extends BaseRefTicketResponsible
         $comment->save();
       }
     }
+  }
+
+  public function preDelete($event)
+  {
+    $responsible = Doctrine_Core::getTable('sfGuardUser')->find($this->getUserId());
+    $comment = Comment::createFromArray([
+      'ticket_id' => $this->getTicketId()
+      , 'created_by' => sfContext::getInstance()->getUser()->getGuardUser()->getId()
+      , 'text' => 'Убрал из списка ответственных ' . $responsible
+      , 'skip_notification' => true
+    ]);
+
+    $comment->save();
   }
 }

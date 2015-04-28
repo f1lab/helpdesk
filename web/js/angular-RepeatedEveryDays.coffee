@@ -1,4 +1,4 @@
-app = angular.module 'helpdesk', ['ngStorage', 'ui.select']
+app = angular.module 'helpdesk', []
 
 app.directive 'RepeatedEveryDays', ($compile) ->
   return {

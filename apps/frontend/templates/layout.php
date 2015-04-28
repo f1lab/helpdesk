@@ -20,6 +20,12 @@
 
 <body>
   <script src="/js/notifications.js"></script>
+  <script type="text/coffeescript">
+    window.API =
+      getCounters: '<?php echo url_for('ticketsApi/getCounters') ?>'
+      getTickets: '<?php echo url_for('ticketsApi/getTickets') ?>'
+      iAmNotResponsibleForThis: '<?php echo url_for('ticketsApi/iAmNotResponsibleForThis') ?>'
+  </script>
 
   <div class="navbar">
     <div class="navbar-inner">

@@ -212,10 +212,6 @@
 </style>
 
 <script type="text/coffeescript">
-  URL =
-    getCounters: '<?php echo url_for('ticketsApi/getCounters') ?>'
-    getTickets: '<?php echo url_for('ticketsApi/getTickets') ?>'
-
   app = angular.module 'helpdesk', ['ngStorage']
 
   app.controller 'TicketsPageController', [
@@ -311,7 +307,7 @@
           currentGetCanceller.resolve()
 
         currentGetCanceller = $q.defer()
-        get = $http.get URL.getTickets, {
+        get = $http.get API.getTickets, {
           timeout: currentGetCanceller.promise
           params: filter: $scope.filter
         }
@@ -327,7 +323,7 @@
       , true
 
       $scope.getCounters = ->
-        get = $http.get URL.getCounters, params: filter: $scope.filter
+        get = $http.get API.getCounters, params: filter: $scope.filter
         get.success (counters) ->
           angular.forEach counters, (count, id) ->
             $filter('filter')($scope.tabs, id: id, true)[0]?.count = count
