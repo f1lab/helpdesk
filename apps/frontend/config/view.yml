@@ -44,6 +44,9 @@ default:
     - /bower_components/coffee-script/extras/coffee-script.js
     - /bower_components/momentjs/min/moment.min.js
 
+    - /bower_components/angular-strap/dist/angular-strap.min.js
+    - /bower_components/angular-strap/dist/angular-strap.tpl.min.js
+
     - main
 
 

@@ -208,13 +208,26 @@
 <form action="<?php echo url_for('@comments-create?id=' . $ticket->getId()) ?>" method="post" class="well form-fluid add-comment" enctype="multipart/form-data">
   <h3>Добавить комментарий к заявке</h3>
   <?php echo $form->renderUsing('bootstrap') ?>
-  <div class="form-actions">
-    <button type="submit" class="btn btn-success">
-      <i class="icon-comment"></i>
-      Комментировать
-    </button>
 
-    <div class="pull-right">
+  <div class="btn-toolbar">
+    <div class="btn-group">
+      <button type="submit" class="btn btn-success">
+        <i class="icon-comment"></i>
+        Комментировать
+      </button>
+    </div>
+
+    <div class="btn-group" ng-controller="TicketShowPageController">
+      <?php if (false and $sf_user->hasCredential('can mark tickets as duplicates')): ?>
+        <button class="btn" ng-click="closeAsDup()">Закрыть как дубликат</button>
+      <?php endif ?>
+
+      <?php if (Helpdesk::checkIfImInList($sf_user->getRawValue()->getGuardUser(), $ticket->getRawValue()->getResponsibles())): ?>
+        <button class="btn" ng-click="iAmNotResponsibleForThis(<?php echo $ticket->getId() ?>)">Отказаться от заявки</button>
+      <?php endif ?>
+    </div>
+
+    <div class="btn-group pull-right">
       <?php if ($canManipulateThisTicket): ?>
         <?php if ($ticket->getIsClosed()): ?>
           <button type="submit" class="btn ticket-open">
@@ -251,3 +264,31 @@
     </div>
   </form>
 <?php endif ?>
+
+<script type="text/ng-template" id="/i-am-not-responsible.html">
+  <div class="modal top am-fade-and-slide-top" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="$hide()">×</button>
+          <h3 class="modal-title">Отказаться от заявки</h3>
+        </div>
+        <div class="modal-body">
+          <form action="">
+            <div class="control-group">
+              <label class="control-label" for="name">Причина</label>
+              <div class="controls">
+                <textarea name="name" id="name" cols="30" rows="10" class="fluid" ng-model="reasonForDecline" required></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="confirmDecline(reasonForDecline)">Отказаться</button>
+          <button type="button" class="btn btn-default" ng-click="$hide()">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/coffeescript" src="/js/angular-TicketShowPageController.coffee"></script>
