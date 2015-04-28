@@ -11,6 +11,7 @@
     "angular": "<=1.4.0",
     "ngstorage": "~0.3.0",
     "coffee-script": "https://github.com/jashkenas/coffeescript.git#~1.9.0",
-    "momentjs": "~2.9.0"
+    "momentjs": "~2.9.0",
+    "angular-strap": "~2.2.1"
   }
 }

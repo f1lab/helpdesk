@@ -190,4 +190,33 @@ class ticketsApiActions extends sfActions
 
     $this->redirect($request->getReferer());
   }
+
+  public function executeIAmNotResponsibleForThis(sfWebRequest $request)
+  {
+    $this->getResponse()->setHeaderOnly(true);
+
+    $this->forward404Unless($this->getUser()->isAuthenticated());
+
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    $this->forward404Unless($json and $data and $data['ticketId'] and $data['reason']);
+
+    $ref = Doctrine_Query::create()
+      ->from('RefTicketResponsible ref')
+      ->addWhere('ref.ticket_id = ?', $data['ticketId'])
+      ->addWhere('ref.user_id = ?', $this->getUser()->getGuardUser()->getId())
+      ->limit(1)
+      ->fetchOne()
+    ;
+    if ($ref) {
+      $comment = Comment::createFromArray([
+        'ticket_id' => $data['ticketId'],
+        'text' => 'Пользователь @' . $this->getUser()->getGuardUser()->getUsername() . ' отказался от выполнения заявки по причине: ' . $data['reason'],
+      ]);
+      $ref->delete();
+      $comment->save();
+    }
+
+    return sfView::NONE;
+  }
 }
