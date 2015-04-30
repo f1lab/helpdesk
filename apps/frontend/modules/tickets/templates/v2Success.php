@@ -90,7 +90,7 @@
                 <div class="control-group">
                   <div class="controls">
                     <label class="checkbox">
-                      <input type="checkbox" ng-model="filter.without_periodicals"> Скрыть регламентные работы
+                      <input type="checkbox" ng-model="filter.without_periodicals"> Скрыть повторяющиеся работы
                     </label>
                   </div>
                 </div>
@@ -314,16 +314,27 @@
 
         get.success (tickets) ->
           $scope.tickets = tickets
-
-        get.error ->
-          $scope.ticketsLoadError = true
-
-        get.finally ->
+          $scope.ticketsLoadError = false
           $scope.ticketsLoading = false
+
+        get.error (data, statusCode) ->
+          if statusCode > 0
+            $scope.ticketsLoadError = true
+            $scope.ticketsLoading = false
+
       , true
 
+      currentGetCountersCanceller = null
       $scope.getCounters = ->
-        get = $http.get API.getCounters, params: filter: $scope.filter
+        if currentGetCountersCanceller?
+          currentGetCountersCanceller.resolve()
+
+        currentGetCountersCanceller = $q.defer()
+        get = $http.get API.getCounters, {
+          timeout: currentGetCountersCanceller.promise
+          params: filter: $scope.filter
+        }
+
         get.success (counters) ->
           angular.forEach counters, (count, id) ->
             $filter('filter')($scope.tabs, id: id, true)[0]?.count = count
