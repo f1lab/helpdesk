@@ -25,6 +25,8 @@
       getCounters: '<?php echo url_for('ticketsApi/getCounters') ?>'
       getTickets: '<?php echo url_for('ticketsApi/getTickets') ?>'
       iAmNotResponsibleForThis: '<?php echo url_for('ticketsApi/iAmNotResponsibleForThis') ?>'
+      getTicketsList: '<?php echo url_for('ticketsApi/getTicketsList') ?>'
+      closeAsDuplicate: '<?php echo url_for('ticketsApi/closeAsDuplicate') ?>'
   </script>
 
   <div class="navbar">

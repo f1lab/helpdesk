@@ -219,4 +219,21 @@ class ticketsApiActions extends sfActions
 
     return sfView::NONE;
   }
+
+  public function executeGetTicketsList(sfWebRequest $request)
+  {
+    $query = Doctrine_Query::create()
+      ->from('Ticket t')
+      ->select('t.id, t.name')
+      ->addOrderBy('t.id desc')
+    ;
+
+    if ($request->getParameter('of') and true == ($ticket = Doctrine_Core::getTable('Ticket')->find($request->getParameter('of')))) {
+      $query->addWhere('t.company_id = ?', $ticket->getCompanyId());
+    }
+
+    $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
+
+    self::returnJson($tickets);
+  }
 }

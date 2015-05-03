@@ -218,8 +218,8 @@
     </div>
 
     <div class="btn-group" ng-controller="TicketShowPageController">
-      <?php if (false and $sf_user->hasCredential('can mark tickets as duplicates')): ?>
-        <button class="btn" ng-click="closeAsDup()">Закрыть как дубликат</button>
+      <?php if ($sf_user->hasCredential('can mark tickets as duplicates')): ?>
+        <button class="btn" ng-click="closeAsDup(<?php echo $ticket->getId() ?>)">Закрыть как дубликат</button>
       <?php endif ?>
 
       <?php if (Helpdesk::checkIfImInList($sf_user->getRawValue()->getGuardUser(), $ticket->getRawValue()->getResponsibles())): ?>
@@ -247,24 +247,6 @@
   </div>
 </form>
 
-<?php if ($sf_user->hasCredential('can mark tickets as duplicates')): ?>
-  <form action="<?php echo url_for('ticketsApi/closeAsDuplicate') ?>" method="post" class="well">
-    <h3>Закрыть как дубликат</h3>
-    <input type="hidden" name="id" value="<?php echo $ticket->getId() ?>">
-
-    <div class="control-group">
-      <label class="control-label" for="parent_id">Исходная заявка</label>
-      <div class="controls">
-        <input type="number" min="1" step="1" name="parent_id" required>
-
-        <button type="submit" class="btn" style="margin-bottom: 9px;">
-          Закрыть как дубликат
-        </button>
-      </div>
-    </div>
-  </form>
-<?php endif ?>
-
 <script type="text/ng-template" id="/i-am-not-responsible.html">
   <div class="modal top am-fade-and-slide-top" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -291,4 +273,35 @@
     </div>
   </div>
 </script>
+
+<script type="text/ng-template" id="/close-as-dup.html">
+  <div class="modal top am-fade-and-slide-top" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="$hide()">×</button>
+          <h3 class="modal-title">Закрыть как дубликат</h3>
+        </div>
+        <div class="modal-body">
+          <div className="alert alert-error" ng-show="error">Ошибка загрузки списка заявок, попробуйте ещё раз</div>
+          <form action="">
+            <div class="control-group">
+              <label class="control-label" for="name">Исходная заявка</label>
+              <div class="controls">
+                <select name="name" id="name" ng-options="ticket.id as (ticket.id + ': ' + ticket.name) for ticket in tickets" ng-model="parentId" class="fluid">
+                  <option value="">Выберите</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="confirmClose(parentId)">Закрыть</button>
+          <button type="button" class="btn btn-default" ng-click="$hide()">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/coffeescript" src="/js/angular-TicketShowPageController.coffee"></script>
