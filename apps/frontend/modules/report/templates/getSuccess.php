@@ -6,32 +6,44 @@
 
 <?php include_partial('form', ['form' => $form]) ?>
 
+<?php $rowWithHeaders = '
+  <tr>
+    <th>#</th>
+    <th>Автор</th>
+    <th>Тема</th>
+    <th>Категория</th>
+    <th>Дата поступления</th>
+
+    <th>Дата назначения ответственного</th>
+    <th>Кто ответственный</th>
+
+    <th>Дата принятия в работу</th>
+    <th>Кто принял в работу</th>
+
+    <th>Дата закрытия</th>
+    <th>Кто закрыл</th>
+
+    <th>Закрыта удалённо?</th>
+    <th>Обработана в срок?</th>
+    <th>Принята в срок?</th>
+    <th>Закрыта в срок?</th>
+  </tr>
+'; ?>
+
 <?php if (count($tickets)): $remotelyClosed = 0; $deadlineForResponsibleOk = 0; $deadlineForApproveOk = 0; $deadlineOk = 0; ?>
   <table class="table table-condensed table-bordered table-hover">
     <thead>
-      <tr>
-        <th>#</th>
-        <th>Автор</th>
-        <th>Тема</th>
-        <th>Категория</th>
-        <th>Дата поступления</th>
-
-        <th>Дата назначения ответственного</th>
-        <th>Кто ответственный</th>
-
-        <th>Дата принятия в работу</th>
-        <th>Кто принял в работу</th>
-
-        <th>Дата закрытия</th>
-        <th>Кто закрыл</th>
-      </tr>
+      <?php echo $rowWithHeaders; ?>
     </thead>
-    <tbody><?php foreach ($tickets as $ticket):
+    <tbody><?php $i = 0; foreach ($tickets as $ticket):
       $closer = $ticket->getIsClosed() ? ($ticket->getCloser() ?: null) : null;
       $firstResponsibleRef = $ticket->getFirstResponsibleRef();
       $applier = $ticket->getApplier();
 
+      $isRemotelyClosed = $isDeadlineForResponsibleOk = $isDeadlineForApproveOk = $isDeadlineOk = false;
+
       if ($ticket->getIsClosed() and $ticket->getIsClosedRemotely()) {
+        $isRemotelyClosed = true;
         $remotelyClosed += 1;
       }
 
@@ -40,6 +52,7 @@
         or !$firstResponsibleRef
         or (strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForSettingResponsible())
       ) {
+        $isDeadlineForResponsibleOk = true;
         $deadlineForResponsibleOk += 1;
       }
 
@@ -48,6 +61,7 @@
         or !$applier
         or (strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForApproving())
       ) {
+        $isDeadlineForApproveOk = true;
         $deadlineForApproveOk += 1;
       }
 
@@ -56,9 +70,13 @@
         or !$closer
         or (strtotime($ticket->getDeadline()) - strtotime($closer->getCreatedAt()) > 0)
       ) {
+        $isDeadlineOk = true;
         $deadlineOk += 1;
       }
     ?>
+      <?php if ($i > 0 and $form->getValue('headers_drawer') > 0 and $i % $form->getValue('headers_drawer') === 0): ?>
+        <?php echo $rowWithHeaders; ?>
+      <?php endif ?>
       <tr class="<?php //echo (!$ticket->getDeadline() or $worked < $reglamented) ? 'success' : 'error' ?>">
         <td><a href="<?php echo url_for('tickets/show?id='.$ticket->getId()) ?>"><?php echo $ticket->getId() ?></a></td>
         <td>@<?php echo $ticket->getCreator()->getUsername() ?></td>
@@ -84,8 +102,13 @@
 
         <td><?php echo $closer ? date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) : '—' ?></td>
         <td><?php echo $closer ? $closer->getCreator() : '—' ?></td>
+
+        <td><span class="icon icon-<?php echo $isRemotelyClosed ? 'ok' : 'remove' ?>"></span></td>
+        <td><span class="icon icon-<?php echo $isDeadlineForResponsibleOk ? 'ok' : 'remove' ?>"></span></td>
+        <td><span class="icon icon-<?php echo $isDeadlineForApproveOk ? 'ok' : 'remove' ?>"></span></td>
+        <td><span class="icon icon-<?php echo $isDeadlineOk ? 'ok' : 'remove' ?>"></span></td>
       </tr>
-    <?php endforeach; ?></tbody>
+    <?php $i++; endforeach; ?></tbody>
   </table>
 
   <div class="alert alert-info">

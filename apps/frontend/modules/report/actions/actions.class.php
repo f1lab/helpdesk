@@ -62,6 +62,15 @@ class reportActions extends sfActions
           ->addWhere('type = ?', 'it-admin')
       ), ['class' => 'chzn-select']))
 
+      ->offsetSet('headers_drawer', new sfWidgetFormInputText([
+        'label' => 'Через сколько строк выводить заголовки',
+        'default' => 0,
+      ], [
+        'type' => 'number',
+        'min' => 0,
+        'step' => 15,
+      ]))
+
       ->setNameFormat('filter[%s]')
     ;
 
@@ -88,6 +97,7 @@ class reportActions extends sfActions
         'required' => false,
         'multiple' => true,
       )))
+      ->offsetSet('headers_drawer', new sfValidatorPass())
     ;
 
     $this->period = array(
