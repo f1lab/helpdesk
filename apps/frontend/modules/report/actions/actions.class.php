@@ -132,6 +132,7 @@ class reportActions extends sfActions
           ->leftJoin('closer.Creator')
 
           ->addWhere('t.isClosed = ?', true)
+          ->addOrderBy('t.id asc')
         ;
 
         if ($this->form->getValue('from')) {
