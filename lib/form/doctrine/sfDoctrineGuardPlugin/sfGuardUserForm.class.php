@@ -78,6 +78,8 @@ class sfGuardUserForm extends PluginsfGuardUserForm
       'categories_list' => 'Видит категории',
       'work_phone' => 'Номер рабочего телефона',
       'position' => 'Должность',
+      'phone' => 'Телефон',
+      'work_phone' => 'Рабочий телефон',
     ));
   }
 }

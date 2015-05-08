@@ -79,16 +79,15 @@ class dashboardActions extends sfActions
 
       if ($this->form->isValid()) {
         $object = $this->form->save();
-        $flash = array('success','','настройки сохранены');
-        if ($flash and is_array($flash)) {
-          $this->getUser()->setFlash('message', $flash);
-        }
+        $flash = array('success','','Настройки сохранены');
       } else {
-        $flash = array('error','','настройки не сохранены');
-        if ($flash and is_array($flash)) {
-          $this->getUser()->setFlash('message', $flash);
-        }
+        $flash = array('error','','Настройки не сохранены');
       }
+
+      if ($flash and is_array($flash)) {
+        $this->getUser()->setFlash('message', $flash);
+      }
+      $this->redirect('@homepage');
     }
 
   }
