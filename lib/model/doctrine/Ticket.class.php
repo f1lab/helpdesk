@@ -113,4 +113,22 @@ class Ticket extends BaseTicket
 
     return $firstRef;
   }
+
+  public function getResponsiblesAndObserversForNotification()
+  {
+    static $result = null;
+
+    if ($result === null) {
+      $result = Doctrine_Query::create()
+        ->from('sfGuardUser u')
+        ->select('u.*')
+        ->leftJoin('u.ResponsibleForTickets t1')
+        ->leftJoin('u.ObserverForTickets t2')
+        ->addWhere('t1.id = :ticket_id or t2.id = :ticket_id', ['ticket_id' => $this->getId()])
+        ->execute()
+      ;
+    }
+
+    return $result;
+  }
 }

@@ -74,11 +74,11 @@ class Comment extends BaseComment
         Email::send($to, Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
       }
 
-      // to observers
-      $observers = $this->getTicket()->getObservers();
-      foreach ($observers as $observer) {
-        if ($observer->getId() != $this->getCreatedBy() and $observer->getId() != $this->getTicket()->getCreatedBy()) {
-          Email::send($observer->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
+      // to observers and responsibles
+      $usersToNotify = $this->getTicket()->getResponsiblesAndObserversForNotification();
+      foreach ($usersToNotify as $user) {
+        if ($user->getId() != $this->getCreatedBy() and $user->getId() != $this->getTicket()->getCreatedBy()) {
+          Email::send($user->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
         }
       }
     }
