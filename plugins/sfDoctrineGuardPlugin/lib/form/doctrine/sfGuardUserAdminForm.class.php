@@ -14,17 +14,7 @@ class sfGuardUserAdminForm extends BasesfGuardUserAdminForm
    * @see sfForm
    */
   public function configure()
-  {$this->widgetSchema->setLabels(array(
-      'first_name' => 'Имя',
-      'last_name' => 'Фамилия',
-      'username' => 'Имя пользователя',
-      'email_address' => 'Почтовый ящик',
-      'permissions_list' => 'Права',
-      'password' => 'Пароль',
-      'groups_list' => 'Компания',
-      'responsible_for_company_list' => 'Отвечает за компанию',
-      'password_again' => 'Повторите пароль',
-    ));
+  {
   }
 }
 
