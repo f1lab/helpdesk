@@ -106,7 +106,7 @@
     <pre>{{filter | json}}</pre>
   <?php endif ?>
 
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" ng-cloak>
     <li ng-repeat="tab in tabs" ng-class="{ active: tab.id === filter.tab }">
       <a href="" ng-click="selectTab(tab.id)">
         {{tab.name}}
@@ -116,55 +116,50 @@
   </ul>
 
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю заявки…</div>
-  <div class="alert alert-warning" ng-show="ticketsLoadError">Ошибка загрузки заявок. Попробуйте <a href="" ng-click="reloadPage()">обновить страницу</a>.</div>
+  <div class="alert alert-warning" ng-show="ticketsLoadError" ng-cloak>Ошибка загрузки заявок. Попробуйте <a href="" ng-click="reloadPage()">обновить страницу</a>.</div>
 
-  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20">
+  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20" ng-cloak>
     <thead>
       <tr>
-        <th class="span1">
+        <th class="id">
           <a href="" ng-click="orderBy('id')">
             №
             <span ng-show="tableSorter.orderByField == 'id'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
-        <th class="span12">
-          <a href="" ng-click="orderBy('name')">
-            Тема
-            <span ng-show="tableSorter.orderByField == 'name'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
-          </a>
-        </th>
-        <th>
+        <th class="name">Тема</th>
+        <th class="date">
           <a href="" ng-click="orderBy('created_at')">
             Дата
             <span ng-show="tableSorter.orderByField == 'created_at'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
-        <th>
+        <th class="category">
           <a href="" ng-click="orderBy('Category.name')">
             Категория
             <span ng-show="tableSorter.orderByField == 'Category.name'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
-        <th>
+        <th class="creator">
           <a href="" ng-click="orderBy(['Creator.username', 'ToCompany.name'])">
             Пользователь@Компания
             <span ng-show="tableSorter.orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
-        <th>Статус</th>
-        <th></th>
+        <th class="state">Статус</th>
+        <th class="comments"></th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="ticket in tickets | orderBy:tableSorter.orderByField:tableSorter.reverseSort" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
-        <td>{{ticket.id}}</td>
-        <td><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" style="display: block;">
+        <td class="id">{{ticket.id}}</td>
+        <td class="name"><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" title="{{ticket.name}}">
           {{ticket.name}}
         </a></td>
-        <td>{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm:ss'}}</td>
-        <td>{{ticket.Category ? ticket.Category.name : ''}}</td>
-        <td>{{ticket.Creator.username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
-        <td>
+        <td class="date">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
+        <td class="creator">{{ticket.Creator.username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
+        <td class="state">
           <span ng-if="ticket.CommentsAgain.length === 0">
             не в работе<span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span
             ><span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
@@ -173,16 +168,16 @@
           </span>
 
           <span ng-if="ticket.CommentsAgain.length !== 0" ng-init="applier = ticket.CommentsAgain[ticket.CommentsAgain.length - 1]">
-            в работе с {{applier.created_at | moment | date:'dd.MM.yyyy HH:mm:ss'}}
+            в работе с {{applier.created_at | moment | date:'dd.MM.yyyy HH:mm'}}
             у {{applier.Creator.username}}
           </span>
         </td>
-        <td><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
+        <td class="comments"><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
       </tr>
     </tbody>
   </table>
 
-  <h4 ng-show="!ticketsLoading && !ticketsLoadError && tickets.length === 0">
+  <h4 ng-show="!ticketsLoading && !ticketsLoadError && tickets.length === 0" ng-cloak>
     Нет заявок.
   </h4>
 </section>
@@ -192,10 +187,17 @@
   .tickets20 th {
     white-space: nowrap;
     font-size: 1.2em;
+    text-align: center;
   }
   .tickets20 td {
     white-space: nowrap;
     background-color: #f5f5f5;
+  }
+  .tickets20 td.name a {
+    display: block;
+    text-overflow: ellipsis;
+    width: 400px;
+    overflow: hidden;
   }
   .tickets20 .unread {
     font-weight: bolder;
