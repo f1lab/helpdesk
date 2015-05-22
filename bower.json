@@ -12,6 +12,7 @@
     "ngstorage": "~0.3.0",
     "coffee-script": "https://github.com/jashkenas/coffeescript.git#~1.9.0",
     "momentjs": "~2.9.0",
+    "jquery-textcomplete": "https://github.com/yuku-t/jquery-textcomplete.git#742663c69b441b9ac8e03b96215226c7db9fa828",
     "angular-strap": "~2.2.1"
   }
 }

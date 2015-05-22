@@ -22,6 +22,7 @@ default:
     - bootstrap-wysihtml5-0.0.2.css
     - chosen
     - style
+    - /bower_components/jquery-textcomplete/dist/jquery.textcomplete.css
 
     - main
 
@@ -46,6 +47,8 @@ default:
 
     - /bower_components/angular-strap/dist/angular-strap.min.js
     - /bower_components/angular-strap/dist/angular-strap.tpl.min.js
+
+    - /bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js
 
     - main
 
