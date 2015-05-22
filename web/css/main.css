@@ -66,6 +66,7 @@ table.tickets tbody tr {
   .comments .comment .content {
     position: relative;
     min-height: 2em;
+    padding-right: 70px;
   }
     .comments .comment .content .actions {
       position: absolute;
