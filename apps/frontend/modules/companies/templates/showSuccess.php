@@ -42,6 +42,7 @@
       <th>№</th>
       <th>Username</th>
       <th>Имя</th>
+      <th>Должность</th>
     </tr>
   </thead>
   <tbody>
@@ -50,6 +51,7 @@
       <td><?php echo $user->getId() ?></td>
       <td>@<a href="<?php echo url_for('/users/edit?id=' . $user->getId()) ?>"><?php echo $user->getUsername() ?></a></td>
       <td><?php echo $user->getName() ?></td>
+      <td><?php echo $user->getPosition() ?></td>
     </tr>
   <?php endforeach ?>
   </tbody>
@@ -74,6 +76,7 @@
         <th>№</th>
         <th>Username</th>
         <th>Имя</th>
+        <th>Должность</th>
       </tr>
       </thead>
       <tbody>
@@ -82,6 +85,7 @@
         <td><?php echo $user->getId() ?></td>
         <td>@<a href="<?php echo url_for('/users/edit?id=' . $user->getId()) ?>"><?php echo $user->getUsername() ?></a></td>
         <td><?php echo $user->getName() ?></td>
+        <td><?php echo $user->getPosition() ?></td>
       </tr>
       <?php endforeach; ?>
       </tbody>
