@@ -305,3 +305,39 @@
 </script>
 
 <script type="text/coffeescript" src="/js/angular-TicketShowPageController.coffee"></script>
+
+<script>
+  (function() {
+    var possibleMentions = <?php echo json_encode(Doctrine_Query::create()
+      ->from('sfGuardUser u')
+      ->addOrderBy('u.last_name, u.first_name, u.username')
+      ->select('u.last_name, u.first_name, u.username')
+      ->execute([], Doctrine_Core::HYDRATE_ARRAY), JSON_UNESCAPED_UNICODE);
+    ?>;
+
+    $('#comment_text').textcomplete([{
+      'match': /@([\w\.]+)/
+      , index: 1
+
+      , search: function (term, callback) {
+        term = term.toLowerCase();
+
+        callback($.map(possibleMentions, function (mention) {
+          return mention.username.toLowerCase().indexOf(term) === 0 ? mention : null;
+        }));
+      }
+
+      , replace: function (mention) {
+        return '@' + mention.username + ' ';
+      }
+
+      , template: function (mention) {
+        console.log(mention);
+        return mention.first_name.length > 1 && mention.last_name.length > 1
+          ? mention.first_name + ' ' + mention.last_name + ' (' + mention.username + ')'
+          : mention.username
+        ;
+      }
+    }]);
+  })();
+</script>
