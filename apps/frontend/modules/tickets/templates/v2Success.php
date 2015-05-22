@@ -118,7 +118,7 @@
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю заявки…</div>
   <div class="alert alert-warning" ng-show="ticketsLoadError" ng-cloak>Ошибка загрузки заявок. Попробуйте <a href="" ng-click="reloadPage()">обновить страницу</a>.</div>
 
-  <table ng-show="!ticketsLoading && tickets.length > 0" class="table table-hover1 tickets20" ng-cloak>
+  <table ng-show="tickets.length > 0" class="table table-hover1 tickets20" ng-cloak>
     <thead>
       <tr>
         <th class="id">
@@ -296,14 +296,24 @@
       $scope.selectTab = (id) ->
         $scope.filter.tab = id
 
+      window.a = ticketsCache = {}
+
       currentGetCanceller = null
-      $scope.$watch 'filter', (newFilter) ->
+      $scope.$watch 'filter', (newFilter, oldFilter) ->
         $scope.getCounters()
         return if not newFilter?
 
         $scope.ticketsLoadError = false
         $scope.ticketsLoading = true
-        $scope.tickets.splice 0
+
+        # put to cache old tab tickets
+        if ticketsCache[oldFilter.tab]?
+          ticketsCache[oldFilter.tab].splice 0
+        ticketsCache[oldFilter.tab] = $scope.tickets.splice 0
+
+        # get from cache new tab tickets
+        if ticketsCache[newFilter.tab]?.length > 0
+          $scope.tickets = ticketsCache[newFilter.tab]
 
         if currentGetCanceller?
           currentGetCanceller.resolve()
