@@ -47,11 +47,11 @@ class reportActions extends sfActions
       ->offsetSet('company_id', new sfWidgetFormDoctrineChoice(array(
         'model' => 'sfGuardGroup',
         'label' => 'Компании',
-        'multiple' => true,
+        // 'multiple' => true,
         'query' => Doctrine_Query::create()
           ->from('sfGuardGroup')
           ->andWhereIn('id', $this->companyIds)
-      ), ['class' => 'chzn-select']))
+      )))
 
       ->offsetSet('responsible_id', new sfWidgetFormDoctrineChoice(array(
         'model' => 'sfGuardUser',
