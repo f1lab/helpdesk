@@ -125,14 +125,16 @@ class reportActions extends sfActions
           ->leftJoin('t.Creator')
           ->leftJoin('t.Category')
           ->leftJoin('t.ToCompany')
-          ->leftJoin('t.Responsibles')
+          ->leftJoin('t.RefTicketResponsible ref')
+          ->leftJoin('ref.Creator')
+          ->leftJoin('ref.User')
           ->leftJoin('t.CommentsForApplier applier with applier.changed_ticket_state_to = ?', 'applied')
           ->leftJoin('t.CommentsForCloser closer with closer.changed_ticket_state_to = ?', 'closed')
           ->leftJoin('applier.Creator')
           ->leftJoin('closer.Creator')
 
           ->addWhere('t.isClosed = ?', true)
-          ->addOrderBy('t.id asc')
+          ->addOrderBy('t.id asc, ref.created_at asc')
         ;
 
         if ($this->form->getValue('from')) {
