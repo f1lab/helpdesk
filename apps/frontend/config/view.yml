@@ -39,6 +39,7 @@ default:
     - jquery-ui.custom.min.js
     - chosen.jquery.min.js
     - jquery-migrate-1.2.1.min.js
+    - jquery.tablesorter.min.js
 
     - /bower_components/angular/angular.min.js
     - /bower_components/ngstorage/ngStorage.js

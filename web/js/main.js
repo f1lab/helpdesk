@@ -121,6 +121,32 @@ $(function() {
   $('.chzn-select').chosen();
   $('.chzn-select-deselect').chosen({ allow_single_deselect: true });
 
+  $('.tablesorter').tablesorter({
+    textExtraction: function(node) {
+      var $node = $(node)
+        , value = $node.find('.tablesorter-value')
+        , text
+      ;
+
+      if (value.length === 1) {
+        text = value.text();
+      } else {
+        // fallback to default
+        if (node.textContent) {
+          text = node.textContent;
+        } else {
+          if (node.childNodes[0] && node.childNodes[0].hasChildNodes()) {
+            text = node.childNodes[0].innerHTML;
+          } else {
+            text = node.innerHTML;
+          }
+        }
+      }
+
+      return text;
+    }
+  });
+
   (function addAcceleratorsToChosenSelects() {
     var $fill = $('<a href="#" class="select-accelerator">добавить всё</a>')
     var $reset = $('<a href="#" class="select-accelerator">очистить всё</a>')
