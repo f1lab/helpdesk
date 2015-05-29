@@ -105,12 +105,13 @@
 
         <td><?php echo ($firstResponsibleRef && $firstResponsibleRef->getCreatedAt() !== '2015-01-01 00:00:00') ? date('d.m.Y H:i:s', strtotime($firstResponsibleRef->getCreatedAt())) : '—' ?></td>
         <td>
-          <?php if (count($ticket->getResponsibles()) > 1): ?>
-            <ul><?php foreach ($ticket->getResponsibles() as $responsible): ?>
-              <li><?php echo $responsible ?></li>
+          <?php $refs = $ticket->getRefTicketResponsible(); ?>
+          <?php if (count($refs) > 1): ?>
+            <ul><?php foreach ($refs as $ref): ?>
+              <li><?php echo $ref->getUser() ?>, назначен <?php echo $ref->getCreator() ?></li>
             <?php endforeach ?></ul>
-          <?php elseif (count($ticket->getResponsibles()) === 1): ?>
-            <?php echo $ticket->getResponsibles()->getFirst() ?>
+          <?php elseif (count($refs) === 1): $ref = $refs->getFirst(); ?>
+            <?php echo $ref->getUser() ?>, назначен <?php echo $ref->getCreator() ?>
           <?php else: ?>
             —
           <?php endif ?>

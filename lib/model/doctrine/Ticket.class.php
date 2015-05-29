@@ -115,15 +115,18 @@ class Ticket extends BaseTicket
 
   public function getFirstResponsibleRef()
   {
-    $firstRef = Doctrine_Query::create()
-      ->from('RefTicketResponsible ref')
-      ->addWhere('ref.ticket_id = ?', $this->getId())
-      ->addOrderBy('ref.created_at asc')
-      ->limit(1)
-      ->fetchOne()
-    ;
+    if ($this->hasReference('RefTicketResponsible')) {
+      return $this->getRefTicketResponsible()->getFirst();
 
-    return $firstRef;
+    } else {
+      return Doctrine_Query::create()
+        ->from('RefTicketResponsible ref')
+        ->addWhere('ref.ticket_id = ?', $this->getId())
+        ->addOrderBy('ref.created_at asc')
+        ->limit(1)
+        ->fetchOne()
+      ;
+    }
   }
 
   public function getResponsiblesAndObserversForNotification()
