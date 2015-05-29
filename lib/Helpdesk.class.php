@@ -53,6 +53,42 @@ final class Helpdesk
     return implode(', ', $result);
   }
 
+  static public function formatDurationDigital($duration) {
+    if (is_string($duration)) {
+      $remained = time() - strtotime($duration);
+    } else {
+      $remained = $duration;
+    }
+
+    $result = [];
+
+    $months = floor($remained / 2635200);
+    $remained -= $months * 2635200;
+    $result[] = sprintf('%d', $months);
+
+    $days = floor($remained / 86400);
+    $remained -= $days * 86400;
+    $result[] = sprintf('%d', $days);
+
+    $hours = floor($remained / 3600);
+    $remained -= $hours * 3600;
+    $result[] = sprintf('%02d', $hours);
+
+    $mins = floor($remained / 60);
+    $remained -= $mins * 60;
+    $result[] = sprintf('%02d', $mins);
+
+    $secs = $remained;
+    $result[] = sprintf('%02d', $secs);
+
+    $string = implode(':', $result);
+    while (($prefix = substr($string, 0, 2)) === '0:' or ($prefix = substr($string, 0, 3)) === '00:') {
+      $string = substr($string, strlen($prefix));
+    }
+
+    return strlen($string) === 2 ? ('00:' . $string) : $string;
+  }
+
   static public final function findMentions($text) {
     preg_match_all('/@([a-zA-Z0-9\.\-_]+)/', $text, $matches);
     $usernames = $matches[1];

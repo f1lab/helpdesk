@@ -21,6 +21,7 @@
     <th>Кто принял в работу</th>
 
     <th>Дата закрытия</th>
+    <th>Deadline</th>
     <th>Кто закрыл</th>
 
     <th>Закрыта удалённо?</th>
@@ -30,8 +31,24 @@
   </tr>
 '; ?>
 
-<?php if (count($tickets)): $remotelyClosed = 0; $deadlineForResponsibleOk = 0; $deadlineForApproveOk = 0; $deadlineOk = 0; ?>
-  <table class="table table-condensed table-bordered table-hover">
+<?php if (count($tickets)): ?>
+  <?php
+    // counters for summary
+    $remotelyClosed = 0; $deadlineForResponsibleOk = 0; $deadlineForApproveOk = 0; $deadlineOk = 0;
+
+    // deadline settings
+    $settingResponsibleDeadline = (int)$tickets->getFirst()->getToCompany()->getDeadlineForSettingResponsible();
+    $approvingDeadline = (int)$tickets->getFirst()->getToCompany()->getDeadlineForApproving();
+  ?>
+  <div class="alert alert-info">
+    <h4>Регламентированные сроки</h4>
+    <p>Указание ответственного: <?php echo $settingResponsibleDeadline === 0 ? 'не ограничено' : Helpdesk::formatDurationDigital($settingResponsibleDeadline); ?> <br>
+    Принятие в работу: <?php echo $approvingDeadline === 0 ? 'не ограничено' : Helpdesk::formatDurationDigital($approvingDeadline); ?></p>
+
+    <p>Продолжительность времени выводится в формате месяцы:дни:часы:минуты:секунды</p>
+  </div>
+
+  <table class="table table-condensed table-bordered table-hover tablesorter">
     <thead>
       <?php echo $rowWithHeaders; ?>
     </thead>
@@ -41,6 +58,7 @@
       $applier = $ticket->getApplier();
 
       $isRemotelyClosed = $isDeadlineForResponsibleOk = $isDeadlineForApproveOk = $isDeadlineOk = false;
+      $approvingTime = $settingResponsibleTime = null;
 
       if ($ticket->getIsClosed() and $ticket->getIsClosedRemotely()) {
         $isRemotelyClosed = true;
@@ -48,23 +66,24 @@
       }
 
       if (
-        $ticket->getToCompany()->getDeadlineForSettingResponsible() == 0
+        $settingResponsibleDeadline == 0
         or !$firstResponsibleRef
-        or (strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForSettingResponsible())
+        or (($settingResponsibleTime = strtotime($firstResponsibleRef->getCreatedAt()) - strtotime($ticket->getCreatedAt())) < $settingResponsibleDeadline)
       ) {
         $isDeadlineForResponsibleOk = true;
         $deadlineForResponsibleOk += 1;
       }
 
       if (
-        $ticket->getToCompany()->getDeadlineForApproving() == 0
+        $approvingDeadline == 0
         or !$applier
-        or (strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt()) < $ticket->getToCompany()->getDeadlineForApproving())
+        or (($approvingTime = strtotime($applier->getCreatedAt()) - strtotime($ticket->getCreatedAt())) < $approvingDeadline)
       ) {
         $isDeadlineForApproveOk = true;
         $deadlineForApproveOk += 1;
       }
 
+      $deadlineTime = strtotime($closer->getCreatedAt()) - strtotime($ticket->getCreatedAt());
       if (
         $ticket->getDeadline() === null
         or !$closer
@@ -77,7 +96,7 @@
       <?php if ($i > 0 and $form->getValue('headers_drawer') > 0 and $i % $form->getValue('headers_drawer') === 0): ?>
         <?php echo $rowWithHeaders; ?>
       <?php endif ?>
-      <tr class="<?php //echo (!$ticket->getDeadline() or $worked < $reglamented) ? 'success' : 'error' ?>">
+      <tr class="<?php echo (!$isDeadlineForResponsibleOk or !$isDeadlineForApproveOk or !$isDeadlineOk) ? 'error' : '' ?>">
         <td><a href="<?php echo url_for('tickets/show?id='.$ticket->getId()) ?>"><?php echo $ticket->getId() ?></a></td>
         <td>@<?php echo $ticket->getCreator()->getUsername() ?></td>
         <td><?php echo $ticket->getName() ?></td>
@@ -101,12 +120,25 @@
         <td><?php echo $applier ? $applier->getCreator() : '—' ?></td>
 
         <td><?php echo $closer ? date('d.m.Y H:i:s', strtotime($closer->getCreatedAt())) : '—' ?></td>
+        <td><?php echo $ticket->getDeadline() ? date('d.m.Y H:i:s', strtotime($ticket->getDeadline())) : '—' ?></td>
         <td><?php echo $closer ? $closer->getCreator() : '—' ?></td>
 
-        <td><span class="icon icon-<?php echo $isRemotelyClosed ? 'ok' : 'remove' ?>"></span></td>
-        <td><span class="icon icon-<?php echo $isDeadlineForResponsibleOk ? 'ok' : 'remove' ?>"></span></td>
-        <td><span class="icon icon-<?php echo $isDeadlineForApproveOk ? 'ok' : 'remove' ?>"></span></td>
-        <td><span class="icon icon-<?php echo $isDeadlineOk ? 'ok' : 'remove' ?>"></span></td>
+        <td><span class="icon icon-<?php echo $isRemotelyClosed ? 'ok' : 'remove' ?>"></span> <span class="tablesorter-value hidden"><?php echo $isRemotelyClosed ? 'да' : 'нет' ?></span></td>
+        <td>
+          <span class="icon icon-<?php echo $isDeadlineForResponsibleOk ? 'ok' : 'remove' ?>"></span>
+          <?php echo isset($settingResponsibleTime) ? Helpdesk::formatDurationDigital($settingResponsibleTime) : ''; ?>
+          <span class="tablesorter-value hidden"><?php echo $settingResponsibleTime ?></span>
+        </td>
+        <td>
+          <span class="icon icon-<?php echo $isDeadlineForApproveOk ? 'ok' : 'remove' ?>"></span>
+          <?php echo isset($approvingTime) ? Helpdesk::formatDurationDigital($approvingTime) : ''; ?>
+          <span class="tablesorter-value hidden"><?php echo $approvingTime ?></span>
+        </td>
+        <td>
+          <span class="icon icon-<?php echo $isDeadlineOk ? 'ok' : 'remove' ?>"></span>
+          <?php echo Helpdesk::formatDurationDigital($deadlineTime); ?>
+          <span class="tablesorter-value hidden"><?php echo $deadlineTime ?></span>
+        </td>
       </tr>
     <?php $i++; endforeach; ?></tbody>
   </table>
