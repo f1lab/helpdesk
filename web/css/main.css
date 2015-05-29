@@ -136,3 +136,7 @@ footer {
   background-image: none;
   background-color: inherit;
 }
+
+.tablesorter th {
+  cursor: pointer;
+}
