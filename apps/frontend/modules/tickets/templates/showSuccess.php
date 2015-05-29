@@ -235,7 +235,9 @@
             Комментировать и открыть
           </button>
         <?php elseif ($ticket->getCategoryId() === null): ?>
-          <div class="alert alert-info" style="display: inline-block">Нельзя закрыть заявку без категории.</div>
+          <div class="alert alert-info" style="display: inline-block; font-size: 14px; padding: 4px 15px;">Нельзя закрыть заявку без категории.</div>
+        <?php elseif (!$applier): ?>
+          <div class="alert alert-info" style="display: inline-block; font-size: 14px; padding: 4px 15px;">Нельзя закрыть заявку не принимая её в работу.</div>
         <?php else: ?>
           <button type="submit" class="btn ticket-close">
             <i class="icon-remove"></i>
