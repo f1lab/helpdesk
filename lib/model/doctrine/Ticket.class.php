@@ -13,29 +13,41 @@
 class Ticket extends BaseTicket
 {
   public function getCloser() {
-    return $this->getCommentsForCloser()->getFirst();
-    return Doctrine_Query::create()
-      ->from('Comment c')
-      ->addWhere('c.ticket_id = ?', $this->getId())
-      ->addWhere('c.changed_ticket_state_to = ?', 'closed')
-      ->leftJoin('c.Creator')
-      ->limit(1)
-      ->addOrderBy('c.created_at desc')
-      ->fetchOne()
-    ;
+    // just return if CommentsForCloser is joined
+    if ($this->hasReference('CommentsForCloser')) {
+       return $this->getCommentsForCloser()->getFirst();
+
+    // query db if not
+    } else {
+      return Doctrine_Query::create()
+        ->from('Comment c')
+        ->addWhere('c.ticket_id = ?', $this->getId())
+        ->addWhere('c.changed_ticket_state_to = ?', 'closed')
+        ->leftJoin('c.Creator')
+        ->limit(1)
+        ->addOrderBy('c.created_at desc')
+        ->fetchOne()
+      ;
+    }
   }
 
   public function getApplier() {
-    return $this->getCommentsForApplier()->getFirst();
-    return Doctrine_Query::create()
-      ->from('Comment c')
-      ->addWhere('c.ticket_id = ?', $this->getId())
-      ->addWhere('c.changed_ticket_state_to = ?', 'applied')
-      ->leftJoin('c.Creator')
-      ->limit(1)
-      ->addOrderBy('c.created_at desc')
-      ->fetchOne()
-    ;
+    // just return if CommentsForApplier is joined
+    if ($this->hasReference('CommentsForApplier')) {
+       return $this->getCommentsForApplier()->getFirst();
+
+    // query db if not
+    } else {
+      return Doctrine_Query::create()
+        ->from('Comment c')
+        ->addWhere('c.ticket_id = ?', $this->getId())
+        ->addWhere('c.changed_ticket_state_to = ?', 'applied')
+        ->leftJoin('c.Creator')
+        ->limit(1)
+        ->addOrderBy('c.created_at desc')
+        ->fetchOne()
+      ;
+    }
   }
 
   public function preInsert($event)
