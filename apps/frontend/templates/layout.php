@@ -101,5 +101,7 @@
 
     <?php echo $sf_content ?>
   </div>
+
+  <script type="text/coffeescript" src="/js/angular-RepeatedEveryDays.coffee" />
 </body>
 </html>

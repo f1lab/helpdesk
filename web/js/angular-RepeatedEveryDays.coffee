@@ -1,22 +1,25 @@
 app = angular.module 'helpdesk', []
 
 app.directive 'RepeatedEveryDays', ($compile) ->
+  template = angular.element """
+    <input type="number" min="0" step="1" ng-model="repeats">
+
+    <select ng-model="days">
+      <option value="1">дней</option>
+      <option value="7">недель</option>
+      <option value="30">месяцев</option>
+    </select>'
+  """
+
   return {
     restrict: 'C'
+    scope:
+      days: '=?'
+      repeats: '=?'
     link: ($scope, element) ->
       $scope.days = 1
       $scope.repeats = +element.val()
       element.attr 'type', 'hidden'
-
-      template = angular.element """
-        <input type="number" min="0" step="1" ng-model="repeats">
-
-        <select ng-model="days">
-          <option value="1">дней</option>
-          <option value="7">недель</option>
-          <option value="30">месяцев</option>
-        </select>'
-      """
 
       $compile(template) $scope, (cloned) ->
         cloned.insertAfter element
@@ -30,7 +33,6 @@ app.directive 'RepeatedEveryDays', ($compile) ->
 
       $scope.$watch 'days', watcher
       $scope.$watch 'repeats', watcher
-
   }
 
-angular.element(document).ready -> angular.bootstrap document, ['helpdesk']
+try angular.element(document).ready -> angular.bootstrap document, ['helpdesk']
