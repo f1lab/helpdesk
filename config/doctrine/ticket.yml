@@ -32,6 +32,9 @@ Ticket:
       type: boolean
       default: true
       notnull: true
+
+    repeater_id:
+      type: integer
   relations:
     Comments:
       class: Comment
@@ -77,6 +80,10 @@ Ticket:
       local: ticket_id
       foreign: user_id
       foreignAlias: ObserverForTickets
+    Repeater:
+      class: TicketRepeater
+      local: repeater_id
+      foreign: id
 
 RefTicketObserver:
   actAs:
