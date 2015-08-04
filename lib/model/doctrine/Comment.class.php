@@ -101,6 +101,12 @@ class Comment extends BaseComment
               'user_id' => $mention->getId(),
               'ticket_id' => $this->getTicket()->getId(),
             ]);
+
+            // workaround for mentions in comments created from email
+            if (!sfContext::getInstance()->getUser()->getGuardUser()) {
+              $observeRecord->setCreatedBy($this->getCreatedBy());
+            }
+
             $observeRecord->save();
           }
         }

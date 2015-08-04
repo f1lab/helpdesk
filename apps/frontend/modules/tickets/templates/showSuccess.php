@@ -151,13 +151,13 @@
   <div class="row-fluid" id="ticketcomment-<?php echo $comment->getId() ?>">
     <!-- //userpics are not implemented for now
     <div class="span">
-      <img width="48" src="http://placehold.it/140" alt="userpic of <?php echo $comment->getCreator()->getUsername() ?>" />
+      <img width="48" src="http://placehold.it/140" alt="userpic of <?php //echo $comment->getCreator()->getUsername() ?>" />
     </div>-->
     <div class="comment" >
       <?php $comment->isRead();?>
 
       <div class="header">
-        <span class="who"><a href="#"><?php echo $comment->getCreator()->getUsername() ?></a></span>
+        <span class="who"><a href="#"><?php echo ($commentCreator = $comment->getCreator()) == true ? $commentCreator->getUsername() : 'unknown' ?></a></span>
         <span class="what">
           добавил комментарий
           <?php if ($comment->getChangedTicketStateTo()): ?>
