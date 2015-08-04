@@ -69,6 +69,7 @@ RefTicketRepeaterResponsible:
     user_id: integer
   relations:
     Ticket:
+      class: TicketRepeater
       local: ticket_id
       foreign: id
     User:
@@ -84,6 +85,7 @@ RefTicketRepeaterObserver:
     user_id: integer
   relations:
     Ticket:
+      class: TicketRepeater
       local: ticket_id
       foreign: id
     User:
