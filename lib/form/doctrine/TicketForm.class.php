@@ -23,6 +23,7 @@ class TicketForm extends BaseTicketForm
       , $this['real_sender']
       , $this['period_id']
       , $this['is_closed_remotely']
+      , $this['repeater_id']
     );
 
     $user = sfContext::getInstance()->getUser();
