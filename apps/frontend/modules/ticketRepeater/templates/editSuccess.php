@@ -1,13 +1,13 @@
 <div class="page-header">
-  <h1>Добавить заявку</h1>
+  <h1>Редактировать регламентную работу</h1>
 </div>
 
-<form action="<?php echo url_for('@tickets-create') ?>" method="post" enctype="multipart/form-data" class="well form-fluid">
+<form action="<?php echo url_for('ticketRepeater/update?id=' . $form->getObject()->getId()) ?>" method="post" enctype="multipart/form-data" class="well form-fluid">
   <?php echo $form->renderUsing('bootstrap') ?>
   <div class="form-actions ">
     <button type="submit" class="btn btn-primary">
       <i class="icon-ok icon-white"></i>
-      Добавить
+      Сохранить
     </button>
     <a class="btn" href="<?php echo url_for('tickets/v2') ?>">
       Вернуться
