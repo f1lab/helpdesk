@@ -113,6 +113,16 @@ class sfGuardUser extends PluginsfGuardUser
       ->orderBy('t.created_at desc')
     ;
 
+    $return['ticket-repeaters'] = Doctrine_Query::create()
+      ->from('TicketRepeater t')
+      ->leftJoin('t.Category')
+      ->leftJoin('t.ToCompany')
+      ->leftJoin('t.Creator')
+      ->leftJoin('t.Responsibles r')
+      ->where('t.created_by = ?', $this->getId())
+      ->orderBy('t.created_at desc')
+    ;
+
     return $return;
   }
 

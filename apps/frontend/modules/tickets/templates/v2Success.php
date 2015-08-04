@@ -287,6 +287,7 @@
         {id: 'assigned-to-me', name: 'Я назначен ответственным', count: 0}
         {id: 'observed-by-me', name: 'Я назначен наблюдателем', count: 0}
         {id: 'auto-assigned-to-me', name: 'От моих компаний', count: 0}
+        {id: 'ticket-repeaters', name: 'Регламентные', count: 0}
       ]
 
       $scope.tickets = []
