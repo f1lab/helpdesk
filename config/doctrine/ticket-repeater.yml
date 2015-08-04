@@ -1,0 +1,92 @@
+TicketRepeater:
+  actAs: [Timestampable, Signable, SoftDelete]
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+    company_id:
+      type: integer
+      notnull: true
+    category_id:
+      type: integer
+      notnull: true
+    description:
+      type: clob
+      notnull: true
+
+    initiator_id: # от чьего имени создавать заявки
+      type: integer
+      notnull: true
+
+    repeated_every_days: # повторять каждые N дней
+      type: integer
+      notnull: true
+      default: 0
+
+    planned_start: # дата, начиная с которой будут создаваться заявки
+      type: timestamp
+      notnull: true
+
+    create_before_days: # Создавать заявку за N дней до даты выполнения
+      type: integer
+      notnull: true
+      default: 0
+
+    deadline_days: # дедлайн в днях
+      type: integer
+      notnull: true
+      default: 0
+
+  relations:
+    ToCompany:
+      class: sfGuardGroup
+      local: company_id
+      foreign: id
+    Category:
+      local: category_id
+      foreign: id
+    Initiator:
+      class: sfGuardUser
+      local: initiator_id
+      foreign: id
+    Responsibles:
+      class: sfGuardUser
+      refClass: RefTicketRepeaterResponsible
+      local: ticket_id
+      foreign: user_id
+    Observers:
+      class: sfGuardUser
+      refClass: RefTicketRepeaterObserver
+      local: ticket_id
+      foreign: user_id
+
+RefTicketRepeaterResponsible:
+  actAs:
+    - Signable
+    - Timestampable
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefTicketRepeaterObserver:
+  actAs:
+    - Signable
+  columns:
+    ticket_id: integer
+    user_id: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
