@@ -14,5 +14,3 @@
     </a>
   </div>
 </form>
-
-<script type="text/coffeescript" src="/js/angular-RepeatedEveryDays.coffee" />
