@@ -15,7 +15,6 @@ class ticketsApiActions extends sfActions
   static private function fillFilter($request)
   {
     self::$filter = json_decode(urldecode($request->getParameter('filter', '{}')), true);
-    // var_dump(self::$filter);die;
   }
 
   static private function returnJson($data)
@@ -31,7 +30,6 @@ class ticketsApiActions extends sfActions
 
     if (self::$filter['enabled']) {
       $query
-        ->addWhere('t.isClosed = ?', self::$filter['closed'])
         ->andWhereIn('t.category_id', self::$filter['category_id'])
         ->andWhereIn('t.company_id', self::$filter['company_id'])
         ->andWhereIn('r.id', self::$filter['responsible_id'])
@@ -40,8 +38,10 @@ class ticketsApiActions extends sfActions
       if (self::$filter['without_periodicals']) {
         $query->addWhere('t.repeated_every_days = ?', 0);
       }
-    } else {
-      $query->addWhere('t.isClosed = ?', false);
+    }
+
+    if (self::$filter['tab'] !== 'ticket-repeaters') {
+      $query->addWhere('t.isClosed = ?', self::$filter['enabled'] ? self::$filter['closed'] : false  );
     }
 
     return $query;
