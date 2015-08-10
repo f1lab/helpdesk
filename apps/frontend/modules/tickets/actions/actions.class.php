@@ -65,7 +65,7 @@ class ticketsActions extends sfActions
       $isReaded = Doctrine_Core::getTable('ReadedTickets')->createQuery('a')
         ->where('a.user_id = ?', $this->getContext()->getUser()->getGuardUser()->getId())
         ->andWhere('a.ticket_id = ?', $this->ticket->getId())
-        ->count() === true
+        ->count() > 0
       ;
       if (!$isReaded) {
         $record = ReadedTickets::createFromArray([

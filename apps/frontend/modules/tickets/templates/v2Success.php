@@ -9,6 +9,10 @@
         <i class="icon icon-plus"></i>
         Добавить заявку
       </a>
+      <a href="/frontend_dev.php/ticketRepeater/new" class="btn">
+        <i class="icon icon-plus"></i>
+        Добавить регламентную работу
+      </a>
     </div>
 
     <div class="btn-group">
