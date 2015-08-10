@@ -22,7 +22,7 @@ class ticketsApiActions extends sfActions
     die(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
   }
 
-  static private function addFilterParametersToQuery($request, $query)
+  static private function addFilterParametersToQuery($request, $query, $skipIsClosedQualifier = false)
   {
     if (self::$filter === null) {
       self::fillFilter($request);
@@ -40,7 +40,7 @@ class ticketsApiActions extends sfActions
       }
     }
 
-    if (self::$filter['tab'] !== 'ticket-repeaters') {
+    if (!$skipIsClosedQualifier) {
       $query->addWhere('t.isClosed = ?', self::$filter['enabled'] ? self::$filter['closed'] : false  );
     }
 
@@ -55,7 +55,7 @@ class ticketsApiActions extends sfActions
     $result = [];
     if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
       foreach ($queries as $tab => $query) {
-        self::addFilterParametersToQuery($request, $query);
+        self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters');
         $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
         $counter = 0;
@@ -81,9 +81,10 @@ class ticketsApiActions extends sfActions
       }
 
     } else {
-      $result = array_map(function($query) use ($request) {
-        return self::addFilterParametersToQuery($request, $query)->count();
-      }, $queries);
+      array_walk($queries, function(&$query, $tab) use ($request) {
+        $query = self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters')->count();
+      });
+      $result = $queries;
     }
 
     self::returnJson($result);
@@ -99,7 +100,7 @@ class ticketsApiActions extends sfActions
     $query = $queries[ $tab ];
     $this->forward404Unless($query);
 
-    self::addFilterParametersToQuery($request, $query);
+    self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters');
 
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
