@@ -45,34 +45,45 @@ class ticketsActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->ticket = Doctrine_Query::create()
-      ->from('Ticket t')
-      ->leftJoin('t.Creator')
-      ->leftJoin('t.Comments comments')
-      ->leftJoin('comments.Creator')
-      ->addOrderBy('comments.created_at asc')
-      ->where('t.id = ?', $request->getParameter('id'))
-      ->fetchOne()
-    ;
+    $this->isRepeater = $request->getParameter('repeater', false);
 
-    $this->forward404Unless($this->ticket);
-    $this->form = new CommentForm();
+    if (!$this->isRepeater) {
+      $this->ticket = Doctrine_Query::create()
+        ->from('Ticket t')
+        ->leftJoin('t.Creator')
+        ->leftJoin('t.Comments comments')
+        ->leftJoin('comments.Creator')
+        ->addOrderBy('comments.created_at asc')
+        ->where('t.id = ?', $request->getParameter('id'))
+        ->fetchOne()
+      ;
+      $this->forward404Unless($this->ticket);
 
-    //проверка на прочтение пользователем заявки
-    $ticketExist = Doctrine_Core::getTable('ReadedTickets')->createQuery('a')
-      ->where('a.user_id = ?', $this->getContext()->getUser()->getGuardUser()->getId())
-      ->andWhere('a.ticket_id = ?', $this->ticket->getId())
-      ->execute()
-    ;
+      $this->form = new CommentForm();
 
-    if ($ticketExist->count() == 0)
-    {
-      $record = new ReadedTickets();
-      $record->setUser_id($this->getContext()->getUser()->getGuardUser()->getId());
-      $record->setTicket_id($this->ticket->getId());
-      $record->save();
+      //проверка на прочтение пользователем заявки
+      $isReaded = Doctrine_Core::getTable('ReadedTickets')->createQuery('a')
+        ->where('a.user_id = ?', $this->getContext()->getUser()->getGuardUser()->getId())
+        ->andWhere('a.ticket_id = ?', $this->ticket->getId())
+        ->count() === true
+      ;
+      if (!$isReaded) {
+        $record = ReadedTickets::createFromArray([
+          'user_id' => $this->getUser()->getGuardUser()->getId(),
+          'ticket_id' => $this->ticket->getId(),
+        ]);
+        $record->save();
+      }
+
+    } else {
+      $this->ticket = Doctrine_Query::create()
+        ->from('TicketRepeater t')
+        ->leftJoin('t.Creator')
+        ->where('t.id = ?', $request->getParameter('id'))
+        ->fetchOne()
+      ;
+      $this->forward404Unless($this->ticket);
     }
-
   }
 
   public function executeNew(sfWebRequest $request)

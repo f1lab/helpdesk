@@ -153,7 +153,7 @@
     <tbody>
       <tr ng-repeat="ticket in tickets | orderBy:tableSorter.orderByField:tableSorter.reverseSort" ng-class="{ 'unread': ticket.ReadedTickets.length === 0 }">
         <td class="id">{{ticket.id}}</td>
-        <td class="name"><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}" title="{{ticket.name}}">
+        <td class="name"><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}{{filter.tab === 'ticket-repeaters' ? '?repeater=true' : ''}}" title="{{ticket.name}}">
           {{ticket.name}}
         </a></td>
         <td class="date">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
