@@ -22,7 +22,7 @@ class ticketsApiActions extends sfActions
     die(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
   }
 
-  static private function addFilterParametersToQuery($request, $query, $skipIsClosedQualifier = false)
+  static private function addFilterParametersToQuery($request, $query)
   {
     if (self::$filter === null) {
       self::fillFilter($request);
@@ -40,9 +40,7 @@ class ticketsApiActions extends sfActions
       }
     }
 
-    if (!$skipIsClosedQualifier) {
-      $query->addWhere('t.isClosed = ?', self::$filter['enabled'] ? self::$filter['closed'] : false  );
-    }
+    $query->addWhere('t.isClosed = ?', self::$filter['enabled'] ? self::$filter['closed'] : false  );
 
     return $query;
   }
@@ -55,7 +53,7 @@ class ticketsApiActions extends sfActions
     $result = [];
     if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
       foreach ($queries as $tab => $query) {
-        self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters');
+        self::addFilterParametersToQuery($request, $query);
         $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
         $counter = 0;
@@ -81,10 +79,9 @@ class ticketsApiActions extends sfActions
       }
 
     } else {
-      array_walk($queries, function(&$query, $tab) use ($request) {
-        $query = self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters')->count();
-      });
-      $result = $queries;
+      $result = array_map(function($query) use ($request) {
+        return self::addFilterParametersToQuery($request, $query)->count();
+      }, $queries);
     }
 
     self::returnJson($result);
@@ -100,7 +97,7 @@ class ticketsApiActions extends sfActions
     $query = $queries[ $tab ];
     $this->forward404Unless($query);
 
-    self::addFilterParametersToQuery($request, $query, $tab === 'ticket-repeaters');
+    self::addFilterParametersToQuery($request, $query);
 
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
