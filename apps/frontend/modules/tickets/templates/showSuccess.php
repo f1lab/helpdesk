@@ -18,7 +18,7 @@
       <span class="when"><?php echo $ticket->getCreatedAt() ?></span>
     </div>
     <?php
-      if (true == ($dl = $ticket->getDeadline())):
+      if (!$isRepeater and true == ($dl = $ticket->getDeadline())):
         $dl = str_replace('00:00:00', '', $dl);
         if (substr($dl, -3) == ':00'):
           $dl = substr($dl, 0, -3);
@@ -27,13 +27,13 @@
       <p><span class="label label-warning">deadline: <?php echo $dl ?></span></p>
     <?php endif ?>
     <div class="content">
-      <?php if ($ticket->getRealSender()): ?>
+      <?php if (!$isRepeater and $ticket->getRealSender()): ?>
         <div class="alert alert-info">Письмо пришло от <a href="mailto:<?php echo $ticket->getRealSender() ?>"><?php echo $ticket->getRealSender() ?></a>.</div>
       <?php endif ?>
       <h1 class="page-header">
         <?php echo $ticket->getName() ?>
 
-        <small><?php $applier = $ticket->getApplier(); ?>
+        <?php if (!$isRepeater): ?><small><?php $applier = $ticket->getApplier(); ?>
           <?php if ($applier): ?>
             в работе с <?php echo date('d.m.Y H:i:s', strtotime($applier->getCreatedAt())) ?>
           <?php elseif (!$ticket->getIsClosed() and $sf_user->getGuardUser()->getType() === 'it-admin' and Helpdesk::checkIfImInList($sf_user->getRawValue()->getGuardUser(), $ticket->getRawValue()->getResponsibles())): ?>
@@ -41,7 +41,7 @@
           <?php else: ?>
             ещё не обработана
           <?php endif ?>
-        </small>
+        </small><?php endif ?>
       </h1>
 
     <?php if (true == ($description = $sf_data->getRaw('ticket')->getDescription())): ?>
@@ -50,7 +50,7 @@
       <div class="alert alert-info">No description given.</div>
     <?php endif ?>
     </div>
-  <?php if ($attach=$ticket->attach): ?>
+  <?php if (!$isRepeater and true == ($attach = $ticket->attach)): ?>
     <hr />
     <div class="attachment">
       Вложения:
@@ -77,13 +77,13 @@
     </div>
   <?php endif ?>
 
-  <div>
+  <?php if (!$isRepeater): ?><div>
     Комментариев: <?php echo $ticket->getComments()->count() ?>
-  </div>
+  </div><?php endif ?>
 
   <?php if ($canManipulateThisTicket): ?>
     <div class="center">
-      <a href="<?php echo url_for('@tickets-edit?id=' . $ticket->getId()) ?>" class="btn btn-mini">
+      <a href="<?php echo url_for('ticketRepeater/edit?id=' . $ticket->getId()) ?>" class="btn btn-mini">
         <i class="icon icon-pencil"></i>
         Редактировать
       </a>
@@ -92,7 +92,7 @@
 
   <?php if ($sf_user->hasCredential('delete_tickets')): ?>
     <div class="center">
-      <a href="#" class="btn btn-mini ticket-deleter" data-delete-uri="<?php echo url_for('@tickets-delete?id=' . $ticket->getId()) ?>">
+      <a href="#" class="btn btn-mini ticket-deleter" data-delete-uri="<?php echo url_for('ticketRepeater/delete?id=' . $ticket->getId()) ?>">
         <i class="icon icon-remove"></i>
         Удалить
       </a>
@@ -145,7 +145,7 @@
 
 <hr class="hidden"/>
 
-<?php if ($ticket->getComments()->count()): use_helper('Text');?>
+<?php if (!$isRepeater and $ticket->getComments()->count()): use_helper('Text');?>
 <div class="comments">
 <?php foreach ($ticket->getComments() as $comment): ?>
   <div class="row-fluid" id="ticketcomment-<?php echo $comment->getId() ?>">
@@ -205,6 +205,7 @@
 
 <hr class="hidden"/>
 
+<?php if (!$isRepeater): ?>
 <form action="<?php echo url_for('@comments-create?id=' . $ticket->getId()) ?>" method="post" class="well form-fluid add-comment" enctype="multipart/form-data">
   <h3>Добавить комментарий к заявке</h3>
   <?php echo $form->renderUsing('bootstrap') ?>
@@ -248,6 +249,7 @@
     </div>
   </div>
 </form>
+<?php endif ?>
 
 <script type="text/ng-template" id="/i-am-not-responsible.html">
   <div class="modal top am-fade-and-slide-top" tabindex="-1" role="dialog">

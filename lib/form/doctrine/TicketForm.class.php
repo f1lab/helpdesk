@@ -24,6 +24,7 @@ class TicketForm extends BaseTicketForm
       , $this['period_id']
       , $this['is_closed_remotely']
       , $this['repeater_id']
+      , $this['repeated_every_days']
     );
 
     $user = sfContext::getInstance()->getUser();
@@ -59,16 +60,6 @@ class TicketForm extends BaseTicketForm
         $this['responsibles_list']
         , $this['company_id']
       );
-    }
-
-    if (!$user->hasCredential('can_use_schedule')) {
-      unset (
-        $this['repeated_every_days']
-      );
-    } else {
-      $this->getWidgetSchema()->offsetGet('repeated_every_days')
-        ->setAttribute('class', 'RepeatedEveryDays')
-      ;
     }
 
     if (!$user->hasCredential('can set observers for tickets')) {

@@ -10,14 +10,6 @@
  */
 class ticketRepeaterActions extends sfActions
 {
-  public function executeIndex(sfWebRequest $request)
-  {
-    $this->ticket_repeaters = Doctrine_Query::create()
-      ->from('TicketRepeater t')
-      ->execute()
-    ;
-  }
-
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new TicketRepeaterForm();
@@ -25,12 +17,8 @@ class ticketRepeaterActions extends sfActions
 
   public function executeCreate(sfWebRequest $request)
   {
-    $this->forward404Unless($request->isMethod(sfRequest::POST));
-
     $this->form = new TicketRepeaterForm();
-
     $this->processForm($request, $this->form);
-
     $this->setTemplate('new');
   }
 
@@ -42,32 +30,46 @@ class ticketRepeaterActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
-    $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $this->forward404Unless($ticket_repeater = Doctrine_Core::getTable('TicketRepeater')->find(array($request->getParameter('id'))), sprintf('Object ticket_repeater does not exist (%s).', $request->getParameter('id')));
-    $this->form = new TicketRepeaterForm($ticket_repeater);
+    $this->forward404Unless(
+      $this->getUser()->hasCredential('can_edit_tickets')
+      and true == ($this->form = new TicketRepeaterForm(Doctrine_Core::getTable('TicketRepeater')->find($request->getParameter('id'))))
+    );
 
-    $this->processForm($request, $this->form);
+    $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'));
 
     $this->setTemplate('edit');
   }
 
   public function executeDelete(sfWebRequest $request)
   {
-    $request->checkCSRFProtection();
+    if ($this->getUser()->hasCredential('delete_tickets')) {
+      if (Doctrine_Core::getTable('TicketRepeater')->find($request->getParameter('id'))->delete()) {
+        $this->getUser()->setFlash('message', array('success', 'Отлично!', 'Одной заявкой меньше.'));
+      }
+    }
 
-    $this->forward404Unless($ticket_repeater = Doctrine_Core::getTable('TicketRepeater')->find(array($request->getParameter('id'))), sprintf('Object ticket_repeater does not exist (%s).', $request->getParameter('id')));
-    $ticket_repeater->delete();
-
-    $this->redirect('ticketRepeater/index');
+    $this->redirect('tickets/v2');
   }
 
-  protected function processForm(sfWebRequest $request, sfForm $form)
-  {
-    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-    if ($form->isValid()) {
-      $ticket_repeater = $form->save();
+    public function processForm(
+      sfWebRequest $request,
+      sfForm $form,
+      $flash = array(
+        'success',
+        'Отлично!',
+        'Заявка добавлена.',
+      ),
+      $redirect = false
+  ) {
+    $form->bind(
+      $request->getParameter($form->getName()),
+      $request->getFiles($form->getName())
+    );
 
-      $this->redirect('ticketRepeater/edit?id='.$ticket_repeater->getId());
+    if ($form->isValid()) {
+      $ticket = $form->save();
+      $this->getUser()->setFlash('message', $flash);
+      $this->redirect($redirect ? $redirect : '@tickets-show?repeater=true&id=' . $ticket->getId());
     }
   }
 }
