@@ -19,6 +19,7 @@ class TicketRepeaterForm extends BaseTicketRepeaterForm
       , $this['updated_by']
       , $this['deleted_at']
       , $this['repeater_id']
+      , $this['isClosed']
     );
 
     $user = sfContext::getInstance()->getUser()->getGuardUser() ?: new sfGuardUser();

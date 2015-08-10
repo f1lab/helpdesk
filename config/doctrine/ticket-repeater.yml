@@ -4,6 +4,10 @@ TicketRepeater:
     name:
       type: string(255)
       notnull: true
+    isClosed:
+      type: boolean
+      default: false
+      notnull: true
     company_id:
       type: integer
       notnull: true
