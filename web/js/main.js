@@ -151,8 +151,12 @@ $(function() {
     var $fill = $('<a href="#" class="select-accelerator">добавить всё</a>')
     var $reset = $('<a href="#" class="select-accelerator">очистить всё</a>')
     $('.chzn-select').each(function(id, select) {
-      var $select = $(select)
-        , container = $select.parent()
+      var $select = $(select);
+      if (!$select.attr('multiple')) {
+        return;
+      }
+
+      var container = $select.parent()
         , fill = $fill.clone()
         , reset = $reset.clone()
       ;
