@@ -132,11 +132,18 @@
           </a>
         </th>
         <th class="name">Тема</th>
+        <th class="repeated-every" ng-if="filter.tab === 'ticket-repeaters'">
+          <a href="" ng-click="orderBy('repeated_every_days')">
+            Период повторения
+            <span ng-show="tableSorter.orderByField == 'repeated_every_days'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
+          </a>
+        </th>
         <th class="date">
-          <a href="" ng-click="orderBy('created_at')">
+          <a href="" ng-click="orderBy('created_at')" ng-if="filter.tab !== 'ticket-repeaters'">
             Дата
             <span ng-show="tableSorter.orderByField == 'created_at'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
+          <span ng-if="filter.tab === 'ticket-repeaters'">Следующее выполнение</span>
         </th>
         <th class="category">
           <a href="" ng-click="orderBy('Category.name')">
@@ -145,13 +152,16 @@
           </a>
         </th>
         <th class="creator">
-          <a href="" ng-click="orderBy(['Creator.username', 'ToCompany.name'])">
+          <a href="" ng-click="orderBy(['Creator.username', 'ToCompany.name'])" ng-if="filter.tab !== 'ticket-repeaters'">
             Пользователь@Компания
             <span ng-show="tableSorter.orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
+          <a href="" ng-click="orderBy(['Initiator.username', 'ToCompany.name'])" ng-if="filter.tab === 'ticket-repeaters'">
+            Инициатор@Компания
+            <span ng-show="tableSorter.orderByField.toString() == ['Initiator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
+          </a>
         </th>
         <th class="state">Статус</th>
-        <th class="comments"></th>
       </tr>
     </thead>
     <tbody>
@@ -160,23 +170,40 @@
         <td class="name"><a href="<?php echo url_for('@tickets-show?id=') ?>{{ticket.id}}{{filter.tab === 'ticket-repeaters' ? '?repeater=true' : ''}}" title="{{ticket.name}}">
           {{ticket.name}}
         </a></td>
-        <td class="date">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
-        <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
-        <td class="creator">{{ticket.Creator.username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
-        <td class="state">
-          <span ng-if="ticket.CommentsAgain.length === 0">
-            не в работе<span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span
-            ><span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
-              <li ng-repeat="responsible in ticket.Responsibles">{{responsible.username}}</li>
-            </ul></span>
-          </span>
+        <td class="repetaed-every" ng-if="filter.tab === 'ticket-repeaters'">{{ticket.repeated_every_days}} дней</td>
 
-          <span ng-if="ticket.CommentsAgain.length !== 0" ng-init="applier = ticket.CommentsAgain[ticket.CommentsAgain.length - 1]">
-            в работе с {{applier.created_at | moment | date:'dd.MM.yyyy HH:mm'}}
-            у {{applier.Creator.username}}
-          </span>
+        <td class="date" ng-if="filter.tab !== 'ticket-repeaters'">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td class="date" ng-if="filter.tab === 'ticket-repeaters'">FIXME</td>
+
+        <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
+        <td class="creator">{{ticket[filter.tab === 'ticket-repeaters' ? 'Initiator' : 'Creator'].username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
+        <td class="state">
+          <div ng-if="filter.tab !== 'ticket-repeaters'">
+            <span ng-if="ticket.CommentsAgain.length === 0">
+              не в работе<span ng-if="ticket.Responsibles.length === 1">, ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</span
+              ><span ng-if="ticket.Responsibles.length > 1">, ответственные: <ul>
+                <li ng-repeat="responsible in ticket.Responsibles">{{responsible.username}}</li>
+              </ul></span>
+            </span>
+
+            <span ng-if="ticket.CommentsAgain.length !== 0" ng-init="applier = ticket.CommentsAgain[ticket.CommentsAgain.length - 1]">
+              в работе с {{applier.created_at | moment | date:'dd.MM.yyyy HH:mm'}}
+              у {{applier.Creator.username}}
+            </span>
+          </div>
+
+          <div ng-if="filter.tab === 'ticket-repeaters'">
+            <div ng-if="ticket.Responsibles.length === 1">Ответственный: {{ticket.Responsibles[ticket.Responsibles.length - 1].username}}</div>
+            <div ng-if="ticket.Responsibles.length > 1">Ответственные: <ul>
+              <li ng-repeat="responsible in ticket.Responsibles">{{responsible.username}}</li>
+            </ul></div>
+
+            <div ng-if="ticket.Observers.length === 1">Наблюдатель: {{ticket.Observers[ticket.Observers.length - 1].username}}</div>
+            <div ng-if="ticket.Observers.length > 1">Наблюдатели: <ul>
+              <li ng-repeat="observer in ticket.Observers">{{observer.username}}</li>
+            </ul></div>
+          </div>
         </td>
-        <td class="comments"><span class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">{{ticket.Comments.length}}</span></td>
       </tr>
     </tbody>
   </table>

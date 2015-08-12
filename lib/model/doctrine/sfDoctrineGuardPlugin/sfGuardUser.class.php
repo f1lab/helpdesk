@@ -117,8 +117,9 @@ class sfGuardUser extends PluginsfGuardUser
       ->from('TicketRepeater t')
       ->leftJoin('t.Category')
       ->leftJoin('t.ToCompany')
-      ->leftJoin('t.Creator')
+      ->leftJoin('t.Initiator')
       ->leftJoin('t.Responsibles r')
+      ->leftJoin('t.Observers o')
       ->where('t.created_by = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;

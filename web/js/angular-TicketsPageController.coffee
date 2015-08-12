@@ -60,10 +60,11 @@ app.controller 'TicketsPageController', [
       $scope.ticketsLoadError = false
       $scope.ticketsLoading = true
 
-      # put to cache old tab tickets
-      if ticketsCache[oldFilter.tab]?
-        ticketsCache[oldFilter.tab].splice 0
-      ticketsCache[oldFilter.tab] = $scope.tickets.splice 0
+      if $scope.tickets.length > 0
+        # put to cache old tab tickets
+        if ticketsCache[oldFilter.tab]?
+          ticketsCache[oldFilter.tab].splice 0
+        ticketsCache[oldFilter.tab] = $scope.tickets.splice 0
 
       # get from cache new tab tickets
       if ticketsCache[newFilter.tab]?.length > 0
