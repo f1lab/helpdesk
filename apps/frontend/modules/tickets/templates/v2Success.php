@@ -173,7 +173,7 @@
         <td class="repetaed-every" ng-if="filter.tab === 'ticket-repeaters'">{{ticket.repeated_every_days}} дней</td>
 
         <td class="date" ng-if="filter.tab !== 'ticket-repeaters'">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
-        <td class="date" ng-if="filter.tab === 'ticket-repeaters'">FIXME</td>
+        <td class="date" ng-if="filter.tab === 'ticket-repeaters'">FIXME {{ticket.planned_start}}</td>
 
         <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
         <td class="creator">{{ticket[filter.tab === 'ticket-repeaters' ? 'Initiator' : 'Creator'].username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>

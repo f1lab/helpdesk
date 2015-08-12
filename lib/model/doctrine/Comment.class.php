@@ -40,13 +40,12 @@ class Comment extends BaseComment
     $statesRu = ['открыта' => 'opened', 'закрыта' => 'closed'];
 
     $comment = $event->getInvoker();
-    $ticket = $this->getTicket();
-    $user = sfContext::getInstance()->getUser();
-
     if (isset($comment['changed_ticket_state_to'])
       and in_array($comment['changed_ticket_state_to'], $states)
       and (
-        $ticket->getCreatedBy() === $user->getGuardUser()->getId()
+        true == ($ticket = $this->getTicket())
+        and true == ($user = sfContext::getInstance()->getUser())
+        and $ticket->getCreatedBy() === $user->getGuardUser()->getId()
         || $user->hasCredential('can_edit_tickets')
         || $user->getGuardUser()->getType() === 'it-admin'
       )

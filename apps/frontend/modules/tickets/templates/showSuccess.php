@@ -83,7 +83,7 @@
 
   <?php if ($canManipulateThisTicket): ?>
     <div class="center">
-      <a href="<?php echo url_for('ticketRepeater/edit?id=' . $ticket->getId()) ?>" class="btn btn-mini">
+      <a href="<?php echo url_for('ticket' . ($isRepeater ? 'Repeater' : 's') . '/edit?id=' . $ticket->getId()) ?>" class="btn btn-mini">
         <i class="icon icon-pencil"></i>
         Редактировать
       </a>
@@ -92,7 +92,7 @@
 
   <?php if ($sf_user->hasCredential('delete_tickets')): ?>
     <div class="center">
-      <a href="#" class="btn btn-mini ticket-deleter" data-delete-uri="<?php echo url_for('ticketRepeater/delete?id=' . $ticket->getId()) ?>">
+      <a href="#" class="btn btn-mini ticket-deleter" data-delete-uri="<?php echo url_for('ticket' . ($isRepeater ? 'Repeater' : 's') . '/delete?id=' . $ticket->getId()) ?>">
         <i class="icon icon-remove"></i>
         Удалить
       </a>
