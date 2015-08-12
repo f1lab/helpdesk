@@ -106,7 +106,7 @@
     </div>
   </div>
 
-  <?php if ($sf_request->getParameter('dev', false)): ?>
+  <?php if (sfConfig::get('sf_environment', 'prod') === 'dev'): ?>
     <pre>{{filter | json}}</pre>
   <?php endif ?>
 
@@ -122,7 +122,7 @@
   <div class="alert alert-info" ng-show="ticketsLoading">Загружаю заявки…</div>
   <div class="alert alert-warning" ng-show="ticketsLoadError" ng-cloak>Ошибка загрузки заявок. Попробуйте <a href="" ng-click="reloadPage()">обновить страницу</a>.</div>
 
-  <table ng-show="tickets.length > 0" class="table table-hover1 tickets20" ng-cloak>
+  <table ng-show="tickets.length > 0" class="table tickets20" ng-cloak>
     <thead>
       <tr>
         <th class="id">
@@ -186,184 +186,39 @@
   </h4>
 </section>
 
-<style>
-  .tickets20 {}
-  .tickets20 th {
-    white-space: nowrap;
-    font-size: 1.2em;
-    text-align: center;
+<script>
+  var selectsOptions = {
+    "categories": [{id: null, name: 'Без категории'}].concat(
+      <?php echo json_encode(Doctrine_Query::create()
+        ->select('c.id, c.name')
+        ->from('Category c')
+        // ->leftJoin('c.RefUserCategory ref')
+        // ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
+        ->addOrderBy('c.name')
+        ->execute([], Doctrine_Core::HYDRATE_ARRAY)
+      ) ?>
+    )
+
+    , "companies": [{id: null, name: 'Без компании'}].concat(
+      <?php echo json_encode(Doctrine_Query::create()
+        ->select('g.id, g.name')
+        ->from('sfGuardGroup g')
+        ->leftJoin('g.RefCompanyResponsible ref')
+        ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
+        ->addOrderBy('g.name')
+        ->execute([], Doctrine_Core::HYDRATE_ARRAY)
+      ) ?>
+    )
+
+    , "responsibles": [].concat(
+      <?php echo json_encode(Doctrine_Query::create()
+        ->select('u.id, u.first_name, u.last_name, u.username')
+        ->from('sfGuardUser u')
+        ->addWhere('u.type = ?', 'it-admin')
+        ->addOrderBy('u.first_name, u.last_name')
+        ->execute([], Doctrine_Core::HYDRATE_ARRAY)
+      ) ?>
+    )
   }
-  .tickets20 td {
-    white-space: nowrap;
-    background-color: #f5f5f5;
-  }
-  .tickets20 td.name a {
-    display: block;
-    text-overflow: ellipsis;
-    width: 400px;
-    overflow: hidden;
-  }
-  .tickets20 .unread {
-    font-weight: bolder;
-  }
-  .tickets20 .unread td {
-    background-color: #fff;
-  }
-  .tickets20 ul {
-    margin-bottom: 0;
-  }
-  .tickets20 tr:hover td {
-    background-color: #dff0d8;
-  }
-</style>
-
-<script type="text/coffeescript">
-  app = angular.module 'helpdesk', ['ngStorage']
-
-  app.controller 'TicketsPageController', [
-    '$scope', '$http', '$timeout', '$filter', '$q', '$sessionStorage', '$localStorage'
-    ($scope, $http, $timeout, $filter, $q, $sessionStorage, $localStorage) ->
-      $scope.tableSorter = $localStorage.$default
-        orderByField: 'id'
-        reverseSort: false
-
-      $scope.orderBy = (column) ->
-        sameColumnSelected = $scope.tableSorter.orderByField.toString() is column.toString()
-        $scope.tableSorter.orderByField = column
-
-        $scope.tableSorter.reverseSort = if sameColumnSelected then !$scope.tableSorter.reverseSort else false
-
-      $scope.reloadPage = ->
-        document.location.reload()
-
-      $scope.filterSelects =
-        categories: [{id: null, name: 'Без категории'}].concat(
-          <?php echo json_encode(Doctrine_Query::create()
-            ->select('c.id, c.name')
-            ->from('Category c')
-            // ->leftJoin('c.RefUserCategory ref')
-            // ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
-            ->addOrderBy('c.name')
-            ->execute([], Doctrine_Core::HYDRATE_ARRAY)
-          ) ?>
-        )
-
-        companies: [{id: null, name: 'Без компании'}].concat(
-          <?php echo json_encode(Doctrine_Query::create()
-            ->select('g.id, g.name')
-            ->from('sfGuardGroup g')
-            ->leftJoin('g.RefCompanyResponsible ref')
-            ->addWhere('ref.user_id = ?', $sf_user->getGuardUser()->getId())
-            ->addOrderBy('g.name')
-            ->execute([], Doctrine_Core::HYDRATE_ARRAY)
-          ) ?>
-        )
-
-        responsibles: [].concat(
-          <?php echo json_encode(Doctrine_Query::create()
-            ->select('u.id, u.first_name, u.last_name, u.username')
-            ->from('sfGuardUser u')
-            ->addWhere('u.type = ?', 'it-admin')
-            ->addOrderBy('u.first_name, u.last_name')
-            ->execute([], Doctrine_Core::HYDRATE_ARRAY)
-          ) ?>
-        )
-
-      $scope.filter = $sessionStorage.$default
-        enabled: false
-        tab: null
-        closed: false
-        company_id: []
-        category_id: []
-        responsible_id: []
-        without_responsibles: false
-        without_appliers: false
-        without_periodicals: false
-        refresh: 0
-
-      delete $scope.filter.$default
-      delete $scope.filter.$reset
-
-      $scope.refresh = -> $scope.filter.refresh++
-
-      $scope.tabs = [
-        {id: 'created-by-me', name: 'Созданы мной', count: 0}
-        {id: 'assigned-to-me', name: 'Я назначен ответственным', count: 0}
-        {id: 'observed-by-me', name: 'Я назначен наблюдателем', count: 0}
-        {id: 'auto-assigned-to-me', name: 'От моих компаний', count: 0}
-        {id: 'ticket-repeaters', name: 'Регламентные', count: 0}
-      ]
-
-      $scope.tickets = []
-      $scope.ticketsLoading = false
-      $scope.ticketsLoadError = false
-
-      $scope.selectTab = (id) ->
-        $scope.filter.tab = id
-
-      window.a = ticketsCache = {}
-
-      currentGetCanceller = null
-      $scope.$watch 'filter', (newFilter, oldFilter) ->
-        $scope.getCounters()
-        return if not newFilter?
-
-        $scope.ticketsLoadError = false
-        $scope.ticketsLoading = true
-
-        # put to cache old tab tickets
-        if ticketsCache[oldFilter.tab]?
-          ticketsCache[oldFilter.tab].splice 0
-        ticketsCache[oldFilter.tab] = $scope.tickets.splice 0
-
-        # get from cache new tab tickets
-        if ticketsCache[newFilter.tab]?.length > 0
-          $scope.tickets = ticketsCache[newFilter.tab]
-
-        if currentGetCanceller?
-          currentGetCanceller.resolve()
-
-        currentGetCanceller = $q.defer()
-        get = $http.get API.getTickets, {
-          timeout: currentGetCanceller.promise
-          params: filter: $scope.filter
-        }
-
-        get.success (tickets) ->
-          $scope.tickets = tickets
-          $scope.ticketsLoadError = false
-          $scope.ticketsLoading = false
-
-        get.error (data, statusCode) ->
-          if statusCode > 0
-            $scope.ticketsLoadError = true
-            $scope.ticketsLoading = false
-
-      , true
-
-      currentGetCountersCanceller = null
-      $scope.getCounters = ->
-        if currentGetCountersCanceller?
-          currentGetCountersCanceller.resolve()
-
-        currentGetCountersCanceller = $q.defer()
-        get = $http.get API.getCounters, {
-          timeout: currentGetCountersCanceller.promise
-          params: filter: $scope.filter
-        }
-
-        get.success (counters) ->
-          angular.forEach counters, (count, id) ->
-            $filter('filter')($scope.tabs, id: id, true)[0]?.count = count
-
-      if not $scope.filter.tab?
-        $scope.selectTab $scope.tabs[0].id
-
-      $timeout -> angular.element('.chzn-select').trigger('liszt:updated')
-  ]
-
-  app.filter 'moment', ->
-    (datetime) -> moment(datetime).toDate()
-
-  angular.element(document).ready -> angular.bootstrap document, ['helpdesk']
 </script>
+<script type="text/coffeescript" src="/js/angular-TicketsPageController.coffee"></script>

@@ -140,3 +140,33 @@ footer {
 .tablesorter th {
   cursor: pointer;
 }
+
+
+
+.tickets20 {}
+.tickets20 th {
+  white-space: nowrap;
+  font-size: 1.2em;
+}
+.tickets20 td {
+  white-space: nowrap;
+  background-color: #f5f5f5;
+}
+.tickets20 td.name a {
+  display: block;
+  text-overflow: ellipsis;
+  width: 400px;
+  overflow: hidden;
+}
+.tickets20 .unread {
+  font-weight: bolder;
+}
+.tickets20 .unread td {
+  background-color: #fff;
+}
+.tickets20 ul {
+  margin-bottom: 0;
+}
+.tickets20 tr:hover td {
+  background-color: #dff0d8;
+}
