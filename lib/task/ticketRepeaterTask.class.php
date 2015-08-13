@@ -76,6 +76,14 @@ EOF;
         $ticket->save();
         $this->logSection('repeater', sprintf('Created ticket #%d for repeater #%d', $ticket->getId(), $repeater->getId()));
 
+        $comment = Comment::createFromArray([
+          'skip_notification' => true,
+          'ticket_id' => $ticket->getId(),
+          'text' => 'Заявка относится к регламентной работе ##' . $repeater->getId(),
+          'created_by' => $repeater->getInitiatorId(),
+        ]);
+        $comment->save();
+
         $nextStartTime = strtotime('+' . $repeater->getRepeatedEveryDays() . ' days', strtotime($repeater->getNextStart()));
         $repeater->setNextStart(date('Y-m-d H:i:s', $nextStartTime));
         $repeater->save();
