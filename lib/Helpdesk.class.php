@@ -105,6 +105,36 @@ final class Helpdesk
     return $users;
   }
 
+  static public final function replaceTicketRepeaterMentionsWithLinks($text) {
+    static $url = null;
+    if ($url === null) {
+      $url = sfContext::getInstance()->getController()->genUrl('tickets/show?id=', false);
+    }
+
+    static $query = null;
+    if ($query === null) {
+      $query = Doctrine_Query::create()
+        ->from('TicketRepeater t')
+        ->select('t.name, t.isClosed')
+        ->addWhere('t.id = ?')
+        ->limit(1)
+      ;
+    }
+
+    static $formatOpen = '##<a href="%1$s%2$s?repeater=true" title="%3$s">%2$s</a>';
+    static $formatClosed = '<del>##<a href="%1$s%2$s?repeater=true" title="%3$s">%2$s</a></del>';
+
+    return preg_replace_callback('/##([0-9]+)/', function($matches) use ($url, $query, $formatOpen, $formatClosed) {
+      $ticketId = $matches[1];
+      $ticket = $query->fetchOne([$ticketId]);
+      if ($ticket) {
+        return sprintf($ticket->getIsClosed() ? $formatClosed : $formatOpen, $url, $ticketId, $ticket->getName());
+      } else {
+        return $matches[0];
+      }
+    }, $text);
+  }
+
   static public final function replaceTicketMentionsWithLinks($text) {
     static $url = null;
     if ($url === null) {
