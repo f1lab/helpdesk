@@ -60,6 +60,29 @@
     </div>
   <?php endif ?>
   </div>
+
+  <?php if ($isRepeater): ?>
+    <table class="table tickets20">
+      <thead>
+        <tr>
+          <th class="id">№</th>
+          <th class="name">Тема</th>
+          <th class="date">Дата выполнения</th>
+        </tr>
+      </thead>
+      <tbody><?php foreach ($ticket->getTickets() as $ticket_): ?>
+        <tr>
+          <td class="id"><?php echo $ticket_->getId() ?></td>
+          <td class="name">
+            <a href="<?php echo url_for('tickets/show?id=' . $ticket_->getId()) ?>">
+              <?php echo $ticket_->getName() ?>
+            </a>
+          </td>
+          <td class="date"><?php echo $ticket_->getPlannedStart() ?></td>
+        </tr>
+      <?php endforeach ?></tbody>
+    </table>
+  <?php endif ?>
 </div>
 
 <div class="span2 ticket-status">
