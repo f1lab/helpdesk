@@ -41,6 +41,10 @@ TicketRepeater:
       notnull: true
       default: 0
 
+    next_start: # дата следующего начала выполнения заявки
+      type: timestamp
+      notnull: true
+
   relations:
     ToCompany:
       class: sfGuardGroup
@@ -63,6 +67,11 @@ TicketRepeater:
       refClass: RefTicketRepeaterObserver
       local: ticket_id
       foreign: user_id
+    Tickets:
+      type: many
+      class: Ticket
+      local: id
+      foreign: repeater_id
 
 RefTicketRepeaterResponsible:
   actAs:

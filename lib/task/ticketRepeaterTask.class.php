@@ -27,37 +27,40 @@ EOF;
 
     $this->logSection('repeater', 'Getting repeaters');
     $repeaters = Doctrine_Query::create()
-      ->from('TicketRepeater t')
-      ->addWhere('t.isClosed = ?', false)
-      ->addWhere('t.planned_start <= ?', date('Y-m-d H:i:s'))
-      ->leftJoin('t.Responsibles r')
-      ->leftJoin('t.Observers o')
+      ->from('TicketRepeater r')
+      ->addWhere('r.isClosed = ?', false)
+      ->addWhere('r.next_start <= ?', date('Y-m-d H:i:s'))
+      ->leftJoin('r.Responsibles')
+      ->leftJoin('r.Observers')
       ->execute()
     ;
+    $this->logSection('repeater', sprintf('Found %d possibly not resheduled repeaters', count($repeaters)));
 
-    $this->logSection('repeater', sprintf('Found %d repeaters', count($repeaters)));
     foreach ($repeaters as $repeater) {
-      $this->logSection('repeater', sprintf('Processing #%d', $repeater->getId()));
+      $this->logSection('repeater', sprintf('Processing repeater #%d', $repeater->getId()));
 
-      $plannedStart = $repeater->getPlannedStart();
+      $ticketNextPlannedStartTime = strtotime($repeater->getNextStart());
       $createBeforeDays = $repeater->getCreateBeforeDays();
-      $deadlineDays = $repeater->getDeadlineDays();
 
-      // FIXME: check if it's time to create new ticket
-      if (true) {
-        $this->logSection('repeater', sprintf('Creating task for #%d', $repeater->getId()));
-        $nextStartDate = time();
+      $isTicketAlreadyCreated = Doctrine_Query::create()
+        ->from('Ticket t')
+        ->addWhere('t.planned_start = ?', $repeater->getNextStart())
+        ->count() === 1
+      ;
+      $createBeforeDaysFulfilled = strtotime('-' . $createBeforeDays . ' days', $ticketNextPlannedStartTime) <= time();
 
-        $createBeforeTime = strtotime('-' . $createBeforeDays . ' days', $nextStartDate);
-        $plannedStartTime = $nextStartDate;
-        $deadlineTime = strtotime('+' . $deadlineDays . ' days', $nextStartDate);
+      if (!$isTicketAlreadyCreated and $createBeforeDaysFulfilled) {
+        $this->logSection('repeater', sprintf('Creating ticket for #%d', $repeater->getId()));
+
+        $deadlineDays = $repeater->getDeadlineDays();
+        $deadlineTime = strtotime('+' . $deadlineDays . ' days', $ticketNextPlannedStartTime);
 
         $ticket = Ticket::createFromArray([
           'name' => $repeater->getName(),
           'company_id' => $repeater->getCompanyId(),
           'category_id' => $repeater->getCategoryId(),
           'description' => $repeater->getDescription(),
-          'planned_start' => date('Y-m-d H:i:s', $plannedStartTime),
+          'planned_start' => date('Y-m-d H:i:s', $ticketNextPlannedStartTime),
           'deadline' => date('Y-m-d H:i:s', $deadlineTime),
           'repeater_id' => $repeater->getId(),
           'created_by' => $repeater->getInitiatorId(),
@@ -71,8 +74,12 @@ EOF;
           return $user['id'];
         }, $repeater->getObservers()->toArray()));
         $ticket->save();
+        $this->logSection('repeater', sprintf('Created ticket #%d for repeater #%d', $ticket->getId(), $repeater->getId()));
 
-        $this->logSection('repeater', sprintf('Created task #%d for Repeater #%d', $ticket->getId(), $repeater->getId()));
+        $nextStartTime = strtotime('+' . $repeater->getRepeatedEveryDays() . ' days', strtotime($repeater->getNextStart()));
+        $repeater->setNextStart(date('Y-m-d H:i:s', $nextStartTime));
+        $repeater->save();
+        $this->logSection('repeater', sprintf('Sheduled repeater #%d to %s', $repeater->getId(), $repeater->getNextStart()));
       }
     }
   }

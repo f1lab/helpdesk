@@ -20,6 +20,7 @@ class TicketRepeaterForm extends BaseTicketRepeaterForm
       , $this['deleted_at']
       , $this['repeater_id']
       , $this['isClosed']
+      , $this['next_start']
     );
 
     $user = sfContext::getInstance()->getUser()->getGuardUser() ?: new sfGuardUser();
