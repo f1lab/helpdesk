@@ -143,7 +143,10 @@
             Дата
             <span ng-show="tableSorter.orderByField == 'created_at'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
-          <span ng-if="filter.tab === 'ticket-repeaters'">Следующее выполнение</span>
+          <a href="" ng-click="orderBy('next_start')" ng-if="filter.tab === 'ticket-repeaters'">
+            Следующее выполнение
+            <span ng-show="tableSorter.orderByField == 'next_start'"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
+          </a>
         </th>
         <th class="category">
           <a href="" ng-click="orderBy('Category.name')">
@@ -173,7 +176,7 @@
         <td class="repetaed-every" ng-if="filter.tab === 'ticket-repeaters'">{{ticket.repeated_every_days}} дней</td>
 
         <td class="date" ng-if="filter.tab !== 'ticket-repeaters'">{{ticket.created_at | moment | date:'dd.MM.yyyy HH:mm'}}</td>
-        <td class="date" ng-if="filter.tab === 'ticket-repeaters'">FIXME {{ticket.planned_start}}</td>
+        <td class="date" ng-if="filter.tab === 'ticket-repeaters'">{{ticket.next_start | moment | date:'dd.MM.yyyy HH:mm'}}</td>
 
         <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
         <td class="creator">{{ticket[filter.tab === 'ticket-repeaters' ? 'Initiator' : 'Creator'].username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>

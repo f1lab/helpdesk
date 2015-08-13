@@ -80,10 +80,6 @@ Ticket:
       local: ticket_id
       foreign: user_id
       foreignAlias: ObserverForTickets
-    Repeater:
-      class: TicketRepeater
-      local: repeater_id
-      foreign: id
 
 RefTicketObserver:
   actAs:
