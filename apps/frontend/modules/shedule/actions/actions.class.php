@@ -106,7 +106,7 @@ class sheduleActions extends sfActions
         for ($i = 0; $i < 7; $i++) {
           $element = array_merge($ticket, [
             'planned_start' => date('Y-m-d H:i:s', strtotime('+' . $upper . ' day', strtotime($ticket['planned_start']))),
-            'editable' => false ,
+            // 'editable' => false ,
             'repeated' => 'event-repeated',
           ]);
 
@@ -128,7 +128,7 @@ class sheduleActions extends sfActions
           'event-completed-' . ($ticket['isClosed'] ? 'yes' : 'no'),
           isset($ticket['repeated']) ? $ticket['repeated'] : '',
         ]),
-        'editable' => isset($ticket['editable']) ? $ticket['editable'] : true,
+        // 'editable' => isset($ticket['editable']) ? $ticket['editable'] : true,
         'allDay' => false,
       ];
     }, $result), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

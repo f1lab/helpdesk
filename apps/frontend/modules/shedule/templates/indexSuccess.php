@@ -27,11 +27,11 @@
       // store the Event Object in the DOM element so we can get to it later
       $(this).data('eventObject', eventObject);
       // make the event draggable using jQuery UI
-      $(this).draggable({
-        zIndex: 999,
-        revert: true,      // will cause the event to go back to its
-        revertDuration: 0  //  original position after the drag
-      });
+      // $(this).draggable({
+      //   zIndex: 999,
+      //   revert: true,      // will cause the event to go back to its
+      //   revertDuration: 0  //  original position after the drag
+      // });
     });
 
     var clickHandler = function(event, e) {
@@ -79,7 +79,7 @@
     /* initialize the calendar
     -----------------------------------------------------------------*/
     $('#calendar').fullCalendar({
-      editable: true,
+      editable: false,
       selectable: true,
       selectHelper: true,
       // select: function(start, end, allDay) {
@@ -123,8 +123,8 @@
         week: "Неделя",
         day: "День",
       },
-      resizeble: true,
-      droppable: true, // this allows things to be dropped onto the calendar !!!
+      resizeble: false,
+      droppable: false, // this allows things to be dropped onto the calendar !!!
       events: {
         url: '<?php echo url_for('shedule/eventsource') ?>'
         , data: function() {
