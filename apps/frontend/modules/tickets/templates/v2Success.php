@@ -5,11 +5,11 @@
 
   <div class="btn-toolbar">
     <div class="btn-group">
-      <a href="/frontend_dev.php/tickets/new" class="btn">
+      <a href="<?php echo url_for('tickets/new') ?>" class="btn">
         <i class="icon icon-plus"></i>
         Добавить заявку
       </a>
-      <a href="/frontend_dev.php/ticketRepeater/new" class="btn">
+      <a href="<?php echo url_for('ticketRepeater/new') ?>" class="btn">
         <i class="icon icon-plus"></i>
         Добавить регламентную работу
       </a>
