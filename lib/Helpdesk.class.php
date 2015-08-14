@@ -2,7 +2,8 @@
 
 final class Helpdesk
 {
-  static public final function checkIfImInList(sfGuardUser $me, Doctrine_Collection $usersCollection) {
+  static public final function checkIfImInList(sfGuardUser $me, Doctrine_Collection $usersCollection)
+  {
     foreach ($usersCollection as $user) {
       if ($user->getId() === $me->getId()) {
         return true;
@@ -12,7 +13,8 @@ final class Helpdesk
     return false;
   }
 
-  static public final function formatDuration($duration) {
+  static public final function formatDuration($duration)
+  {
     if (is_string($duration)) {
       $remained = time() - strtotime($duration);
     } else {
@@ -53,7 +55,8 @@ final class Helpdesk
     return implode(', ', $result);
   }
 
-  static public function formatDurationDigital($duration) {
+  static public function formatDurationDigital($duration)
+  {
     if (is_string($duration)) {
       $remained = time() - strtotime($duration);
     } else {
@@ -89,7 +92,8 @@ final class Helpdesk
     return strlen($string) === 2 ? ('00:' . $string) : $string;
   }
 
-  static public final function findMentions($text) {
+  static public final function findMentions($text)
+  {
     preg_match_all('/@([a-zA-Z0-9\.\-_]+)/', $text, $matches);
     $usernames = $matches[1];
 
@@ -105,7 +109,8 @@ final class Helpdesk
     return $users;
   }
 
-  static public final function replaceTicketRepeaterMentionsWithLinks($text) {
+  static public final function replaceTicketRepeaterMentionsWithLinks($text)
+  {
     static $url = null;
     if ($url === null) {
       $url = sfContext::getInstance()->getController()->genUrl('tickets/show?id=', false);
@@ -135,7 +140,8 @@ final class Helpdesk
     }, $text);
   }
 
-  static public final function replaceTicketMentionsWithLinks($text) {
+  static public final function replaceTicketMentionsWithLinks($text)
+  {
     static $url = null;
     if ($url === null) {
       $url = sfContext::getInstance()->getController()->genUrl('tickets/show?id=', false);

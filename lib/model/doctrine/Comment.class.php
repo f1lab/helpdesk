@@ -64,7 +64,8 @@ class Comment extends BaseComment
     }
   }
 
-  public function postInsert($event) {
+  public function postInsert($event)
+  {
     // send message to ticket creator and observers
     if (!$this->getSkipNotification()) {
       // to creator
@@ -84,30 +85,34 @@ class Comment extends BaseComment
 
     // send messages to mentioned users
     $mentions = Helpdesk::findMentions($this->getText());
-    if (count($mentions) > 0) {
-      foreach ($mentions as $mention) {
-        if ($mention->getId() != $this->getCreatedBy() and $mention->getId() != $this->getTicket()->getCreatedBy()) {
-          Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this, 'mention'));
+    foreach ($mentions as $mention) {
+      if ($mention->getId() != $this->getCreatedBy() and $mention->getId() != $this->getTicket()->getCreatedBy()) {
+        Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this, 'mention'));
 
-          $observingAlready = Doctrine_Query::create()
-            ->from('RefTicketObserver ref')
-            ->addWhere('ref.user_id = ?', $mention->getId())
-            ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
-            ->count() !== 0
-          ;
-          if (!$observingAlready) {
-            $observeRecord = RefTicketObserver::createFromArray([
-              'user_id' => $mention->getId(),
-              'ticket_id' => $this->getTicket()->getId(),
-            ]);
+        $observingAlready = Doctrine_Query::create()
+          ->from('RefTicketObserver ref')
+          ->addWhere('ref.user_id = ?', $mention->getId())
+          ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
+          ->count() !== 0
+        ;
+        $isResponsible = Doctrine_Query::create()
+          ->from('RefTicketResponsible ref')
+          ->addWhere('ref.user_id = ?', $mention->getId())
+          ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
+          ->count() !== 0
+        ;
+        if (!$observingAlready and !$isResponsible) {
+          $observeRecord = RefTicketObserver::createFromArray([
+            'user_id' => $mention->getId(),
+            'ticket_id' => $this->getTicket()->getId(),
+          ]);
 
-            // workaround for mentions in comments created from email
-            if (!sfContext::getInstance()->getUser()->getGuardUser()) {
-              $observeRecord->setCreatedBy($this->getCreatedBy());
-            }
-
-            $observeRecord->save();
+          // workaround for mentions in comments created from email
+          if (!sfContext::getInstance()->getUser()->getGuardUser()) {
+            $observeRecord->setCreatedBy($this->getCreatedBy());
           }
+
+          $observeRecord->save();
         }
       }
     }
