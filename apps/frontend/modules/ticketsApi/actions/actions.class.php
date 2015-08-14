@@ -35,8 +35,8 @@ class ticketsApiActions extends sfActions
         ->andWhereIn('r.id', self::$filter['responsible_id'])
       ;
 
-      if (self::$filter['without_periodicals']) {
-        $query->addWhere('t.repeated_every_days = ?', 0);
+      if (self::$filter['without_periodicals'] and explode(' ', $query->getDqlPart('from')[0])[0] === 'Ticket') {
+        $query->addWhere('t.repeater_id is null');
       }
     }
 

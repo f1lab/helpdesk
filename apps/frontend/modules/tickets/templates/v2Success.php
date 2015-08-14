@@ -94,7 +94,7 @@
                 <div class="control-group">
                   <div class="controls">
                     <label class="checkbox">
-                      <input type="checkbox" ng-model="filter.without_periodicals"> Скрыть повторяющиеся работы
+                      <input type="checkbox" ng-model="filter.without_periodicals"> Скрыть заявки по регламентным работам
                     </label>
                   </div>
                 </div>
