@@ -87,6 +87,7 @@ class TicketForm extends BaseTicketForm
         'class' => 'span2',
         'type' => 'date',
       )));
+      $this->setDefault('deadline', date('Y-m-d H:i:s', strtotime('+1 day')));
     } else {
       $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
     }
@@ -116,7 +117,7 @@ class TicketForm extends BaseTicketForm
         'description' => 'Описание',
         'attach' => 'Вложение',
         'repeated_every_days' => 'Повторять заявку каждые',
-        'planned_start' => 'Планируемая дата выполнения',
+        'planned_start' => 'Дата начала выполнения',
         'deadline' => 'Деадлайн',
         'responsibles_list' => 'Ответственные',
         'period_id' => 'Период',
