@@ -102,6 +102,6 @@
     <?php echo $sf_content ?>
   </div>
 
-  <script type="text/coffeescript" src="/js/angular-RepeatedEveryDays.coffee" />
+  <script type="text/coffeescript" src="/js/angular-RepeatedEveryDays.coffee"></script>
 </body>
 </html>
