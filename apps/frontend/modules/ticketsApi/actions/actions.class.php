@@ -226,8 +226,12 @@ class ticketsApiActions extends sfActions
       ->addOrderBy('t.id desc')
     ;
 
-    if ($request->getParameter('of') and true == ($ticket = Doctrine_Core::getTable('Ticket')->find($request->getParameter('of')))) {
-      $query->addWhere('t.company_id = ?', $ticket->getCompanyId());
+    $of = $request->getParameter('of', null);
+    if ($of !== null and true == ($ticket = Doctrine_Core::getTable('Ticket')->find($of))) {
+      $query
+        ->addWhere('t.company_id = ?', $ticket->getCompanyId())
+        ->addWhere('t.id != ?', $of)
+      ;
     }
 
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
