@@ -120,7 +120,13 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('t.Initiator')
       ->leftJoin('t.Responsibles r')
       ->leftJoin('t.Observers o')
-      ->where('t.created_by = ?', $this->getId())
+
+      ->andWhereIn('t.category_id', $seesCategories)
+      ->andWhereIn('t.created_by', $users)
+      ->toGroup()
+      ->orWhereIn('t.company_id', $companies)
+      ->endGroup()
+
       ->orderBy('t.created_at desc')
     ;
 

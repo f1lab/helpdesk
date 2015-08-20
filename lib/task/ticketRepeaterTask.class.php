@@ -44,6 +44,7 @@ EOF;
 
       $isTicketAlreadyCreated = Doctrine_Query::create()
         ->from('Ticket t')
+        ->addWhere('t.repeater_id = ?', $repeater->getId())
         ->addWhere('t.planned_start = ?', $repeater->getNextStart())
         ->count() === 1
       ;

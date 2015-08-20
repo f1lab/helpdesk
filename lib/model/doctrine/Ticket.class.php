@@ -50,22 +50,8 @@ class Ticket extends BaseTicket
     }
   }
 
-  public function preInsert($event)
-  {
-    if ($event->getInvoker()->getPlannedStart() === null and $event->getInvoker()->getRepeatedEveryDays() > 0) {
-      $this->setPlannedStart(date('Y-m-d H:i:s'));
-    }
-  }
-
-  public function preUpdate($event)
-  {
-    if ($event->getInvoker()->getPlannedStart() === null and $event->getInvoker()->getRepeatedEveryDays() > 0) {
-      $this->setPlannedStart(date('Y-m-d H:i:s'));
-    }
-  }
-
   public function postInsert($event) {
-    $company = $this->getCreator()->getGroups()->getFirst();
+    $company = $this->getToCompany();
 
     // notify it-admins
     if ($company) {
