@@ -76,7 +76,7 @@ class sheduleActions extends sfActions
   {
     $query = Doctrine_Query::create()
       ->from('Ticket t')
-      ->leftJoin('t.ToCompany c')
+      ->leftJoin('t.Company c')
       ->leftJoin('t.Responsibles r')
       ->andWhere('t.isClosed = ?', false)
       ->andWhere('(t.planned_start >= ? and t.planned_start <= ?) or t.repeated_every_days > 0', [
@@ -121,7 +121,7 @@ class sheduleActions extends sfActions
     die(json_encode(array_map(function($ticket) {
       return [
         'id' => $ticket['id'],
-        'title' => (isset($ticket['company_id']) ? $ticket['ToCompany']['name'] : 'Без компании') . ' / ' . $ticket['name'],
+        'title' => (isset($ticket['company_id']) ? $ticket['Company']['name'] : 'Без компании') . ' / ' . $ticket['name'],
         'start' => $ticket['planned_start'],
         'end' => date('Y-m-d H:i:s', strtotime('+ 1 hour', strtotime($ticket['planned_start']))),
         'className' => join(' ', [

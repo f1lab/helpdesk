@@ -161,13 +161,13 @@
           </a>
         </th>
         <th class="creator">
-          <a href="" ng-click="orderBy(['Creator.username', 'ToCompany.name'])" ng-if="filter.tab !== 'ticket-repeaters'">
+          <a href="" ng-click="orderBy(['Creator.username', 'Company.name'])" ng-if="filter.tab !== 'ticket-repeaters'">
             Пользователь@Компания
-            <span ng-show="tableSorter.orderByField.toString() == ['Creator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField.toString() == ['Creator.username', 'Company.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
-          <a href="" ng-click="orderBy(['Initiator.username', 'ToCompany.name'])" ng-if="filter.tab === 'ticket-repeaters'">
+          <a href="" ng-click="orderBy(['Initiator.username', 'Company.name'])" ng-if="filter.tab === 'ticket-repeaters'">
             Инициатор@Компания
-            <span ng-show="tableSorter.orderByField.toString() == ['Initiator.username', 'ToCompany.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
+            <span ng-show="tableSorter.orderByField.toString() == ['Initiator.username', 'Company.name'].toString()"><span ng-show="!tableSorter.reverseSort">^</span><span ng-show="tableSorter.reverseSort">v</span></span>
           </a>
         </th>
         <th class="state">Статус</th>
@@ -190,7 +190,7 @@
         </td>
 
         <td class="category">{{ticket.Category ? ticket.Category.name : ''}}</td>
-        <td class="creator">{{ticket[filter.tab === 'ticket-repeaters' ? 'Initiator' : 'Creator'].username}}@{{ticket.ToCompany ? ticket.ToCompany.name : '—'}}</td>
+        <td class="creator">{{ticket[filter.tab === 'ticket-repeaters' ? 'Initiator' : 'Creator'].username}}@{{ticket.Company ? ticket.Company.name : '—'}}</td>
         <td class="state">
           <div ng-if="filter.tab !== 'ticket-repeaters'">
             <span ng-if="ticket.CommentsAgain.length === 0">

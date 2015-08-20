@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4>Заявка №<?php echo $ticket->getId() ?> от компании «<?php echo $ticket->getToCompany() ? $ticket->getToCompany()->getName() : 'Без компании' ?>»</h4>
+  <h4>Заявка №<?php echo $ticket->getId() ?> от компании «<?php echo $ticket->getCompany() ? $ticket->getCompany()->getName() : 'Без компании' ?>»</h4>
 </div>
 
 <div class="modal-body">

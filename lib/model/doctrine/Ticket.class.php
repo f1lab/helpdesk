@@ -51,7 +51,7 @@ class Ticket extends BaseTicket
   }
 
   public function postInsert($event) {
-    $company = $this->getToCompany();
+    $company = $this->getCompany();
 
     // notify it-admins
     if ($company) {

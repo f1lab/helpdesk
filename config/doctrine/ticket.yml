@@ -67,7 +67,7 @@ Ticket:
       class: Periods
       local: period_id
       foreign: id
-    ToCompany:
+    Company:
       class: sfGuardGroup
       local: company_id
       foreign: id

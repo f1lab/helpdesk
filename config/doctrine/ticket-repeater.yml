@@ -46,7 +46,7 @@ TicketRepeater:
       notnull: true
 
   relations:
-    ToCompany:
+    Company:
       class: sfGuardGroup
       local: company_id
       foreign: id

@@ -37,8 +37,8 @@
     $remotelyClosed = 0; $deadlineForResponsibleOk = 0; $deadlineForApproveOk = 0; $deadlineOk = 0;
 
     // deadline settings
-    $settingResponsibleDeadline = (int)$tickets->getFirst()->getToCompany()->getDeadlineForSettingResponsible();
-    $approvingDeadline = (int)$tickets->getFirst()->getToCompany()->getDeadlineForApproving();
+    $settingResponsibleDeadline = (int)$tickets->getFirst()->getCompany()->getDeadlineForSettingResponsible();
+    $approvingDeadline = (int)$tickets->getFirst()->getCompany()->getDeadlineForApproving();
   ?>
   <div class="alert alert-info">
     <h4>Регламентированные сроки</h4>

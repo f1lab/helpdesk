@@ -124,7 +124,7 @@ class reportActions extends sfActions
           ->from('Ticket t')
           ->leftJoin('t.Creator')
           ->leftJoin('t.Category')
-          ->leftJoin('t.ToCompany')
+          ->leftJoin('t.Company')
           ->leftJoin('t.RefTicketResponsible ref')
           ->leftJoin('ref.Creator')
           ->leftJoin('ref.User')
