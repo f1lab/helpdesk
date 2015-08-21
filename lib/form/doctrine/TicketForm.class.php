@@ -87,7 +87,6 @@ class TicketForm extends BaseTicketForm
         'class' => 'span2',
         'type' => 'date',
       )));
-      $this->setDefault('deadline', date('Y-m-d H:i:s', strtotime('+1 day')));
     } else {
       $this->getWidgetSchema()->offsetSet('deadline', new sfWidgetFormInputHidden());
     }

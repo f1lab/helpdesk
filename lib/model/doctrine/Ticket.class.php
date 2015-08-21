@@ -50,6 +50,13 @@ class Ticket extends BaseTicket
     }
   }
 
+  public function preInsert($event)
+  {
+    if ($this->getDeadline() === null) {
+      $this->setDeadline(date('Y-m-d H:i:s', strtotime('+1 day')));
+    }
+  }
+
   public function postInsert($event) {
     $company = $this->getCompany();
 
