@@ -171,6 +171,7 @@
           </a>
         </th>
         <th class="state">Статус</th>
+        <th class="comments"></th>
       </tr>
     </thead>
     <tbody>
@@ -217,6 +218,11 @@
               <li ng-repeat="observer in ticket.Observers">{{observer.username}}</li>
             </ul></div>
           </div>
+        </td>
+        <td class="comments">
+          <span ng-if="filter.tab !== 'ticket-repeaters'" class="badge" ng-class="{ 'badge-warning': ticket.ReadedComments.length !== ticket.Comments.length }">
+            {{ticket.Comments.length}}
+          </span>
         </td>
       </tr>
     </tbody>
