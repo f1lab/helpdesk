@@ -242,7 +242,7 @@
     </div>
 
     <div class="btn-group" ng-controller="TicketShowPageController">
-      <?php if ($sf_user->hasCredential('can mark tickets as duplicates')): ?>
+      <?php if ($sf_user->hasCredential('can mark tickets as duplicates') and !$ticket->getIsClosed()): ?>
         <button class="btn" ng-click="closeAsDup(<?php echo $ticket->getId() ?>)">Закрыть как дубликат</button>
       <?php endif ?>
 
@@ -315,7 +315,7 @@
             <div class="control-group">
               <label class="control-label" for="name">Исходная заявка</label>
               <div class="controls">
-                <select name="name" id="name" ng-options="ticket.id as (ticket.id + ': ' + ticket.name) for ticket in tickets" ng-model="parentId" class="fluid">
+                <select name="name" id="name" ng-options="ticket.id as (ticket.id + ': ' + ticket.name) for ticket in tickets" ng-model="parentId" class="fluid" required>
                   <option value="">Выберите</option>
                 </select>
               </div>
@@ -323,7 +323,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="confirmClose(parentId)">Закрыть</button>
+          <button type="button" class="btn btn-primary" ng-click="confirmClose(parentId, $event)">Закрыть</button>
           <button type="button" class="btn btn-default" ng-click="$hide()">Отмена</button>
         </div>
       </div>

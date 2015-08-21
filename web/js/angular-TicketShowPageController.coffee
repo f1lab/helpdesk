@@ -35,10 +35,11 @@ app.controller 'TicketShowPageController', [
         if statusCode > 0
           $scope.error = true
 
-    $scope.confirmClose = (parentId) ->
+    $scope.confirmClose = (parentId, event) ->
       return if not parentId > 0
 
-      console.log parentId
+      target = angular.element event.target
+      target.attr 'disabled', true
 
       get = $http.get API.closeAsDuplicate, {
         params:
@@ -47,7 +48,9 @@ app.controller 'TicketShowPageController', [
       }
 
       get.success -> window.location.reload()
-      get.error -> $scope.error = true
+      get.error ->
+        $scope.error = true
+        target.attr 'disabled', false
 
     $scope.iAmNotResponsibleForThis = (ticketId) ->
       $scope.ticketId = ticketId
