@@ -28,6 +28,7 @@ EOF;
     $this->logSection('repeater', 'Getting repeaters');
     $repeaters = Doctrine_Query::create()
       ->from('TicketRepeater r')
+      ->addWhere('r.deleted_at is null')
       ->addWhere('r.isClosed = ?', false)
       ->addWhere('r.next_start <= ?', date('Y-m-d H:i:s'))
       ->leftJoin('r.Responsibles')
@@ -75,6 +76,7 @@ EOF;
           return $user['id'];
         }, $repeater->getObservers()->toArray()));
         $ticket->save();
+
         $this->logSection('repeater', sprintf('Created ticket #%d for repeater #%d', $ticket->getId(), $repeater->getId()));
 
         $comment = Comment::createFromArray([
