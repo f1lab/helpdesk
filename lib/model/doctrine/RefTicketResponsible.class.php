@@ -21,6 +21,12 @@ class RefTicketResponsible extends BaseRefTicketResponsible
       Sms::send([$responsible->getPhone()], 'Вы были назначены ответственным за выполнение заявки ' . $this->getTicketId());
     }
 
+    // send email to responsible
+    if ($responsible and $responsible->getEmailAddress()) {
+      Email::send($responsible->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::addResponsible($this->getTicket()));
+    }
+
+
     // add comment to ticket
     if ($responsible) {
       $comment = Comment::createFromArray([
@@ -38,6 +44,7 @@ class RefTicketResponsible extends BaseRefTicketResponsible
   {
     $parameters = $event->getQuery()->getParams()['where'];
     $ticketId = array_shift($parameters);
+    $ticket = Doctrine_Core::getTable('Ticket')->find($ticketId);
     $usersIds = $parameters;
 
     foreach ($usersIds as $userId) {
@@ -51,8 +58,12 @@ class RefTicketResponsible extends BaseRefTicketResponsible
           , 'text' => 'Убрал из списка ответственных ' . $responsible
           , 'skip_notification' => true
         ]);
-
         $comment->save();
+
+        // send email to responsible
+        if ($responsible and $responsible->getEmailAddress()) {
+          Email::send($responsible->getEmailAddress(), Email::generateSubject($ticket), EmailTemplate::removeResponsible($ticket));
+        }
       }
     }
   }
@@ -66,7 +77,11 @@ class RefTicketResponsible extends BaseRefTicketResponsible
       , 'text' => 'Убрал из списка ответственных ' . $responsible
       , 'skip_notification' => true
     ]);
-
     $comment->save();
+
+    // send email to responsible
+    if ($responsible and $responsible->getEmailAddress()) {
+      Email::send($responsible->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::removeResponsible($this->getTicket()));
+    }
   }
 }
