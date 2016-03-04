@@ -2,7 +2,7 @@
 
 class Email
 {
-  static public function send($to, $subject, $text) {
+  static public function send($to, $subject, $text, array $files = []) {
     $enabled = sfConfig::get('app_mailgun_enabled', false);
     $key = sfConfig::get('app_mailgun_key', null);
     $domain = sfConfig::get('app_mailgun_domain', null);
@@ -29,7 +29,7 @@ class Email
         'to'      => $to,
         'subject' => $subject,
         'text'    => $text,
-      ]);
+      ], ['attachment' => $files]);
     } catch (Exception $e) {
       file_put_contents(
         sfConfig::get('sf_upload_dir') . DIRECTORY_SEPARATOR . 'email-bugs' . DIRECTORY_SEPARATOR . 'email@' . time()

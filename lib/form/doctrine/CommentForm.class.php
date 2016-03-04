@@ -44,7 +44,7 @@ class CommentForm extends BaseCommentForm
 
     $this->validatorSchema['attachment'] = new sfValidatorFile(array(
       'required'   => false,
-      'path'       => sfConfig::get('sf_upload_dir').'/comment-attachments',
+      'path'       => Comment::getAttachmentsPath(),
     ));
   }
 }

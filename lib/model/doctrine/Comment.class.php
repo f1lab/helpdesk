@@ -12,6 +12,11 @@
  */
 class Comment extends BaseComment
 {
+  public static function getAttachmentsPath()
+  {
+    return sfConfig::get('sf_upload_dir').'/comment-attachments';
+  }
+
   public function isRead() {
     $userId = sfContext::getInstance()->getUser()->getGuardUser()->getId();
 
@@ -71,14 +76,14 @@ class Comment extends BaseComment
       // to creator
       if ($this->getCreatedBy() != $this->getTicket()->getCreatedBy()) {
         $to = $this->getTicket()->getRealSender() ?: $this->getTicket()->getCreator()->getEmailAddress();
-        Email::send($to, Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
+        Email::send($to, Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this), $this->getAttachmentsForEmail());
       }
 
       // to observers and responsibles
       $usersToNotify = $this->getTicket()->getResponsiblesAndObserversForNotification();
       foreach ($usersToNotify as $user) {
         if ($user->getId() != $this->getCreatedBy() and $user->getId() != $this->getTicket()->getCreatedBy()) {
-          Email::send($user->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this));
+          Email::send($user->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this), $this->getAttachmentsForEmail());
         }
       }
     }
@@ -87,7 +92,7 @@ class Comment extends BaseComment
     $mentions = Helpdesk::findMentions($this->getText());
     foreach ($mentions as $mention) {
       if ($mention->getId() != $this->getCreatedBy() and $mention->getId() != $this->getTicket()->getCreatedBy()) {
-        Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this, 'mention'));
+        Email::send($mention->getEmailAddress(), Email::generateSubject($this->getTicket()), EmailTemplate::newComment($this, 'mention'), $this->getAttachmentsForEmail());
 
         $observingAlready = Doctrine_Query::create()
           ->from('RefTicketObserver ref')
@@ -127,5 +132,10 @@ class Comment extends BaseComment
     ];
 
     return $states[ $this->getChangedTicketStateTo() ];
+  }
+
+  protected function getAttachmentsForEmail()
+  {
+    return $this->getAttachment() ? [static::getAttachmentsPath() . DIRECTORY_SEPARATOR . $this->getAttachment()] : [];
   }
 }
