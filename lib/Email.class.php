@@ -18,17 +18,24 @@ class Email
 
     $mgClient = new Mailgun\Mailgun($key);
 
-    if (is_array($to)) {
-      $to = implode(',', $to);
+    if (!is_array($to)) {
+      $to = [$to];
     }
+
+    $toImploded = implode(',', $to);
+    $variables = array_combine($to, array_map(function($email) {
+      return ['md5' => md5($email)];
+    }, $to));
+    $variablesJson = json_encode($variables);
 
     $result = false;
     try {
       $result = $mgClient->sendMessage($domain, [
         'from'    => $from,
-        'to'      => $to,
+        'to'      => $toImploded,
         'subject' => $subject,
         'text'    => $text,
+        'recipient-variables' => $variablesJson,
       ], ['attachment' => $files]);
     } catch (Exception $e) {
       file_put_contents(
