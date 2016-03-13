@@ -12,6 +12,11 @@
  */
 class Ticket extends BaseTicket
 {
+  public static function getAttachmentsPath()
+  {
+    return sfConfig::get('sf_upload_dir').'/ticket-attachments';
+  }
+
   public function getCloser() {
     // just return if CommentsForCloser is joined
     if ($this->hasReference('CommentsForCloser')) {
@@ -89,7 +94,7 @@ class Ticket extends BaseTicket
 
         $subject = Email::generateSubject($this);
         $text = EmailTemplate::newTicketForCompany($this);
-        Email::send($emails, $subject, $text);
+        Email::send($emails, $subject, $text, $this->getAttachmentsForEmail());
       }
     }
 
@@ -139,5 +144,10 @@ class Ticket extends BaseTicket
     }
 
     return $result;
+  }
+
+  protected function getAttachmentsForEmail()
+  {
+    return $this->getAttach() ? [static::getAttachmentsPath() . DIRECTORY_SEPARATOR . $this->getAttach()] : [];
   }
 }

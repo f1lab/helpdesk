@@ -128,7 +128,7 @@ class TicketForm extends BaseTicketForm
 
     $this->validatorSchema['attach'] = new sfValidatorFile(array(
       'required'   => false,
-      'path'       => sfConfig::get('sf_upload_dir').'/ticket-attachments',
+      'path'       => Ticket::getAttachmentsPath(),
     ));
   }
 }
