@@ -62,11 +62,6 @@ class Ticket extends BaseTicket
 
     // notify it-admins
     if ($company) {
-      $subject = Email::generateSubject($this);
-      $text = 'Заявка от компании ' . $company->getName() . ', пользователь ' . $this->getCreator()->getUsername() . PHP_EOL
-            . 'http://helpdesk.f1lab.ru/tickets/' . $this->getId()
-      ;
-
       // sms
       if (true == ($notify = $company->getNotifySms())) {
         $phones = [];
@@ -76,6 +71,10 @@ class Ticket extends BaseTicket
           }
         }
 
+        $text = 'Заявка от компании ' . $company->getName(). ', пользователь '
+                . $this->getCreator()->getUsername() . PHP_EOL
+                . 'http://helpdesk.f1lab.ru/tickets/' . $this->getId()
+        ;
         Sms::send($phones, $text);
       }
 
@@ -88,6 +87,8 @@ class Ticket extends BaseTicket
           }
         }
 
+        $subject = Email::generateSubject($this);
+        $text = EmailTemplate::newTicketForCompany($this);
         Email::send($emails, $subject, $text);
       }
     }

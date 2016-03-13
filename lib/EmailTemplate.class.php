@@ -23,6 +23,18 @@ final class EmailTemplate {
     return $message;
   }
 
+  static public function newTicketForCompany($ticket) {
+    $message = '
+В системе зарегистрирована заявка № ' . $ticket->getId() . '
+Компания: ' . $ticket->getCompany() . '
+Автор: ' . $ticket->getCreator() . '
+Время создания: ' . date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) . '
+Тема: ' . $ticket->getName() . '
+Описание: ' . str_replace(['--', '<br/>'], '', $ticket->getDescription()) . '
+' . self::getFooter($ticket);
+    return $message;
+  }
+
   static public function newComment($comment, $reason = null) {
     if ($comment->getChangedTicketStateTo() === 'applied') {
       $text = '';
