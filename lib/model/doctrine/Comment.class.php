@@ -121,6 +121,28 @@ class Comment extends BaseComment
         }
       }
     }
+
+    // add to observers
+    if (
+      $this->getCreatedBy() != $this->getTicket()->getCreatedBy()
+      && true == ($user = sfContext::getInstance()->getUser()->getGuardUser())
+    ) {
+      $observingAlready = Doctrine_Query::create()
+        ->from('RefTicketObserver ref')
+        ->addWhere('ref.user_id = ?', $user->getId())
+        ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
+        ->count() !== 0
+      ;
+
+      if (!$observingAlready) {
+        // add to observers
+        $observeRecord = RefTicketObserver::createFromArray([
+          'user_id' => $user->getId(),
+          'ticket_id' => $this->getTicket()->getId(),
+        ]);
+        $observeRecord->save();
+      }
+    }
   }
 
   public function getChangedTicketStateToLabel()
