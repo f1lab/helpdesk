@@ -133,8 +133,14 @@ class Comment extends BaseComment
         ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
         ->count() !== 0
       ;
+      $isResponsible = Doctrine_Query::create()
+          ->from('RefTicketResponsible ref')
+          ->addWhere('ref.user_id = ?', $user->getId())
+          ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
+          ->count() !== 0
+        ;
 
-      if (!$observingAlready) {
+      if (!$observingAlready and !$isResponsible) {
         // add to observers
         $observeRecord = RefTicketObserver::createFromArray([
           'user_id' => $user->getId(),
