@@ -62,26 +62,32 @@
   </div>
 
   <?php if ($isRepeater): ?>
-    <table class="table tickets20">
-      <thead>
-        <tr>
-          <th class="id">№</th>
-          <th class="name">Тема</th>
-          <th class="date">Дата выполнения</th>
-        </tr>
-      </thead>
-      <tbody><?php foreach ($ticket->getTickets() as $ticket_): ?>
-        <tr>
-          <td class="id"><?php echo $ticket_->getId() ?></td>
-          <td class="name">
-            <a href="<?php echo url_for('tickets/show?id=' . $ticket_->getId()) ?>">
-              <?php echo $ticket_->getName() ?>
-            </a>
-          </td>
-          <td class="date"><?php echo $ticket_->getPlannedStart() ?></td>
-        </tr>
-      <?php endforeach ?></tbody>
-    </table>
+    <?php if (count($ticket->getTickets())): ?>
+      <table class="table tickets20">
+        <thead>
+          <tr>
+            <th class="id">№</th>
+            <th class="name">Тема</th>
+            <th class="date">Планируемая дата выполнения</th>
+            <th>Выполнено?</th>
+          </tr>
+        </thead>
+        <tbody><?php foreach ($ticket->getTickets() as $ticket_): ?>
+          <tr>
+            <td class="id"><?php echo $ticket_->getId() ?></td>
+            <td class="name">
+              <a href="<?php echo url_for('tickets/show?id=' . $ticket_->getId()) ?>">
+                <?php echo $ticket_->getName() ?>
+              </a>
+            </td>
+            <td class="date"><?php echo $ticket_->getPlannedStart() ?></td>
+            <td><span class="icon icon-<?php echo $ticket_->getIsClosed() ? 'ok' : 'remove' ?>"></span></td>
+          </tr>
+        <?php endforeach ?></tbody>
+      </table>
+    <?php else: ?>
+      <div class="alert alert-info">Нет заявок для этой регламентной работы</div>
+    <?php endif ?>
   <?php endif ?>
 </div>
 

@@ -116,32 +116,24 @@ class Comment extends BaseComment
           $observeRecord = RefTicketObserver::createFromArray([
             'user_id' => $mention->getId(),
             'ticket_id' => $this->getTicket()->getId(),
+            'created_by' => $this->getCurrentUserIdOrCreatedBy(),
           ]);
-
-          // workaround for mentions in comments created from email
-          if (!sfContext::getInstance()->getUser()->getGuardUser()) {
-            $observeRecord->setCreatedBy($this->getCreatedBy());
-          }
-
           $observeRecord->save();
         }
       }
     }
 
     // add to observers
-    if (
-      $this->getCreatedBy() != $this->getTicket()->getCreatedBy()
-      && true == ($user = sfContext::getInstance()->getUser()->getGuardUser())
-    ) {
+    if ($this->getCreatedBy() != $this->getTicket()->getCreatedBy()) {
       $observingAlready = Doctrine_Query::create()
         ->from('RefTicketObserver ref')
-        ->addWhere('ref.user_id = ?', $user->getId())
+        ->addWhere('ref.user_id = ?', $this->getCurrentUserIdOrCreatedBy())
         ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
         ->count() !== 0
       ;
       $isResponsible = Doctrine_Query::create()
           ->from('RefTicketResponsible ref')
-          ->addWhere('ref.user_id = ?', $user->getId())
+          ->addWhere('ref.user_id = ?', $this->getCurrentUserIdOrCreatedBy())
           ->addWhere('ref.ticket_id = ?', $this->getTicket()->getId())
           ->count() !== 0
         ;
@@ -149,7 +141,7 @@ class Comment extends BaseComment
       if (!$observingAlready and !$isResponsible) {
         // add to observers
         $observeRecord = RefTicketObserver::createFromArray([
-          'user_id' => $user->getId(),
+          'user_id' => $this->getCurrentUserIdOrCreatedBy(),
           'ticket_id' => $this->getTicket()->getId(),
         ]);
         $observeRecord->save();
@@ -171,5 +163,14 @@ class Comment extends BaseComment
   protected function getAttachmentsForEmail()
   {
     return $this->getAttachment() ? [static::getAttachmentsPath() . DIRECTORY_SEPARATOR . $this->getAttachment()] : [];
+  }
+
+  protected function getCurrentUserIdOrCreatedBy()
+  {
+    if (sfContext::hasInstance() && true == ($user = sfContext::getInstance()->getUser()->getGuardUser())) {
+      return $user->getId();
+    } else {
+      return $this->getCreatedBy();
+    }
   }
 }

@@ -78,8 +78,10 @@ class ticketsActions extends sfActions
     } else {
       $this->ticket = Doctrine_Query::create()
         ->from('TicketRepeater t')
+        ->leftJoin('t.Tickets tt')
         ->leftJoin('t.Creator')
         ->where('t.id = ?', $request->getParameter('id'))
+        ->addOrderBy('tt.id desc')
         ->fetchOne()
       ;
       $this->forward404Unless($this->ticket);
