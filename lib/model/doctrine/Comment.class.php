@@ -17,6 +17,8 @@ class Comment extends BaseComment
     return sfConfig::get('sf_upload_dir').'/comment-attachments';
   }
 
+  public $skipPreInsertHook = false;
+
   public function isRead() {
     $userId = sfContext::getInstance()->getUser()->getGuardUser()->getId();
 
@@ -41,6 +43,10 @@ class Comment extends BaseComment
   }
 
   public function preInsert($event) {
+    if ($this->skipPreInsertHook) {
+      return;
+    }
+
     $states = [0 => 'opened', 1 => 'closed'];
     $statesRu = ['открыта' => 'opened', 'закрыта' => 'closed'];
 
