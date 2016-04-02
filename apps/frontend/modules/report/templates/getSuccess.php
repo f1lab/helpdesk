@@ -83,7 +83,7 @@
         $deadlineForApproveOk += 1;
       }
 
-      $deadlineTime = strtotime($closer->getCreatedAt()) - strtotime($ticket->getCreatedAt());
+      $deadlineTime = $closer ? (strtotime($closer->getCreatedAt()) - strtotime($ticket->getCreatedAt())) : false;
       if (
         $ticket->getDeadline() === null
         or !$closer
