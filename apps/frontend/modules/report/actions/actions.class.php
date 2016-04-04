@@ -54,7 +54,7 @@ class reportActions extends sfActions
           $query->addWhere('t.created_at <= ?', (new DateTime($this->form->getValue('to')))->modify('+1 day')->format('Y-m-d'));
         }
       } else {
-        $query->addWhere('t.created_at <= ?', (new DateTime($this->form->getValue('to') ?: $this->form->getValue('from')))->modify('+1 day')->format('Y-m-d'));
+        $query->addWhere('t.created_at <= ?', (new DateTime($this->form->getValue('from')))->modify('+1 day')->format('Y-m-d'));
         if ($closedType === 'closed') {
           $query->addWhere('closer.created_at >= ?', $this->form->getValue('from'));
           $query->addWhere('closer.created_at <= ?', (new DateTime($this->form->getValue('to')))->modify('+1 day')->format('Y-m-d'));
