@@ -42,6 +42,10 @@ class ticketsApiActions extends sfActions
 
     $query->addWhere('t.isClosed = ?', self::$filter['enabled'] ? self::$filter['closed'] : false  );
 
+    if (trim(self::$filter['name'])) {
+      $query->addWhere('t.name like ?', '%' . addcslashes(trim(self::$filter['name']), "%_") . '%');
+    }
+
     return $query;
   }
 

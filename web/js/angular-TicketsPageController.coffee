@@ -19,6 +19,7 @@ app.controller 'TicketsPageController', [
     $scope.filterSelects = selectsOptions
 
     $scope.filter = $sessionStorage.$default
+      name: ''
       enabled: false
       tab: null
       closed: false

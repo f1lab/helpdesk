@@ -33,6 +33,13 @@
       <div id="collapseOne" class="accordion-body collapse" ng-class="{ in: filter.enabled }">
         <div class="accordion-inner">
           <form action="" class="form-horizontal" style="margin-bottom: 0;">
+            <div class="control-group">
+              <label class="control-label">Тема</label>
+              <div class="controls">
+                <input type="text" ng-model="filter.name" class="input-block-level" style="max-width: 900px">
+              </div>
+            </div>
+
             <div class="row">
               <div class="span6">
                 <div class="control-group">
