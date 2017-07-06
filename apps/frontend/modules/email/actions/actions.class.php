@@ -12,7 +12,10 @@ class emailActions extends sfActions
 {
   public function executePost(sfWebRequest $request) {
     // drop self sent emails
-    if ($request->getParameter('sender') === 'support@helpdesk.f1lab.ru') {
+    if (
+      $request->getParameter('sender') === 'support@helpdesk.f1lab.ru'
+      || $request->getParameter('sender') === 'helpdesk@f1lab.ru'
+    ) {
       die('dropped self sent email');
     }
 
