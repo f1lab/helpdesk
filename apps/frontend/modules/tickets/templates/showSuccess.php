@@ -1,4 +1,5 @@
 <?php
+  slot('title', 'HD#' . $ticket->getId() . ': ' . $ticket->getName());
   use_helper('Date');
 
   // редактировать, закрывать и переокрывать тикет может его создатель, обладатель прав или it-admin
