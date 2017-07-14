@@ -25,13 +25,11 @@ final class EmailTemplate {
 
   static public function newTicketForCompany($ticket) {
     $message = '
-В системе зарегистрирована заявка № ' . $ticket->getId() . '
+Зарегистрирована заявка № ' . $ticket->getId() . '
 Компания: ' . $ticket->getCompany() . '
 Автор: ' . $ticket->getCreator() . '
-Время создания: ' . date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) . '
-Тема: ' . $ticket->getName() . '
-Описание: ' . str_replace(['--', '<br/>'], '', $ticket->getDescription()) . '
-' . self::getFooter($ticket);
+Ссылка: http://helpdesk.f1lab.ru/tickets/' . $ticket->getId() . '
+' ;
     return $message;
   }
 

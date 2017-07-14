@@ -55,6 +55,7 @@ class emailActions extends sfActions
           $ticket->setIsClosed(false)->save();
         }
 
+        $comment->skipPreInsertHook = true;
         $comment->save();
         $result[] = 'comment created';
       }
