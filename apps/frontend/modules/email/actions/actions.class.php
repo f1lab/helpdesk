@@ -12,7 +12,10 @@ class emailActions extends sfActions
 {
   public function executePost(sfWebRequest $request) {
     // drop self sent emails
-    if ($request->getParameter('sender') === 'support@helpdesk.f1lab.ru') {
+    if (
+      $request->getParameter('sender') === 'support@helpdesk.f1lab.ru'
+      || $request->getParameter('sender') === 'helpdesk@f1lab.ru'
+    ) {
       die('dropped self sent email');
     }
 
@@ -63,7 +66,7 @@ class emailActions extends sfActions
       $ticket = Ticket::createFromArray([
         'name' => $subject
         , 'company_id' => $from && $from->getGroups() && $from->getGroups()->getFirst() ? $from->getGroups()->getFirst() : 1
-        , 'description' => str_replace("\n", "<br/>\n", $request->getParameter('body-plain'))
+        , 'description' => $request->getParameter('body-html') ?: str_replace("\n", "<br/>\n", $request->getParameter('body-plain'))
         , 'created_by' => $from ? $from->getId() : 82
         , 'real_sender' => $from ? null : $request->getParameter('sender')
       ]);
