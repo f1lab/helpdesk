@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <?php include_http_metas() ?>
   <?php include_metas() ?>
-  <?php include_title() ?>
+  <title><?php echo get_slot('title') ?></title>
 
   <?php include_stylesheets() ?>
 
