@@ -17,7 +17,7 @@ final class EmailTemplate {
 В системе зарегистрирована заявка № ' . $ticket->getId() . '
 Время создания: ' . date('d.m.Y H:i:s', strtotime($ticket->getCreatedAt())) . '
 Тема: ' . $ticket->getName() . '
-Описание: ' . str_replace(['--', '<br/>'], '', $ticket->getDescription()) . '
+Описание: ' . str_replace(['--', '<br/>'], '', strip_tags($ticket->getDescription())) . '
 
 В ближайшее время Заявка будет рассмотрена!' . self::getFooter($ticket);
     return $message;
