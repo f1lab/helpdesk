@@ -16,6 +16,12 @@ sfGuardGroup:
       type: integer
       default: 0
       notnull: true
+    working_hours_from: # рабочее время с
+      type: string
+      notnull: false
+    working_hours_to: # рабочее время до
+      type: string
+      notnull: false
   relations:
     Responsibles:
       class: sfGuardUser
