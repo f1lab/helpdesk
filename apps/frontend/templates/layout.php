@@ -68,8 +68,14 @@
             <?php endif ?>
 
             <?php if ($sf_user->hasCredential('can view report')): ?>
-              <li <?php if ('report' == $sf_context->getModuleName()): ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('report/index') ?>">Отчёт</a>
+              <li <?php if ('report' == $sf_context->getModuleName() && 'works' !== $sf_context->getActionName()): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('report/index') ?>">Отчёт по заявкам</a>
+              </li>
+            <?php endif ?>
+
+            <?php if ($sf_user->hasCredential('can view report')): ?>
+              <li <?php if ('report' == $sf_context->getModuleName() && 'works' === $sf_context->getActionName()): ?> class="active"<?php endif ?>>
+                <a href="<?php echo url_for('report/works') ?>">Отчёт по работам</a>
               </li>
             <?php endif ?>
           </ul>

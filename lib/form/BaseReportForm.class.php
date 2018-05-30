@@ -1,6 +1,6 @@
 <?php
 
-class ReportForm extends sfFormSymfony
+class BaseReportForm extends sfFormSymfony
 {
   public function configure()
   {
@@ -21,15 +21,6 @@ class ReportForm extends sfFormSymfony
     ;
 
     $this->getWidgetSchema()
-      ->offsetSet('type', new sfWidgetFormChoice([
-        'label' => 'Тип отчёта',
-        'choices' => [
-          'createdIn+closed' => 'Закрытые заявки, созданные в указанный период',
-          'createdIn+notClosed' => 'Открытые заявки, созданные в указанный период',
-          'createdBefore+closed' => 'Созданные ранее указанного периода и закрытые в указанный',
-          'createdBefore+notClosed' => 'Созданные ранее указанного периода и до сих пор не закрытые',
-        ],
-      ], ['class' => 'span6']))
       ->offsetSet('from', new sfWidgetFormBootstrapDate([
         'label' => 'Период',
       ], [
@@ -66,23 +57,10 @@ class ReportForm extends sfFormSymfony
           ->addWhere('type = ?', 'it-admin')
       ), ['class' => 'chzn-select']))
 
-      ->offsetSet('headers_drawer', new sfWidgetFormChoice([
-        'label' => ' ',
-        'choices' => [
-          0 => 'Не повторять заголовки',
-          15 => 'Повторить каждые 15 строк',
-          30 => 'Повторить каждые 50 строк',
-          60 => 'Повторить каждые 50 строк',
-        ],
-      ]))
-
       ->setNameFormat('filter[%s]')
     ;
 
     $this->getValidatorSchema()
-      ->offsetSet('type', new sfValidatorPass(array(
-        'required' => true,
-      )))
       ->offsetSet('from', new sfValidatorDate(array(
         'required' => false,
       )))
@@ -104,7 +82,6 @@ class ReportForm extends sfFormSymfony
         'required' => false,
         'multiple' => true,
       )))
-      ->offsetSet('headers_drawer', new sfValidatorPass())
     ;
   }
 }

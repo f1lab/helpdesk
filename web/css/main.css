@@ -170,3 +170,7 @@ footer {
 .tickets20 tr:hover td {
   background-color: #dff0d8;
 }
+
+.datepicker {
+  z-index:1151 !important;
+}
