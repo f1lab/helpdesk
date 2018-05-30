@@ -1,5 +1,6 @@
 <?php
 /**
+ * @see \ticketsActions::executeShow
  * @var \Ticket      $ticket
  * @var \CommentForm $form
  */
@@ -277,6 +278,12 @@ $canManipulateThisTicket = $ticket->getCreatedBy() === $sf_user->getGuardUser()-
                         от заявки
                     </button>
                 <?php endif ?>
+            </div>
+
+            <div class="btn-group">
+                <a href="<?= url_for('work/new?ticket_id=' . $ticket->getId()); ?>" class="btn">
+                    Добавить работы
+                </a>
             </div>
 
             <div class="btn-group pull-right">

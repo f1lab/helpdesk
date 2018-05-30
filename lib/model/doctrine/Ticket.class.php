@@ -2,6 +2,9 @@
 
 /**
  * @method \sfGuardUser getCreator()
+ * @method int getId()
+ * @method string getCreatedAt()
+ * @method int getCreatedBy()
  */
 class Ticket extends BaseTicket
 {

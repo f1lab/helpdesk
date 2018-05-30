@@ -1,0 +1,32 @@
+Work:
+  actAs: [Timestampable, Signable]
+  columns:
+    ticket_id:
+      type: integer
+      notnull: true
+    started_at:
+      type: timestamp
+      notnull: true
+    finished_at:
+      type: timestamp
+      notnull: true
+    description:
+      type: string
+      notnull: true
+    responsible_id:
+      type: integer
+  relations:
+    Ticket:
+      local: ticket_id
+      foreign: id
+      foreignAlias: Works
+
+sfGuardUser:
+  relations:
+    Works:
+      class: Work
+      type: many
+      local: id
+      foreign: responsible_id
+      onDelete: CASCADE
+      foreignAlias: Responsible

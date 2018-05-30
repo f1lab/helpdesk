@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+/**
+ * @var sfContext $sf_context
+ */
+?><!DOCTYPE html>
 <html lang="ru-RU">
 <head>
   <meta charset="UTF-8">
