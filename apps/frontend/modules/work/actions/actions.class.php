@@ -85,6 +85,20 @@ class workActions extends sfActions
 
     public function executePrint(sfWebRequest $request)
     {
-        $id = $request->getParameter('id');
+        $id = $request->getParameter('ticket_id');
+        /** @var Ticket $ticket */
+        $ticket = Doctrine_Core::getTable(Ticket::class)->find([$id]);
+        $this->forward404Unless($ticket);
+
+        $works = $ticket->getWorks();
+        if (count($works) === 0) {
+            $this->getUser()->setFlash('message', ['error', 'Упс', 'В тикете нет работ']);
+            $this->redirect('@tickets-show?id=' . $ticket->getId());
+        }
+
+        $this->ticket = $ticket;
+        $this->works = $works;
+        $this->renderPartial('print');
+        return sfView::NONE;
     }
 }

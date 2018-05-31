@@ -281,6 +281,9 @@ $canManipulateThisTicket = $ticket->getCreatedBy() === $sf_user->getGuardUser()-
             </div>
 
             <div class="btn-group">
+                <a href="<?= url_for('work/print?ticket_id=' . $ticket->getId()); ?>" class="btn">
+                    Печать ЛУРВ
+                </a>
                 <a href="<?= url_for('work/new?ticket_id=' . $ticket->getId()); ?>" class="btn">
                     Добавить работы
                 </a>
