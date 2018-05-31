@@ -8,13 +8,6 @@ class WorkForm extends BaseWorkForm
     {
         unset ($this['created_at'], $this['updated_at'], $this['created_by'], $this['updated_by']);
 
-        $this->getWidgetSchema()->offsetSet('planned_at', new sfWidgetFormBootstrapDateTime2(array(
-            'minView' => 0,
-        ), array(
-            'placeholder' => '',
-            'class' => 'span2',
-            'type' => 'date',
-        )));
         $this->getWidgetSchema()->offsetSet('started_at', new sfWidgetFormBootstrapDateTime2(array(
             'minView' => 0,
         ), array(
@@ -40,7 +33,6 @@ class WorkForm extends BaseWorkForm
         )));
 
         $this->widgetSchema->setLabels([
-            'planned_at' => 'Дата',
             'started_at' => 'Факт. начало работ',
             'finished_at' => 'Факт. окончание работ',
             'description' => 'Содержание работ',

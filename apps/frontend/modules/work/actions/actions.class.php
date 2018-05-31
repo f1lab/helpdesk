@@ -73,13 +73,13 @@ class workActions extends sfActions
         $this->redirect('work/index');
     }
 
-    protected function processForm(sfWebRequest $request, sfForm $form)
+    protected function processForm(sfWebRequest $request, WorkForm $form)
     {
         $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
         if ($form->isValid()) {
             $work = $form->save();
 
-            $this->redirect('work/edit?id=' . $work->getId());
+            $this->redirect('@tickets-show?id=' . $work->getTicketId());
         }
     }
 

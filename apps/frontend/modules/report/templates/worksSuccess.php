@@ -24,7 +24,17 @@
         </tr>
         </thead>
         <tbody>
+        <?php
+        $start = new DateTime('00:00');
+        $current = clone $start;
+        ?>
         <?php foreach ($works as $work): ?>
+            <?php
+            $startedAt = new DateTime($work->getStartedAt());
+            $finishedAt = new DateTime($work->getFinishedAt());
+            $dateInterval = $finishedAt->diff($startedAt);
+            $current->add($dateInterval);
+            ?>
             <tr>
                 <td>
                     <a href="<?= url_for('@tickets-show?id=' . $work->getTicket()->getId()); ?>">
@@ -35,14 +45,14 @@
                 <td><?= $work->getFinishedAt(); ?></td>
                 <td><?= $work->getDescription(); ?></td>
                 <td><?= $work->getResponsible(); ?></td>
-                <td><?= (new DateTime($work->getFinishedAt()))->diff(new DateTime($work->getStartedAt()))->format('%H:%I'); ?></td>
+                <td><?= $dateInterval->format('%H:%I'); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 
     <div class="alert alert-info">
-        <h4>Всего времени затрачено: ХХ:ХХ</h4>
+        <h4>Всего времени затрачено: <?= $start->diff($current)->format('%H:%I'); ?></h4>
         <p>
             Работы, выполненные в рабочее время: ХХ:ХХ <br>
             Работы, выполненные в <em>не</em>рабочее время: ХХ:ХХ <br>
