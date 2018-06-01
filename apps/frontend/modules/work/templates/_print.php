@@ -48,7 +48,7 @@
                         colspan="4">
                         <p style="margin-top: 0pt; margin-bottom: 0pt; font-size: 12pt;"><strong><span
                                         style="">
-                                    <?= $ticket->getCompany()->getName(); ?>
+                                    <?= $ticket->getCompany()->getDescription(); ?>
                                 </span></strong></p>
                     </td>
                 </tr>
@@ -194,6 +194,6 @@
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
-<script>window.print();</script>
+<script>window.print();window.history.go(-1);</script>
 </body>
 </html>
