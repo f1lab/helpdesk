@@ -39,10 +39,7 @@ $canManipulateThisTicket = $ticket->getCreatedBy() === $sf_user->getGuardUser()-
                     </div>
                 <?php endif ?>
                 <h1 class="page-header">
-                    <?php
-                    $company = $ticket->getCreator()->getGroups()->getFirst();
-                    ?>
-                    <span style="color: #888"><?= $company; ?></span>.<?php echo $ticket->getName() ?>
+                    <span style="color: #888"><?= $ticket->getCompany()->getName(); ?></span>.<?php echo $ticket->getName() ?>
 
                     <?php if (!$isRepeater): ?>
                         <small><?php $applier = $ticket->getApplier(); ?>

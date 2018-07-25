@@ -1,5 +1,5 @@
 {
     "require": {
-        "mailgun/mailgun-php": "dev-master"
+        "mailgun/mailgun-php": "1.8"
     }
 }
