@@ -31,6 +31,7 @@ class WorkForm extends BaseWorkForm
             'class' => 'chzn-select',
             'data-placeholder' => 'Выберите…',
         )));
+        $this->getWidgetSchema()->offsetSet('ticket_id', new sfWidgetFormInputHidden());
 
         $this->widgetSchema->setLabels([
             'started_at' => 'Факт. начало работ',
