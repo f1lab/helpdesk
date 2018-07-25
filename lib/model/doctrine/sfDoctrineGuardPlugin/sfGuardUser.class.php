@@ -27,6 +27,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('applier.Creator')
       ->leftJoin('t.Creator')
       ->leftJoin('t.Responsibles r')
+      ->leftJoin('t.Works w')
       ->where('t.created_by = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;
@@ -42,6 +43,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('applier.Creator')
       ->leftJoin('t.Creator')
       ->leftJoin('t.Responsibles r')
+        ->leftJoin('t.Works w')
       ->andWhere('r.id = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;
@@ -58,6 +60,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('t.Creator')
       ->leftJoin('t.Observers o')
       ->leftJoin('t.Responsibles r')
+        ->leftJoin('t.Works w')
       ->addWhere('o.id = ?', $this->getId())
       ->orderBy('t.created_at desc')
     ;
@@ -102,6 +105,7 @@ class sfGuardUser extends PluginsfGuardUser
       ->leftJoin('applier.Creator')
       ->leftJoin('t.Category')
       ->leftJoin('t.Creator')
+        ->leftJoin('t.Works w')
 
       ->andWhereIn('t.category_id', $seesCategories)
 

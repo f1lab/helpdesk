@@ -12,17 +12,17 @@ class ticketsApiActions extends sfActions
 {
   static protected $filter = null;
 
-  static private function fillFilter($request)
+  private static function fillFilter($request)
   {
     self::$filter = json_decode(urldecode($request->getParameter('filter', '{}')), true);
   }
 
-  static private function returnJson($data)
+  private static function returnJson($data)
   {
     die(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
   }
 
-  static private function addFilterParametersToQuery($request, $query)
+  private static function addFilterParametersToQuery($request, $query)
   {
     if (self::$filter === null) {
       self::fillFilter($request);
@@ -55,7 +55,7 @@ class ticketsApiActions extends sfActions
     $this->fillFilter($request);
 
     $result = [];
-    if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
+    if (self::$filter['without_responsibles'] || self::$filter['without_appliers'] || self::$filter['without_works']) {
       foreach ($queries as $tab => $query) {
         self::addFilterParametersToQuery($request, $query);
         $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
@@ -77,6 +77,12 @@ class ticketsApiActions extends sfActions
               $alreadyCounted = true;
             }
           }
+            if (self::$filter['without_works'] and !$alreadyCounted) {
+                if (isset($ticket['Works']) && count($ticket['Works']) === 0) {
+                    $counter++;
+                    $alreadyCounted = true;
+                }
+            }
         }
 
         $result[ $tab ] = $counter;
@@ -106,7 +112,7 @@ class ticketsApiActions extends sfActions
     $tickets = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
 
     $result = [];
-    if (self::$filter['without_responsibles'] or self::$filter['without_appliers']) {
+    if (self::$filter['without_responsibles'] || self::$filter['without_appliers'] || self::$filter['without_works']) {
       foreach ($tickets as $ticket) {
         $alreadyCounted = false;
         if (self::$filter['without_responsibles']) {
@@ -121,6 +127,13 @@ class ticketsApiActions extends sfActions
             $result[] = $ticket;
             $alreadyCounted = true;
           }
+        }
+
+        if (self::$filter['without_works'] and !$alreadyCounted) {
+            if (isset($ticket['Works']) && count($ticket['Works']) === 0) {
+                $result[] = $ticket;
+                $alreadyCounted = true;
+            }
         }
       }
 

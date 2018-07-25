@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \BaseReportForm $form
+ */
+?>
 <form action="<?= isset($action) ? $action : url_for('report/get'); ?>" method="get">
     <?php if (isset($form['type'])): ?>
         <?php echo $form['type']->renderRowUsing('bootstrap') ?>

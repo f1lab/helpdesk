@@ -6,6 +6,8 @@ class BaseReportForm extends sfFormSymfony
   {
     $this->disableLocalCSRFProtection();
 
+    $this->setDefault('from', (new DateTime('first day of this month'))->getTimestamp());
+
     $companyIds = Doctrine_Query::create()
       ->from('RefCompanyResponsible')
       ->select('group_id')
@@ -42,11 +44,11 @@ class BaseReportForm extends sfFormSymfony
       ->offsetSet('company_id', new sfWidgetFormDoctrineChoice(array(
         'model' => 'sfGuardGroup',
         'label' => 'Компания',
-        // 'multiple' => true,
+        'multiple' => true,
         'query' => Doctrine_Query::create()
           ->from('sfGuardGroup')
           ->andWhereIn('id', $companyIds)
-      )))
+      ), ['class' => 'chzn-select']))
 
       ->offsetSet('responsible_id', new sfWidgetFormDoctrineChoice(array(
         'model' => 'sfGuardUser',

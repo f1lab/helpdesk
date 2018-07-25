@@ -66,18 +66,15 @@
                 <a href="<?php echo url_for('@companies') ?>">Компании и пользователи</a>
               </li>
             <?php endif ?>
-
-            <?php if ($sf_user->hasCredential('can view report')): ?>
-              <li <?php if ('report' == $sf_context->getModuleName() && 'works' !== $sf_context->getActionName()): ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('report/index') ?>">Отчёт по заявкам</a>
+              <?php if ($sf_user->hasCredential('can view report')): ?>
+              <li class="dropdown<?php if ('report' === $sf_context->getModuleName() && ('works' === $sf_context->getActionName() || 'index' === $sf_context->getActionName())): ?> active"<?php endif ?>">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Отчёты <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li<?= 'index' === $sf_context->getActionName() ? ' class="active"' : ''; ?>><a href="<?php echo url_for('report/index') ?>">Отчёт по заявкам</a></li>
+                      <li<?= 'works' === $sf_context->getActionName() ? ' class="active"' : ''; ?>><a href="<?php echo url_for('report/works') ?>">Отчёт по работам</a></li>
+                  </ul>
               </li>
-            <?php endif ?>
-
-            <?php if ($sf_user->hasCredential('can view report')): ?>
-              <li <?php if ('report' == $sf_context->getModuleName() && 'works' === $sf_context->getActionName()): ?> class="active"<?php endif ?>>
-                <a href="<?php echo url_for('report/works') ?>">Отчёт по работам</a>
-              </li>
-            <?php endif ?>
+              <?php endif ?>
           </ul>
 
           <div class="btn-group pull-right">

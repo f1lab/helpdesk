@@ -105,6 +105,14 @@
                     </label>
                   </div>
                 </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="filter.without_works"> Скрыть заявки с работами
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

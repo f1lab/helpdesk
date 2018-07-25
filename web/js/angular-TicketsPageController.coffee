@@ -29,6 +29,7 @@ app.controller 'TicketsPageController', [
       without_responsibles: false
       without_appliers: false
       without_periodicals: false
+      without_works: false
       refresh: 0
 
     delete $scope.filter.$default
