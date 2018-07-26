@@ -46,6 +46,10 @@ class ticketsApiActions extends sfActions
       $query->addWhere('t.name ilike ?', '%' . addcslashes(trim(self::$filter['name']), "%_") . '%');
     }
 
+    if (self::$filter['without_works']) {
+        $query->addWhere('t.created_at > ?', (new DateTime('-90 days'))->format('Y-m-d'));
+    }
+
     return $query;
   }
 
