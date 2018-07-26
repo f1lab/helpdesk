@@ -99,7 +99,7 @@ class reportActions extends sfActions
                 }
 
                 if ($this->form->getValue('responsible_id')) {
-                    $query->andWhereIn('responsible.created_by', (array)$this->form->getValue('responsible_id'));
+                    $query->andWhereIn('t.responsible_id', (array)$this->form->getValue('responsible_id'));
                 }
 
                 $this->works = $query->execute();
