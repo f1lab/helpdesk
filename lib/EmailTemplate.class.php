@@ -5,7 +5,7 @@ final class EmailTemplate {
     return '
 
 Если вы хотите что-то дополнить, то можете ответить на это письмо
-или сделать это онлайн на странице http://helpdesk.f1lab.ru/tickets/' . $ticket->getId() . '
+или сделать это онлайн на странице https://helpdesk.f1lab.ru/tickets/' . $ticket->getId() . '
 
 --
 С уважением, команда F1 Lab
@@ -28,7 +28,7 @@ final class EmailTemplate {
 Зарегистрирована заявка № ' . $ticket->getId() . '
 Компания: ' . $ticket->getCompany() . '
 Автор: ' . $ticket->getCreator() . '
-Ссылка: http://helpdesk.f1lab.ru/tickets/' . $ticket->getId() . '
+Ссылка: https://helpdesk.f1lab.ru/tickets/' . $ticket->getId() . '
 ' ;
     return $message;
   }

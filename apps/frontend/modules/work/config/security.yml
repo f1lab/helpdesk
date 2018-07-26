@@ -1,8 +1,0 @@
-new:
-  credentials: [[can_create_works]]
-
-edit:
-  credentials: [[can_edit_works]]
-
-delete:
-  credentials: [[can_delete_works]]
